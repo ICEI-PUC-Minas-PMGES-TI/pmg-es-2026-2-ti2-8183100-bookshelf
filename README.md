@@ -1,6 +1,7 @@
 # BookMark
 
-[Escreva um ou dois  parágrafo resumindo o objetivo do seu projeto.]
+O Bookmark foi pensado como um incentivo ao hábito de leitura. O objetivo é que os usuários consigam definir metas de livros, páginas e tempo voltado para ler, além de poder visualizar e compartilhar o progresso feito com outros usuários. 
+Ademais, ele fornece não só um catálogo de livros que permite que cada livro seja adicionado a uma lista (lidos, planejando ler, lendo) e aos favoritos, como também informações sobre cada obra, incluindo título, autor, gênero, avaliações, etc.
 
 ## Alunos integrantes da equipe:
 
