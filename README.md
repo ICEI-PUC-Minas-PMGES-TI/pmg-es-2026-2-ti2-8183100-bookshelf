@@ -2,14 +2,14 @@
 
 [Escreva um ou dois  parágrafo resumindo o objetivo do seu projeto.]
 
-## Alunos integrantes da equipe
+## Alunos integrantes da equipe:
 
 * Carolina Almeida Mendes de Souza
 * Gabriel do Carmo Assis
 * Giovanni Arenare Mota
 * Lukas Nathan Matos Candeia
 
-## Professores responsáveis
+## Professores responsáveis:
 
 * Cleiton Silva Tavares
 * Rafael Henriques Nogueira Diniz
