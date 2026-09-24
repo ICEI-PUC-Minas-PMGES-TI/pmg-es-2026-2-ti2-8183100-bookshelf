@@ -4,16 +4,15 @@
 
 ## Alunos integrantes da equipe
 
-* [Nome completo do aluno 1]
-* [Nome completo do aluno 2]
-* [Nome completo do aluno 3]
-* [Nome completo do aluno 4]
+* Carolina Almeida Mendes de Souza
+* Gabriel do Carmo Assis
+* Giovanni Arenare Mota
+* Lukas Nathan Matos Candeia
 
 ## Professores responsáveis
 
-* [Nome completo do professor 1]
-* [Nome completo do professor 2]
-
-## Instruções de utilização
+* Cleiton Silva Tavares
+* Rafael Henriques Nogueira Diniz
+* Rommel Vieira Carneiro
 
 [Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.]
