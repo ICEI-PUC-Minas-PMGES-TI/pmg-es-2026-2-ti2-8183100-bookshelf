@@ -9,7 +9,7 @@ Ademais, ele fornece não só um catálogo de livros que permite que cada livro 
 * Carolina Almeida Mendes de Souza
 * Gabriel do Carmo Assis
 * Giovanni Arenare Mota
-* Lukas Nathan Matos Candeia
+* Lukas Nathan Matos Candeia 
 
 ## Professores responsáveis:
 
