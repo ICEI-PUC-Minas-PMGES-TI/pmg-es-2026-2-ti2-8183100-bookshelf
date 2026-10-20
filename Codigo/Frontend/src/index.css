@@ -2,9 +2,10 @@
 :root {
   font-family: Inter, "Segoe UI", sans-serif;
   color: #1E1E1E;
-  background: #F8F5EF;
+  background: #FFE7C2;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
