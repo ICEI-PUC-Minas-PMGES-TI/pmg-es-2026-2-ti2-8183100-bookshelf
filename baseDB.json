@@ -1,0 +1,62 @@
+{
+    "usuarios": [{
+        "_id": 1,
+        "nome": "Gabriel Assis",
+        "userName":"GBRA",
+        "email": "gabriel@email.com",
+        "senha": "hash_da_senha",
+        "dataNascimento": "2004-05-20",
+        "dataCadastro": "2026-10-05",
+        "perfil": {
+            "foto": "url_da_foto",
+            "bio": "Gosto de ler ficção e fantasia."
+        },
+        "livrosFav": [2, 234, 1233],
+        "livrosLerDepois": [5, 287, 1988],
+        "livrosLidos": [2, 234, 1233, 456, 3445],
+        "livrosLendo": [501, 34],
+        "metricas": [4, 28, 33],
+        "sequencia": 3
+    }],
+
+    "metricas":[{
+        "_id": 1001,
+        "usuarioId": 1,
+        "livroId": 501,
+        "tituloLivro": "O Hobbit",
+        "dataLeitura": "2026-10-05",
+        "paginaInicial": 45,
+        "paginaFinal": 72,
+        "paginasLidas": 27,
+        "tempoLeituraMinutos": 42,
+        "sessaoConcluida": false
+    }],
+
+    "publicacao": [{
+        "_id": 2001,
+        "usuarioId": 1,
+        "livroId": 501,
+        "tituloLivro": "O Hobbit",
+        "dataPublicacao": "2026-10-05",
+
+        "resenha": {
+            "conteudo": "Gostei bastante do livro. A história é envolvente e os personagens são muito interessantes.",
+            "avaliacao": 5
+        },
+
+        "curtidas": [
+            {
+                "usuarioId": 2,
+                "dataCurtida": "2026-10-05"
+            },
+            {
+                "usuarioId": 5,
+                "dataCurtida": "2026-10-05"
+            },
+            {
+                "usuarioId": 8,
+                "dataCurtida": "2026-10-05"
+            }
+        ]
+    }]
+}
