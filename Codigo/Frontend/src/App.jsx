@@ -17,7 +17,7 @@ function App() {
     <BrowserRouter>
       <nav className="navbar">
         <Link to="/" className="logo">
-          <img src="/logo.png" alt="Logo" />
+          <img src="public/logo.png" alt="Logo" />
         </Link>
 
         <div className="nav-links">

@@ -1,6 +1,5 @@
-
 .navbar {
-  background-color: #C1A67C;
+  background-color: #c1a67c;
   height: 80px;
   padding: 0 32px;
 
@@ -12,8 +11,8 @@
 }
 
 .logo img {
-  width: 55px;
-  height: 55px;
+  width: 110px;
+  height: 110px;
   object-fit: contain;
 }
 
@@ -24,7 +23,7 @@
 }
 
 .nav-links a {
-  color: #1E1E1E;
+  color: #1e1e1e;
   text-decoration: none;
   font-size: 16px;
   font-weight: 600;
@@ -32,7 +31,7 @@
 }
 
 .nav-links a:hover {
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .perfil img {
@@ -40,7 +39,7 @@
   height: 42px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #FFE7C2;
+  border: 2px solid #ffe7c2;
   transition: transform 0.2s ease;
 }
 
@@ -62,8 +61,8 @@
   }
 
   .logo img {
-    width: 40px;
-    height: 40px;
+    width: 100px;
+    height: 100px;
   }
 
   .perfil img {
