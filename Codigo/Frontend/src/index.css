@@ -1,11 +1,19 @@
-
 :root {
+  --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
   font-family: Inter, "Segoe UI", sans-serif;
-  color: #1E1E1E;
-  background: #FFE7C2;
+  color: #1e1e1e;
+  background: #ffe7c2;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--bm-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
