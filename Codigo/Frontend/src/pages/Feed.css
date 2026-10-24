@@ -1,398 +1,391 @@
-
-
-
 .feed-page {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 28px 64px;
-    color: #1E1E1E;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 28px 64px;
+  color: #1e1e1e;
 }
-
 
 .feed-book {
-    position: relative;
-    padding: 14px;
+  position: relative;
+  padding: 14px;
 
-    border: 1px solid #B09262;
-    border-radius: 18px;
+  border: 1px solid #b09262;
+  border-radius: 18px;
 
-    background: #C1A67C;
+  background: #c1a67c;
 
-    box-shadow:
-        0 18px 40px rgb(90 64 35 / 15%),
-        inset 0 0 0 2px rgb(255 247 235 / 18%);
+  box-shadow:
+    0 18px 40px rgb(90 64 35 / 15%),
+    inset 0 0 0 2px rgb(255 247 235 / 18%);
 }
-
 
 .feed-book-pages {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
 
-    padding: clamp(22px, 4vw, 44px);
+  padding: clamp(22px, 4vw, 44px);
 
-    border: 1px solid #DEC6A0;
-    border-radius: 10px;
+  border: 1px solid #dec6a0;
+  border-radius: 10px;
 
-    /* Fundo uniforme, sem linha central */
-    background: #FFF9EF;
+  /* Fundo uniforme, sem linha central */
+  background: #fff9ef;
 
-    box-shadow:
-        inset 0 0 24px rgb(128 92 49 / 8%),
-        0 2px 5px rgb(90 64 35 / 8%);
+  box-shadow:
+    inset 0 0 24px rgb(128 92 49 / 8%),
+    0 2px 5px rgb(90 64 35 / 8%);
 }
-
 
 .feed-book-pages > * {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
 }
 
-
 .feed-eyebrow {
-    color: #80613E;
+  color: #80613e;
 }
 
 .feed-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
 
-    padding-bottom: 28px;
-    border-bottom: 1px solid #DEC6A0;
+  padding-bottom: 28px;
+  border-bottom: 1px solid #dec6a0;
 }
 
 .feed-header h1,
 .feed-section-heading h2,
 .feed-form-header h2 {
-    color: #493621;
+  color: #493621;
 }
 
 .feed-header p {
-    color: #766650;
+  color: #766650;
 }
 
 .feed-create-button,
 .feed-submit-button {
-    border: 1px solid #8E7048;
-    border-radius: 8px;
-    padding: 10px;
+  border: 1px solid #8e7048;
+  border-radius: 8px;
+  padding: 10px;
 
-    background: #C1A67C;
-    color: #1E1E1E;
+  background: #c1a67c;
+  color: #1e1e1e;
 
-    cursor: pointer;
-    transition:
-        background 180ms ease,
-        border-color 180ms ease,
-        transform 180ms ease;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
 }
 
 .feed-create-button:hover,
 .feed-submit-button:hover {
-    border-color: #A78351;
-    background: #B09262;
-    color: #1E1E1E;
+  border-color: #a78351;
+  background: #b09262;
+  color: #1e1e1e;
 }
 
 .feed-create-button:active,
 .feed-submit-button:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .feed-form {
-    margin-top: 28px;
-    padding: 24px;
+  margin-top: 28px;
+  padding: 24px;
 
-    border: 1px solid #DEC6A0;
-    border-radius: 12px;
+  border: 1px solid #dec6a0;
+  border-radius: 12px;
 
-    background: #FFF5E3;
+  background: #fff5e3;
 
-    box-shadow: 0 8px 24px rgb(90 64 35 / 7%);
+  box-shadow: 0 8px 24px rgb(90 64 35 / 7%);
 }
 
 .feed-form-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
 
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .feed-form label {
-    display: block;
-    margin: 18px 0 8px;
+  display: block;
+  margin: 18px 0 8px;
 
-    color: #493621;
-    font-weight: 600;
+  color: #493621;
+  font-weight: 600;
 }
 
 .feed-form input,
 .feed-form textarea {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 
-    padding: 12px 14px;
+  padding: 12px 14px;
 
-    border: 1px solid #DEC6A0;
-    border-radius: 8px;
+  border: 1px solid #dec6a0;
+  border-radius: 8px;
 
-    background: #FFFCF6;
-    color: #1E1E1E;
+  background: #fffcf6;
+  color: #1e1e1e;
 
-    font: inherit;
+  font: inherit;
 }
 
 .feed-form textarea {
-    resize: vertical;
-    min-height: 110px;
+  resize: vertical;
+  min-height: 110px;
 }
 
 .feed-form input:focus,
 .feed-form textarea:focus {
-    outline: none;
-    border-color: #B09262;
-    box-shadow: 0 0 0 3px rgb(193 166 124 / 20%);
+  outline: none;
+  border-color: #b09262;
+  box-shadow: 0 0 0 3px rgb(193 166 124 / 20%);
 }
 
 .feed-form input::placeholder,
 .feed-form textarea::placeholder {
-    color: #9B8A73;
+  color: #9b8a73;
 }
 
 .feed-close-button {
-    border: none;
-    background: transparent;
-    color: #80613E;
+  border: none;
+  background: transparent;
+  color: #80613e;
 
-    font-size: 1.8rem;
-    cursor: pointer;
+  font-size: 1.8rem;
+  cursor: pointer;
 }
 
 .feed-rating {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .feed-rating button {
-    padding: 0;
+  padding: 0;
 
-    border: none;
-    background: transparent;
-    color: #D6C5A9;
+  border: none;
+  background: transparent;
+  color: #d6c5a9;
 
-    font-size: 1.8rem;
-    cursor: pointer;
-    transition: color 150ms ease, transform 150ms ease;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    transform 150ms ease;
 }
 
 .feed-rating button.selected {
-    color: #B09262;
+  color: #b09262;
 }
 
 .feed-rating button:hover {
-    transform: scale(1.12);
+  transform: scale(1.12);
 }
 
 .feed-form-actions {
-    display: flex;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: 12px;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
 
-    margin-top: 24px;
+  margin-top: 24px;
 }
 
 .feed-cancel-button {
-    padding: 10px 18px;
+  padding: 10px 18px;
 
-    border: 1px solid #C1A67C;
-    border-radius: 8px;
+  border: 1px solid #c1a67c;
+  border-radius: 8px;
 
-    background: transparent;
-    color: #493621;
+  background: transparent;
+  color: #493621;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .feed-cancel-button:hover {
-    background: #DEC6A0;
+  background: #dec6a0;
 }
 
 .feed-submit-button {
-    padding: 10px 18px;
+  padding: 10px 18px;
 }
 
 .feed-publications {
-    margin-top: 32px;
+  margin-top: 32px;
 }
 
 .feed-section-heading {
-    padding-bottom: 14px;
-    border-bottom: 1px solid #DEC6A0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #dec6a0;
 }
 
 .feed-section-heading > span {
-    color: #806F57;
+  color: #806f57;
 }
 
 .feed-publications-list {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 
-    padding-top: 4px;
+  padding-top: 4px;
 }
 
 .publicacao-card {
-    border: 1px solid #E4D4BA;
-    border-radius: 12px;
+  border: 1px solid #e4d4ba;
+  border-radius: 12px;
 
-    background: #FFFCF6;
+  background: #fffcf6;
 
-    box-shadow: 0 5px 14px rgb(90 64 35 / 6%);
+  box-shadow: 0 5px 14px rgb(90 64 35 / 6%);
 
-    transition:
-        transform 180ms ease,
-        box-shadow 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .publicacao-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 9px 20px rgb(90 64 35 / 10%);
+  transform: translateY(-2px);
+  box-shadow: 0 9px 20px rgb(90 64 35 / 10%);
 }
 
 .feed-empty {
-    padding: 36px 20px;
+  padding: 36px 20px;
 
-    border: 1px solid #C1A67C;
-    border-radius: 12px;
+  border: 1px solid #c1a67c;
+  border-radius: 12px;
 
-    background: rgb(255 252 246 / 70%);
-    text-align: center;
+  background: rgb(255 252 246 / 70%);
+  text-align: center;
 }
 
 .feed-empty h3 {
-    color: #493621;
+  color: #493621;
 }
 
 .feed-empty p {
-    color: #766650;
+  color: #766650;
 }
 
 .feed-book-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 
-    margin-top: 32px;
-    padding-top: 18px;
+  margin-top: 32px;
+  padding-top: 18px;
 
-    border-top: 1px solid #DEC6A0;
+  border-top: 1px solid #dec6a0;
 
-    color: #80613E;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
+  color: #80613e;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
 }
 
 .feed-book-footer span:first-child {
-    font-weight: 700;
-    letter-spacing: 0.16em;
+  font-weight: 700;
+  letter-spacing: 0.16em;
 }
 
 .feed-header-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .feed-publication-count {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 
-    padding: 9px 13px;
+  padding: 9px 13px;
 
-    border: 1px solid #DEC6A0;
-    border-radius: 20px;
+  border: 1px solid #dec6a0;
+  border-radius: 20px;
 
-    background: #F7EFDF;
-    color: #80613E;
+  background: #f7efdf;
+  color: #80613e;
 
-    font-size: 0.82rem;
-    white-space: nowrap;
+  font-size: 0.82rem;
+  white-space: nowrap;
 }
 
 .feed-publication-count strong {
-    color: #493621;
-    font-size: 0.95rem;
+  color: #493621;
+  font-size: 0.95rem;
 }
 
 .feed-create-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
-    padding: 11px 16px;
+  padding: 11px 16px;
 }
 
 .feed-create-button span {
-    font-size: 1.2rem;
-    line-height: 1;
+  font-size: 1.2rem;
+  line-height: 1;
 }
 
 @media (max-width: 700px) {
-    .feed-page {
-        padding: 24px 14px 40px;
-    }
+  .feed-page {
+    padding: 24px 14px 40px;
+  }
 
-    .feed-book {
-        padding: 7px;
-        border-radius: 13px;
-    }
+  .feed-book {
+    padding: 7px;
+    border-radius: 13px;
+  }
 
-    .feed-book-pages {
-        padding: 22px 16px;
-        background: #FFF9EF;
-    }
+  .feed-book-pages {
+    padding: 22px 16px;
+    background: #fff9ef;
+  }
 
-    .feed-header {
-        align-items: flex-start;
-        padding-bottom: 22px;
-    }
+  .feed-header {
+    align-items: flex-start;
+    padding-bottom: 22px;
+  }
 
-    .feed-header h1 {
-        font-size: clamp(2rem, 8vw, 2.7rem);
-    }
+  .feed-header h1 {
+    font-size: clamp(2rem, 8vw, 2.7rem);
+  }
 
-    .feed-form {
-        padding: 18px;
-    }
+  .feed-form {
+    padding: 18px;
+  }
 
-    .feed-form-actions {
-        flex-direction: column-reverse;
-    }
+  .feed-form-actions {
+    flex-direction: column-reverse;
+  }
 
-    .feed-cancel-button,
-    .feed-submit-button {
-        width: 100%;
-    }
+  .feed-cancel-button,
+  .feed-submit-button {
+    width: 100%;
+  }
 
-    .feed-book-footer {
-        flex-direction: column;
-        text-align: center;
-    }
+  .feed-book-footer {
+    flex-direction: column;
+    text-align: center;
+  }
 }
-
-

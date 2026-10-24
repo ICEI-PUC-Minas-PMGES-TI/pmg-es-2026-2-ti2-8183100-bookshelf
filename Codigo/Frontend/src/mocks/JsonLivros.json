@@ -1,0 +1,18 @@
+{
+  "kind": "livros#volumes",
+  "totalItems": 12,
+  "items": [
+    { "id": "livro-01", "volumeInfo": { "title": "O Pequeno Príncipe", "authors": ["Antoine de Saint-Exupéry"], "publishedDate": "1943", "categories": ["Infantil"], "averageRating": 5, "description": "Um piloto perdido no deserto encontra um menino vindo de outro planeta." } },
+    { "id": "livro-02", "volumeInfo": { "title": "O Hobbit", "authors": ["J.R.R. Tolkien"], "publishedDate": "1937", "categories": ["Fantasia"], "averageRating": 5, "description": "Bilbo Bolseiro é arrancado de sua toca para uma aventura com treze anões." } },
+    { "id": "livro-03", "volumeInfo": { "title": "A Biblioteca da Meia-Noite", "authors": ["Matt Haig"], "publishedDate": "2020", "categories": ["Ficção"], "averageRating": 4, "description": "Entre a vida e a morte existe uma biblioteca com todas as vidas que poderíamos ter vivido." } },
+    { "id": "livro-04", "volumeInfo": { "title": "Dom Casmurro", "authors": ["Machado de Assis"], "publishedDate": "1899", "categories": ["Romance"], "averageRating": 4.5, "description": "Bentinho narra sua história com Capitu e a dúvida que atravessa o livro." } },
+    { "id": "livro-05", "volumeInfo": { "title": "1984", "authors": ["George Orwell"], "publishedDate": "1949", "categories": ["Ficção"], "averageRating": 4.5, "description": "Num regime que vigia tudo, Winston tenta guardar um pensamento só seu." } },
+    { "id": "livro-06", "volumeInfo": { "title": "Harry Potter e a Pedra Filosofal", "authors": ["J.K. Rowling"], "publishedDate": "1997", "categories": ["Fantasia"], "averageRating": 4.5, "description": "Aos onze anos, Harry descobre que é bruxo e vai estudar em Hogwarts." } },
+    { "id": "livro-07", "volumeInfo": { "title": "Código Limpo", "authors": ["Robert C. Martin"], "publishedDate": "2008", "categories": ["Tecnologia"], "averageRating": 4, "description": "Práticas para escrever código legível e fácil de manter." } },
+    { "id": "livro-08", "volumeInfo": { "title": "A Revolução dos Bichos", "authors": ["George Orwell"], "publishedDate": "1945", "categories": ["Ficção"], "averageRating": 4 } },
+    { "id": "livro-09", "volumeInfo": { "title": "Orgulho e Preconceito", "authors": ["Jane Austen"], "publishedDate": "1813", "categories": ["Romance"], "averageRating": 4.5, "description": "Elizabeth Bennet e o Sr. Darcy precisam vencer as primeiras impressões." } },
+    { "id": "livro-10", "volumeInfo": { "title": "O Alquimista", "authors": ["Paulo Coelho"], "publishedDate": "1988", "categories": ["Ficção"], "description": "Santiago, um pastor andaluz, parte em busca de um tesouro no Egito." } },
+    { "id": "livro-11", "volumeInfo": { "title": "Duna", "publishedDate": "1965", "categories": ["Ficção científica"], "averageRating": 4.5, "description": "Em um planeta desértico, uma família disputa a única fonte da especiaria." } },
+    { "id": "livro-12", "volumeInfo": { "title": "Capitães da Areia", "authors": ["Jorge Amado"], "categories": ["Romance"], "averageRating": 4 } }
+  ]
+}
