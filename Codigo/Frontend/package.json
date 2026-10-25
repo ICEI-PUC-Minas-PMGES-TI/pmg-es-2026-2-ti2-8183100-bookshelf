@@ -12,6 +12,7 @@
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.3.5",
     "react": "^19.2.8",
+    "react-calendar": "^6.0.1",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4"
   },

@@ -1,0 +1,394 @@
+.metricas-main {
+  min-height: calc(100vh - 94px);
+  padding: 39px 30px 36px;
+  box-sizing: border-box;
+  background-color: #ffe7c2;
+  font-family: Arial, sans-serif;
+  color: #000;
+}
+
+.metricas-layout {
+  width: 100%;
+  max-width: 1304px;
+  min-height: 813px;
+  margin: 0 auto;
+  padding: 20px 26px 22px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 286px minmax(300px, 370px) minmax(350px, 1fr);
+  grid-template-rows: 468px 208px 60px;
+  gap: 15px 24px;
+  background-color: #c1a67c;
+  border-radius: 32px;
+}
+
+.estatisticas {
+  grid-column: 1;
+  grid-row: 1 / 4;
+  padding: 10px 19px;
+  background-color: #dec6a0;
+  border-radius: 32px;
+}
+
+.estatisticas h2,
+.streak-card h2,
+.leituras-card h2 {
+  margin: 0;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+}
+
+.estatisticas h2 {
+  margin-bottom: 30px;
+  font-size: 34px;
+}
+
+.estatistica-item {
+  margin-bottom: 29px;
+}
+
+.estatistica-item label {
+  display: block;
+  margin-bottom: 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  color: #514333;
+}
+
+.estatistica-valor {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border-radius: 9px;
+  background-color: #c1a67c;
+  color: #514333;
+  font-size: 16px;
+}
+
+.calendario-card {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  min-height: 468px;
+  overflow: hidden;
+  border-radius: 28px;
+  background-color: #dec6a0;
+}
+
+/* .calendario-topo {
+  padding: 19px 24px 0;
+}
+
+.calendario-legenda {
+  display: block;
+  margin-bottom: 35px;
+  color: #514333;
+  font-size: 14px;
+}
+
+.data-selecionada {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  font-size: 29px;
+}
+
+.icone-editar {
+  color: #514333;
+  font-size: 25px;
+}
+
+.calendario-mes {
+  height: 48px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #d1b995;
+  color: #514333;
+  font-size: 14px;
+}
+
+.seta-mes {
+  font-size: 12px;
+}
+
+.calendario-navegacao {
+  display: flex;
+  gap: 22px;
+  margin-left: auto;
+}
+
+.calendario-navegacao button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #514333;
+  cursor: pointer;
+  font-size: 29px;
+}
+
+.calendario-grade {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  row-gap: 7px;
+  padding: 8px 12px 13px;
+}
+
+.dia-semana,
+.dia-calendario {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 15px;
+}
+
+.dia-calendario {
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.dia-calendario:hover {
+  background-color: #c1a67c;
+}
+
+.dia-calendario.dia-ativo {
+  background-color: #b09262;
+  color: white;
+}
+
+.dia-calendario.dia-contorno {
+  border-color: #b09262;
+  color: #b09262;
+} */
+
+.metricas-direita {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 23px 8px 0 0;
+}
+
+.streak-card {
+  min-height: 115px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  border-radius: 30px;
+  background-color: #dec6a0;
+}
+
+.streak-card h2 {
+  font-size: 35px;
+  white-space: nowrap;
+}
+
+.streak-card strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 76px;
+  font-weight: normal;
+}
+
+.streak-fogo {
+  font-size: 64px;
+}
+
+.leituras-card {
+  flex: 1;
+  min-height: 0;
+  padding: 7px 17px 18px;
+  box-sizing: border-box;
+  border-radius: 30px;
+  background-color: #dec6a0;
+}
+
+.leituras-card h2 {
+  margin-bottom: 20px;
+  font-size: 34px;
+}
+
+.leituras-lista img {
+  width: 116px;
+  height: 182px;
+  object-fit: cover;
+  border: 2px solid #000;
+}
+
+.favoritos-card {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 30px;
+  background-color: #dec6a0;
+}
+
+.favoritos-card h3 {
+  margin: 0 0 7px;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.favoritos-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  padding-left: 14px;
+}
+
+.favoritos-lista img {
+  width: 88px;
+  height: 139px;
+  object-fit: cover;
+  border: 2px solid #000;
+}
+
+.metricas-acoes {
+  grid-column: 3;
+  grid-row: 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 26px;
+}
+
+.botao-circulo {
+  width: 236px;
+  height: 58px;
+  border: 1px solid #000;
+  border-radius: 7px;
+  background-color: #c6815b;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px #000, -1px -1px #000;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao-circulo:hover {
+  background-color: #b66e4b;
+}
+
+@media (max-width: 1100px) {
+  .metricas-layout {
+    grid-template-columns: 230px minmax(280px, 1fr);
+    grid-template-rows: auto auto auto auto;
+  }
+
+  .estatisticas {
+    grid-column: 1;
+    grid-row: 1 / 4;
+  }
+
+  .calendario-card {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .metricas-direita {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0;
+  }
+
+  .favoritos-card {
+    grid-column: 1 / 3;
+    grid-row: 4;
+    min-height: 200px;
+  }
+
+  .metricas-acoes {
+    grid-column: 2;
+    grid-row: 3;
+  }
+}
+
+@media (max-width: 650px) {
+  .metricas-main {
+    padding: 20px 12px;
+  }
+
+  .metricas-layout {
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    gap: 18px;
+  }
+
+  .estatisticas {
+    padding-bottom: 5px;
+  }
+
+  .calendario-card {
+    width: 100%;
+  }
+
+  .calendario-grade {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .dia-semana,
+  .dia-calendario {
+    width: 34px;
+    height: 34px;
+  }
+
+  .streak-card {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .streak-card h2 {
+    font-size: 25px;
+  }
+
+  .streak-card strong {
+    font-size: 55px;
+  }
+
+  .streak-fogo {
+    font-size: 45px;
+  }
+
+  .leituras-card {
+    min-height: 280px;
+  }
+
+  .favoritos-lista {
+    gap: 12px;
+    padding-left: 0;
+  }
+
+  .favoritos-lista img {
+    width: 70px;
+    height: 110px;
+  }
+
+  .metricas-acoes {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .botao-circulo {
+    max-width: 100%;
+  }
+}
