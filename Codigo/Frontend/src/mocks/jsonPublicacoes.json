@@ -1,0 +1,36 @@
+
+[
+  {
+    "id": 1,
+    "usuario": "Giovanni Arenare",
+    "userName": "GioAre",
+    "tituloLivro": "O Hobbit",
+    "dataPublicacao": "05/10/2026",
+    "resenha": "Gostei bastante do livro. A história é envolvente e os personagens são muito interessantes.",
+    "avaliacao": 5,
+    "curtidas": 12,
+    "curtiu": false
+  },
+  {
+    "id": 2,
+    "usuario": "Igor Franças",
+    "userName": "IgFr",
+    "tituloLivro": "A Biblioteca da Meia-Noite",
+    "dataPublicacao": "06/10/2026",
+    "resenha": "Uma leitura que faz a gente refletir sobre as escolhas da vida e os caminhos que poderíamos ter seguido.",
+    "avaliacao": 4,
+    "curtidas": 8,
+    "curtiu": false
+  },
+  {
+    "id": 3,
+    "usuario": "Luis Lgnoaco",
+    "userName": "LuLg",
+    "tituloLivro": "O Pequeno Príncipe",
+    "dataPublicacao": "07/10/2026",
+    "resenha": "Um livro simples na escrita, mas cheio de significados. Acho que cada leitura revela algo diferente.",
+    "avaliacao": 5,
+    "curtidas": 21,
+    "curtiu": true
+  }
+]

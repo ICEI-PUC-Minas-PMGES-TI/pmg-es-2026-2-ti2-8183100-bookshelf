@@ -1,37 +1,49 @@
+
+import { Suspense } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  NavLink,
+  Link,
+} from "react-router-dom";
+
 import Feed from "./pages/Feed";
 import Metricas from "./pages/metricas";
 import Home from "./pages/home";
 import Perfil from "./pages/perfil";
 import Catalogo from "./pages/catalogo";
+
 import "./App.css";
-import { Suspense } from 'react'
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Link
-} from "react-router-dom";
 
 function App() {
   return (
     <BrowserRouter>
       <nav className="navbar">
-        <Link to="/" className="logo">
-          <img src="public/logo.png" alt="Logo" />
+        <Link to="/" className="logo" aria-label="BookMark - Início">
+          <img src="/logo.png" alt="BookMark" />
         </Link>
 
         <div className="nav-links">
-          <Link to="/feed">Feed</Link>
-          <Link to="/catalogo">Catálogo</Link>
-          <Link to="/metricas">Métricas</Link>
+          <NavLink
+            to="/feed" className={({ isActive }) => isActive ? "nav-link active" : "nav-link" } > Feed
+          </NavLink>
+
+          <NavLink
+            to="/catalogo" className={({ isActive }) => isActive ? "nav-link active" : "nav-link" } > Catálogo
+          </NavLink>
+
+          <NavLink
+            to="/metricas" className={({ isActive }) => isActive ? "nav-link active" : "nav-link" } > Métricas
+          </NavLink>
         </div>
 
-        <Link to="/perfil" className="perfil">
+        <NavLink
+          to="/perfil" className={({ isActive }) => isActive ? "perfil active" : "perfil" } aria-label="Meu perfil" >
           <img
-            src="https://www.gravatar.com/avatar/?d=mp&s=100"
-            alt="Foto de perfil"
+            src="https://www.gravatar.com/avatar/?d=mp&s=100" alt="Foto de perfil"
           />
-        </Link>
+        </NavLink>
       </nav>
 
       <Suspense fallback={<p>Carregando página...</p>}>
@@ -44,7 +56,7 @@ function App() {
         </Routes>
       </Suspense>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;
