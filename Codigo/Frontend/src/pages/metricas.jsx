@@ -46,17 +46,19 @@ export default function Metricas() {
 
 					<div className="estatistica-item">
 						<label>Horas lidas:</label>
-						<div className="estatistica-valor">Value</div>
+						<div className="estatistica-valor">
+							{Math.floor((usuario?.minLidos || 0) / 60)}h {(usuario?.minLidos || 0) % 60}min
+						</div>
 					</div>
 
 					<div className="estatistica-item">
 						<label>Livros lidos:</label>
-						<div className="estatistica-valor">Value</div>
+						<div className="estatistica-valor">{usuario?.livrosLidos.length || 0}</div>
 					</div>
 
 					<div className="estatistica-item">
 						<label>Páginas lidas:</label>
-						<div className="estatistica-valor">Value</div>
+						<div className="estatistica-valor">{usuario?.pagsLidas || 0}</div>
 					</div>
 				</aside>
 
