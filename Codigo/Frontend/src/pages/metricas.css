@@ -69,108 +69,16 @@
 }
 
 .calendario-card {
-  grid-column: 2;
-  grid-row: 1;
-  align-self: start;
-  min-height: 468px;
-  overflow: hidden;
-  border-radius: 28px;
-  background-color: #dec6a0;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    min-height: 468px;
+    overflow: hidden;
+    border-radius: 28px;
+    background-color: #DEC6A0;
+    padding: 16px;
+    box-sizing: border-box;
 }
-
-/* .calendario-topo {
-  padding: 19px 24px 0;
-}
-
-.calendario-legenda {
-  display: block;
-  margin-bottom: 35px;
-  color: #514333;
-  font-size: 14px;
-}
-
-.data-selecionada {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  font-size: 29px;
-}
-
-.icone-editar {
-  color: #514333;
-  font-size: 25px;
-}
-
-.calendario-mes {
-  height: 48px;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-top: 1px solid #d1b995;
-  color: #514333;
-  font-size: 14px;
-}
-
-.seta-mes {
-  font-size: 12px;
-}
-
-.calendario-navegacao {
-  display: flex;
-  gap: 22px;
-  margin-left: auto;
-}
-
-.calendario-navegacao button {
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #514333;
-  cursor: pointer;
-  font-size: 29px;
-}
-
-.calendario-grade {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  align-items: center;
-  justify-items: center;
-  row-gap: 7px;
-  padding: 8px 12px 13px;
-}
-
-.dia-semana,
-.dia-calendario {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  font-size: 15px;
-}
-
-.dia-calendario {
-  border: 1px solid transparent;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-}
-
-.dia-calendario:hover {
-  background-color: #c1a67c;
-}
-
-.dia-calendario.dia-ativo {
-  background-color: #b09262;
-  color: white;
-}
-
-.dia-calendario.dia-contorno {
-  border-color: #b09262;
-  color: #b09262;
-} */
 
 .metricas-direita {
   grid-column: 3;
@@ -227,6 +135,10 @@
   height: 182px;
   object-fit: cover;
   border: 2px solid #000;
+}
+
+.leituras-lista {
+  display: flex;
 }
 
 .favoritos-card {
@@ -286,6 +198,113 @@
 .botao-circulo:hover {
   background-color: #b66e4b;
 }
+
+/* Calendario */
+
+.calendario-card .react-calendar {
+    width: 100%;
+    max-width: 100%;
+    border: 2px solid #C1A67C;
+    border-radius: 18px;
+    background-color: #FFE7C2;
+    color: #1E1E1E;
+    font-family: inherit;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: none;
+}
+
+/* Cabeçalho do mês */
+.calendario-card .react-calendar__navigation {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.calendario-card .react-calendar__navigation button {
+    color: #1E1E1E;
+    background: transparent;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.calendario-card .react-calendar__navigation button:enabled:hover,
+.calendario-card .react-calendar__navigation button:enabled:focus {
+    background-color: #DEC6A0;
+}
+
+/* Dias da semana */
+.calendario-card .react-calendar__month-view__weekdays {
+    color: #6B5038;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.calendario-card .react-calendar__month-view__weekdays__weekday {
+    padding: 8px 0;
+}
+
+.calendario-card .react-calendar__month-view__weekdays abbr {
+    text-decoration: none;
+}
+
+/* Dias do mês */
+.calendario-card .react-calendar__tile {
+    color: #1E1E1E;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 10px 0;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+/* Efeito ao passar o mouse */
+.calendario-card .react-calendar__tile:enabled:hover,
+.calendario-card .react-calendar__tile:enabled:focus {
+    background-color: #DEC6A0;
+    border-color: #C1A67C;
+}
+
+/* Dia atual */
+.calendario-card .react-calendar__tile--now {
+    background-color: #B09262;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+/* Dia selecionado */
+.calendario-card .react-calendar__tile--active {
+    background-color: #C6815B !important;
+    color: #FFFFFF !important;
+    font-weight: bold;
+    border-color: #A65F3E;
+}
+
+/* Hover do dia selecionado */
+.calendario-card .react-calendar__tile--active:enabled:hover,
+.calendario-card .react-calendar__tile--active:enabled:focus {
+    background-color: #A65F3E !important;
+    color: #FFFFFF !important;
+}
+
+/* Dias de outros meses */
+.calendario-card .react-calendar__month-view__days__day--neighboringMonth {
+    color: #A8957B;
+}
+
+/* Fins de semana */
+.calendario-card .react-calendar__month-view__days__day--weekend {
+    color: #A65F3E;
+}
+
+/* Mantém o texto branco no dia selecionado, inclusive aos fins de semana */
+.calendario-card .react-calendar__tile--active,
+.calendario-card .react-calendar__tile--active:enabled:hover {
+    color: #FFFFFF !important;
+}
+
 
 @media (max-width: 1100px) {
   .metricas-layout {

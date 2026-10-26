@@ -1,0 +1,20 @@
+.card-livro {
+    width: 100px;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: #fff9ef;
+    text-align: center;
+    border: 2px solid #8B7355;
+    border-radius: 12px;
+}
+
+.card-livro img {
+    width: 80px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.card-livro h3 {
+    color: #1e1e1e;
+    font-size: 12px;
+}

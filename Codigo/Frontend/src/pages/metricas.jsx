@@ -2,6 +2,8 @@ import "./metricas.css";
 import { useEffect, useState } from "react";
 import { Calendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import BookMetricas from "../components/BookMetricas";
+import {items} from "../mocks/JsonLivros.json";
 
 async function logUser(userId) {
     try {
@@ -37,6 +39,7 @@ export default function Metricas() {
 		
         carregarUsuario();
     }, []);
+	console.log(items);
 	
 	return (
 		<main className="metricas-main">
@@ -78,7 +81,18 @@ export default function Metricas() {
 					<section className="leituras-card">
 						<h2>Leituras atuais:</h2>
 						<div className="leituras-lista">
-
+							<BookMetricas 
+								titulo="O Pequeno Príncipe"
+								imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
+							/>
+							<BookMetricas 
+								titulo="O Pequeno Príncipe"
+								imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
+							/>
+							<BookMetricas 
+								titulo="O Pequeno Príncipe"
+								imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
+							/>
 						</div>
 					</section>
 				</section>
@@ -87,7 +101,18 @@ export default function Metricas() {
 					<h3>Favoritos:</h3>
 
 					<div className="favoritos-lista">
-
+						<BookMetricas 
+							titulo="O Pequeno Príncipe"
+							imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
+						/>
+						<BookMetricas 
+							titulo="O Pequeno Príncipe"
+							imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
+						/>
+						<BookMetricas 
+							titulo="O Pequeno Príncipe"
+							imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
+						/>
 					</div>
 				</section>
 
