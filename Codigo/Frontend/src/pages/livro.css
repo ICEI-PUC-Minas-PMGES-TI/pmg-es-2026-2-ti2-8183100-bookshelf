@@ -49,19 +49,48 @@
   gap: 14px;
 }
 
+.livro-avaliacao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
 .livro-estrelas {
-  color: #b58a3c;
-  font-size: 1.3rem;
-  letter-spacing: 2px;
+  display: flex;
+  gap: 2px;
 }
 
-.livro-estrelas__vazia {
+.livro-estrela {
+  padding: 0 2px;
+  border: 0;
+  background: none;
   color: #e3d6bd;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 120ms ease,
+    transform 120ms ease;
 }
 
-.livro-sem-nota {
+.livro-estrela.is-cheia {
+  color: #b58a3c;
+}
+
+/* estrelas da nota do próprio usuário ficam mais escuras que a média */
+.livro-estrela.is-sua.is-cheia {
+  color: #8e5a14;
+}
+
+.livro-estrela:hover {
+  transform: scale(1.15);
+}
+
+.livro-nota-texto {
   color: var(--bm-muted);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 .livro-ficha {
@@ -223,4 +252,10 @@
     max-width: 240px;
     margin: 0 auto;
   }
+}
+
+/* lista onde o livro já está */
+.livro-adicionar__opcoes button.is-ativa {
+  background: var(--bm-soft);
+  font-weight: 600;
 }

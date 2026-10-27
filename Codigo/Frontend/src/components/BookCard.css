@@ -140,3 +140,17 @@
   color: var(--bm-muted, #6f5f48);
   letter-spacing: 0;
 }
+
+/* links para a página do livro */
+.book-card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.book-card__cover {
+  display: block;
+}
+
+.book-card__title .book-card__link:hover {
+  text-decoration: underline;
+}

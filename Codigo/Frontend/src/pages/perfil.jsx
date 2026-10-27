@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { searchBooks } from "../services/booksService";
-import dadosUsuario from "../mocks/jsonUsuario.json";
+import {
+  LISTAS,
+  obterUsuario,
+  salvarUsuario,
+  adicionarNaLista,
+  removerDaLista,
+} from "../services/listasService";
 import "../components/BookCard.css";
 import "./perfil.css";
-
-// As quatro listas exibidas na tela. "chave" é o campo do JSON do usuário.
-const LISTAS = [
-  { chave: "livrosFav", titulo: "Favoritos" },
-  { chave: "livrosLendo", titulo: "Lendo" },
-  { chave: "livrosLerDepois", titulo: "Pretendo ler" },
-  { chave: "livrosLidos", titulo: "Lidos" },
-];
 
 // Capa do livro (usa a imagem ou, se não houver, a capa de reserva).
 function CapaLivro({ livro }) {
   if (livro.thumbnail) {
-    return <img className="book-cover" src={livro.thumbnail} alt={`Capa de ${livro.title}`} />;
+    return <img className="book-cover" src={livro.thumbnail} alt={`Capa de ${livro.title}`} draggable="false" />;
   }
   return (
     <div className="book-cover book-cover--fallback">
@@ -28,18 +26,57 @@ function CapaLivro({ livro }) {
 }
 
 export default function Perfil() {
-  const usuario = dadosUsuario.usuario;
+  const [usuario, setUsuario] = useState(null);
   const [livros, setLivros] = useState([]);
+  const [listaAlvo, setListaAlvo] = useState(null); // lista que está recebendo o arraste
+  const [erro, setErro] = useState(false);
 
-  // Busca o catálogo para transformar os ids das listas em livros.
+  // Carrega o usuário e o catálogo (para transformar os ids em livros).
   useEffect(() => {
-    searchBooks("").then(setLivros);
+    Promise.all([obterUsuario(), searchBooks("")])
+      .then(([dadosUsuario, todosLivros]) => {
+        setUsuario(dadosUsuario);
+        setLivros(todosLivros);
+      })
+      .catch(() => setErro(true));
   }, []);
+
+  if (erro) return <main className="perfil-page"><p>Não foi possível carregar o perfil.</p></main>;
+  if (!usuario) return <main className="perfil-page"><p>Carregando perfil...</p></main>;
 
   function livrosDaLista(chave) {
     return usuario[chave]
       .map((id) => livros.find((livro) => livro.id === id))
       .filter(Boolean);
+  }
+
+  // Atualiza a tela na hora e salva em seguida.
+  function atualizar(novoUsuario) {
+    setUsuario(novoUsuario);
+    salvarUsuario(novoUsuario).catch(() => setErro(true));
+  }
+
+  function remover(livroId, chave) {
+    atualizar(removerDaLista(usuario, livroId, chave));
+  }
+
+  // Guarda qual livro está sendo arrastado e de qual lista ele saiu.
+  function iniciarArraste(e, livroId, chave) {
+    e.dataTransfer.setData("text/plain", JSON.stringify({ livroId, origem: chave }));
+    e.dataTransfer.effectAllowed = "move";
+  }
+
+  function soltar(e, chaveDestino) {
+    e.preventDefault();
+    setListaAlvo(null);
+    let dados;
+    try {
+      dados = JSON.parse(e.dataTransfer.getData("text/plain"));
+    } catch {
+      return;
+    }
+    if (dados.origem === chaveDestino) return;
+    atualizar(adicionarNaLista(usuario, dados.livroId, chaveDestino));
   }
 
   return (
@@ -70,7 +107,16 @@ export default function Perfil() {
                 <article
                   key={lista.chave}
                   id={lista.chave === "livrosFav" ? "favoritos" : undefined}
-                  className="perfil-lista"
+                  className={`perfil-lista ${listaAlvo === lista.chave ? "is-alvo" : ""}`}
+                  onDragOver={(e) => {
+                    e.preventDefault(); // permite soltar aqui
+                    e.dataTransfer.dropEffect = "move";
+                    setListaAlvo(lista.chave);
+                  }}
+                  onDragLeave={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget)) setListaAlvo(null);
+                  }}
+                  onDrop={(e) => soltar(e, lista.chave)}
                 >
                   <header className="perfil-lista__topo">
                     <h2>{lista.titulo}</h2>
@@ -82,14 +128,21 @@ export default function Perfil() {
                       <p className="perfil-lista__vazia">Nenhum livro nesta lista.</p>
                     )}
                     {itens.map((livro) => (
-                      <div key={livro.id} className="perfil-livro" draggable="true">
-                        <Link to={`/livro/${livro.id}`} className="perfil-livro__link" title={livro.title}>
+                      <div
+                        key={livro.id}
+                        className="perfil-livro"
+                        draggable={lista.chave !== "livrosFav"}
+                        onDragStart={(e) => iniciarArraste(e, livro.id, lista.chave)}
+                        onDragEnd={() => setListaAlvo(null)}
+                      >
+                        <Link to={`/livro/${livro.id}`} className="perfil-livro__link" title={livro.title} draggable="false">
                           <CapaLivro livro={livro} />
                         </Link>
                         {/* 5. Remover livro da lista */}
                         <button
                           type="button"
                           className="perfil-livro__remover"
+                          onClick={() => remover(livro.id, lista.chave)}
                           aria-label={`Remover ${livro.title} da lista ${lista.titulo}`}
                         >
                           ×

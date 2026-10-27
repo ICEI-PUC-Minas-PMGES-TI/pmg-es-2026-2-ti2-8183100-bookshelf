@@ -257,3 +257,14 @@
     flex-basis: 84px;
   }
 }
+
+/* lista que está recebendo um livro arrastado */
+.perfil-lista.is-alvo {
+  border-color: var(--bm-tan-border);
+  background: #f1e3c6;
+  box-shadow: 0 0 0 3px rgb(193 166 124 / 35%);
+}
+
+.perfil-livro[draggable="false"] {
+  cursor: default;
+}
