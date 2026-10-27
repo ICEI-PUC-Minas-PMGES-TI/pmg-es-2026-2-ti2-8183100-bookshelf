@@ -1,72 +1,134 @@
 .navbar {
-  background-color: #c1a67c;
-  height: 80px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 76px;
+  box-sizing: border-box;
   padding: 0 32px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
+  background-color: #c1a67c;
+  border-bottom: 1px solid #b09262;
+  box-shadow: 0 2px 8px rgb(73 54 33 / 12%);
+  border-radius: 50px;
+}
 
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .logo img {
-  width: 110px;
-  height: 110px;
+  display: block;
+  width: 90px;
+  height: 64px;
   object-fit: contain;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  justify-content: center;
+  gap: 12px;
 }
 
-.nav-links a {
+.nav-link {
+  position: relative;
+
+  padding: 10px 16px;
+  border-radius: 10px;
+
   color: #1e1e1e;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  transition: color 0.2s ease;
+
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
 }
 
-.nav-links a:hover {
-  color: #ffffff;
+.nav-link:hover {
+  background-color: rgb(255 247 235 / 35%);
+}
+
+.nav-link.active {
+  background-color: #493621;
+  color: #ffe7c2;
+}
+
+.nav-link.active:hover {
+  background-color: #60482d;
+}
+
+.perfil {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 46px;
+  height: 46px;
+  box-sizing: border-box;
+
+  border: 2px solid #ffe7c2;
+  border-radius: 50%;
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .perfil img {
-  width: 42px;
-  height: 42px;
+  display: block;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ffe7c2;
-  transition: transform 0.2s ease;
 }
 
-.perfil img:hover {
-  transform: scale(1.08);
+.perfil:hover {
+  transform: scale(1.06);
+  border-color: #493621;
 }
 
-@media (max-width: 600px) {
+.perfil.active {
+  border-color: #493621;
+  box-shadow: 0 0 0 3px rgb(255 231 194 / 60%);
+}
+
+.navbar a:focus-visible {
+  outline: 2px solid #493621;
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
   .navbar {
+    height: 68px;
     padding: 0 12px;
-  }
-
-  .nav-links {
-    gap: 12px;
-  }
-
-  .nav-links a {
-    font-size: 13px;
+    gap: 8px;
   }
 
   .logo img {
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 52px;
   }
 
-  .perfil img {
-    width: 34px;
-    height: 34px;
+  .nav-links {
+    gap: 2px;
+  }
+
+  .nav-link {
+    padding: 9px 8px;
+    font-size: 12px;
+  }
+
+  .perfil {
+    width: 36px;
+    height: 36px;
   }
 }
