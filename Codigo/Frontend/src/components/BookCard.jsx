@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./BookCard.css";
 
 function BookIcon() {
@@ -41,13 +42,13 @@ export default function BookCard({ book }) {
 
   return (
     <article className="book-card">
-      <div className="book-card__cover">
+      <Link to={`/livro/${book.id}`} className="book-card__cover book-card__link">
         {book.thumbnail ? (
           <img className="book-cover" src={book.thumbnail} alt={`Capa de ${book.title}`} loading="lazy" />
         ) : (
           <CoverFallback title={book.title} />
         )}
-      </div>
+      </Link>
 
       {book.category && (
         <span className="book-card__pill">
@@ -55,7 +56,9 @@ export default function BookCard({ book }) {
           {book.category}
         </span>
       )}
-      <h3 className="book-card__title">{book.title}</h3>
+      <h3 className="book-card__title">
+        <Link to={`/livro/${book.id}`} className="book-card__link">{book.title}</Link>
+      </h3>
       <p className="book-card__author">{authors}</p>
       <div className="book-card__meta">
         <Stars rating={book.rating} />

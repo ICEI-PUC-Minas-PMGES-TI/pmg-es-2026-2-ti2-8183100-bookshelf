@@ -1,0 +1,20 @@
+{
+  "usuario": {
+    "_id": 1,
+    "nome": "Gabriel Assis",
+    "userName": "GBRA",
+    "email": "gabriel@email.com",
+    "dataNascimento": "2004-05-20",
+    "dataCadastro": "2026-10-05",
+    "perfil": {
+      "foto": "https://www.gravatar.com/avatar/?d=mp&s=300",
+      "bio": "Gosto de ler ficção e fantasia."
+    },
+    "seguidores": 12,
+    "seguindo": 8,
+    "livrosFav": ["livro-02", "livro-01", "livro-05"],
+    "livrosLendo": ["livro-03", "livro-07"],
+    "livrosLerDepois": ["livro-04", "livro-09", "livro-10"],
+    "livrosLidos": ["livro-02", "livro-01", "livro-05", "livro-06", "livro-08"]
+  }
+}

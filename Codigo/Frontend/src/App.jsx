@@ -13,6 +13,7 @@ import Metricas from "./pages/metricas";
 import Home from "./pages/home";
 import Perfil from "./pages/perfil";
 import Catalogo from "./pages/catalogo";
+import Livro from "./pages/livro";
 
 import "./App.css";
 
@@ -53,6 +54,7 @@ function App() {
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/metricas" element={<Metricas />} />
           <Route path="/catalogo" element={<Catalogo />} />
+          <Route path="/livro/:id" element={<Livro />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
