@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { Calendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import BookMetricas from "../components/BookMetricas";
-import {items} from "../mocks/JsonLivros.json";
+import API_URL from "../services/api";
 
 async function logUser(userId) {
     try {
-        const response = await fetch(`http://localhost:3001/api/usuarios/${userId}`, {
+		console.log("URL da API:", API_URL);
+        const response = await fetch(`${API_URL}/api/usuarios/${userId}`, {
             method: "GET",
         });
 
@@ -39,7 +40,6 @@ export default function Metricas() {
 		
         carregarUsuario();
     }, []);
-	console.log(items);
 	
 	return (
 		<main className="metricas-main">
