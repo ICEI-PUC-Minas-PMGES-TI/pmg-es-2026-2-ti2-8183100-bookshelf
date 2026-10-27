@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import BookCard from "../components/BookCard.jsx";
-import { buscarLivros } from "../services/booksService";
 import "./catalogo.css";
 
 const ORDENACOES = {
