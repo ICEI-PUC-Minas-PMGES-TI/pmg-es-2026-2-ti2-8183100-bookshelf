@@ -1,11 +1,6 @@
-import usuarioMock from "../mocks/jsonUsuario.json";
+import API_URL from "./api";
 
-// Trocar para false quando for usar o backend (precisa do MongoDB e do server.js rodando)
-const USAR_MOCK = true;
-
-const API_URL = "http://localhost:3001/api/usuarios";
 const ID_USUARIO = 1;
-const CHAVE_STORAGE = "bookmark_usuario";
 
 // Nomes dos campos do usuário que guardam cada lista.
 export const LISTAS = [
@@ -18,36 +13,38 @@ export const LISTAS = [
 // Favoritos é uma lista à parte: o livro pode estar nela e em uma das listas de status.
 export const LISTAS_STATUS = ["livrosLendo", "livrosLerDepois", "livrosLidos"];
 
-export async function obterUsuario() {
-  if (USAR_MOCK) {
-    try {
-      const salvo = localStorage.getItem(CHAVE_STORAGE);
-      if (salvo !== null) return JSON.parse(salvo);
-    } catch (erro) {
-      console.error("Erro ao ler o usuário salvo:", erro);
-    }
-    return usuarioMock.usuario;
-  }
-
-  const resposta = await fetch(`${API_URL}/${ID_USUARIO}`);
-  if (!resposta.ok) throw new Error(`A API respondeu com status ${resposta.status}`);
-  return resposta.json();
+// Garante que as listas e as notas existam, mesmo em usuários criados sem esses campos.
+function normalizarUsuario(usuario) {
+  return {
+    ...usuario,
+    livrosFav: usuario.livrosFav ?? [],
+    livrosLendo: usuario.livrosLendo ?? [],
+    livrosLerDepois: usuario.livrosLerDepois ?? [],
+    livrosLidos: usuario.livrosLidos ?? [],
+    avaliacoes: usuario.avaliacoes ?? {},
+  };
 }
 
-export async function salvarUsuario(usuario) {
-  if (USAR_MOCK) {
-    try {
-      localStorage.setItem(CHAVE_STORAGE, JSON.stringify(usuario));
-    } catch (erro) {
-      console.error("Erro ao salvar o usuário:", erro);
-    }
-    return;
-  }
+// Os dados do usuário vêm do backend (MongoDB). O endereço fica em VITE_API_URL, no arquivo .env.
+function urlDoUsuario() {
+  if (!API_URL) throw new Error("O endereço da API (VITE_API_URL) não está configurado.");
+  return `${API_URL}/api/usuarios/${ID_USUARIO}`;
+}
 
-  const resposta = await fetch(`${API_URL}/${ID_USUARIO}`, {
+export async function obterUsuario() {
+  const resposta = await fetch(urlDoUsuario());
+  if (resposta.status === 404) throw new Error("Usuário não encontrado.");
+  if (!resposta.ok) throw new Error(`A API respondeu com status ${resposta.status}`);
+  return normalizarUsuario(await resposta.json());
+}
+
+// Salva só o que esta parte do app altera (listas e notas), para não sobrescrever o resto do usuário.
+export async function salvarUsuario(usuario) {
+  const { livrosFav, livrosLendo, livrosLerDepois, livrosLidos, avaliacoes } = usuario;
+  const resposta = await fetch(urlDoUsuario(), {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(usuario),
+    body: JSON.stringify({ livrosFav, livrosLendo, livrosLerDepois, livrosLidos, avaliacoes }),
   });
   if (!resposta.ok) throw new Error(`A API respondeu com status ${resposta.status}`);
 }

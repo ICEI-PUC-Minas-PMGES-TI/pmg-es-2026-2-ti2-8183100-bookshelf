@@ -4,6 +4,7 @@ import { Calendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import BookMetricas from "../components/BookMetricas";
 import API_URL from "../services/api";
+import { buscarLivrosPorIds } from "../services/booksService";
 
 async function logUser(userId) {
     try {
@@ -27,12 +28,16 @@ async function logUser(userId) {
 
 export default function Metricas() {
 	const [usuario, setUsuario] = useState(null);
+	const [livros, setLivros] = useState([]);
 
     useEffect(() => {
         async function carregarUsuario() {
             try {
                 const data = await logUser(1);
                 setUsuario(data);
+                // Livros das listas "Lendo" e "Favoritos" (um livro pode estar nas duas)
+                const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
+                setLivros(await buscarLivrosPorIds(ids));
             } catch (error) {
 				console.error(error);
             }
@@ -41,6 +46,16 @@ export default function Metricas() {
         carregarUsuario();
     }, []);
 	
+	// Transforma os ids de uma lista do usuário nos livros já carregados.
+	function livrosDa(lista) {
+		return (usuario?.[lista] ?? [])
+			.map((id) => livros.find((livro) => livro.id === id))
+			.filter(Boolean);
+	}
+
+	const lendo = livrosDa("livrosLendo");
+	const favoritos = livrosDa("livrosFav");
+
 	return (
 		<main className="metricas-main">
 			<section className="metricas-layout">
@@ -56,7 +71,7 @@ export default function Metricas() {
 
 					<div className="estatistica-item">
 						<label>Livros lidos:</label>
-						<div className="estatistica-valor">{usuario?.livrosLidos.length || 0}</div>
+						<div className="estatistica-valor">{usuario?.livrosLidos?.length || 0}</div>
 					</div>
 
 					<div className="estatistica-item">
@@ -81,18 +96,10 @@ export default function Metricas() {
 					<section className="leituras-card">
 						<h2>Leituras atuais:</h2>
 						<div className="leituras-lista">
-							<BookMetricas 
-								titulo="O Pequeno Príncipe"
-								imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
-							/>
-							<BookMetricas 
-								titulo="O Pequeno Príncipe"
-								imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
-							/>
-							<BookMetricas 
-								titulo="O Pequeno Príncipe"
-								imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
-							/>
+							{lendo.length === 0 && <p className="metricas-vazio">Nenhum livro em leitura.</p>}
+							{lendo.map((livro) => (
+								<BookMetricas key={livro.id} livro={livro} />
+							))}
 						</div>
 					</section>
 				</section>
@@ -101,18 +108,10 @@ export default function Metricas() {
 					<h3>Favoritos:</h3>
 
 					<div className="favoritos-lista">
-						<BookMetricas 
-							titulo="O Pequeno Príncipe"
-							imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
-						/>
-						<BookMetricas 
-							titulo="O Pequeno Príncipe"
-							imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
-						/>
-						<BookMetricas 
-							titulo="O Pequeno Príncipe"
-							imagem="https://m.media-amazon.com/images/I/61NHEYzP6kL._SY425_.jpg"
-						/>
+						{favoritos.length === 0 && <p className="metricas-vazio">Nenhum livro favorito.</p>}
+						{favoritos.map((livro) => (
+							<BookMetricas key={livro.id} livro={livro} />
+						))}
 					</div>
 				</section>
 
