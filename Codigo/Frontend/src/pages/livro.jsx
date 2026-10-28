@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { searchBooks } from "../services/booksService";
+import { buscarLivroPorId, ErroLivroNaoEncontrado } from "../services/booksService";
 import {
   LISTAS,
   obterUsuario,
@@ -11,7 +11,7 @@ import {
   notaDoLivro,
   definirNota,
 } from "../services/listasService";
-import detalhes from "../mocks/jsonLivroDetalhes.json";
+import { buscarSobreAutor } from "../services/autorService";
 import "../components/BookCard.css";
 import "./livro.css";
 
@@ -56,21 +56,51 @@ function Avaliacao({ media, nota, aoAvaliar }) {
 export default function Livro() {
   const { id } = useParams();
   const [livro, setLivro] = useState(null);
-  const [status, setStatus] = useState("loading"); // loading | ok | naoEncontrado
+  const [status, setStatus] = useState("loading"); // loading | ok | naoEncontrado | erro
+  const [mensagemErro, setMensagemErro] = useState("");
   const [usuario, setUsuario] = useState(null);
   const menuRef = useRef(null);
+  const [aviso, setAviso] = useState("");
+  const [sobreAutor, setSobreAutor] = useState({ estado: "carregando", texto: "", fonte: null });
 
   useEffect(() => {
     obterUsuario().then(setUsuario).catch(() => setUsuario(null));
   }, []);
 
   useEffect(() => {
-    searchBooks("").then((todos) => {
-      const encontrado = todos.find((l) => l.id === id);
-      setLivro(encontrado ?? null);
-      setStatus(encontrado ? "ok" : "naoEncontrado");
-    });
+    let cancelado = false;
+    buscarLivroPorId(id)
+      .then((encontrado) => {
+        if (cancelado) return;
+        setLivro(encontrado);
+        setStatus("ok");
+      })
+      .catch((erro) => {
+        if (cancelado) return;
+        setMensagemErro(erro.message);
+        setStatus(erro instanceof ErroLivroNaoEncontrado ? "naoEncontrado" : "erro");
+      });
+    return () => {
+      cancelado = true;
+    };
   }, [id]);
+
+  // Biografia do primeiro autor (Wikipédia)
+  const primeiroAutor = livro?.authors?.[0];
+  useEffect(() => {
+    let cancelado = false;
+    buscarSobreAutor(primeiroAutor).then((resumo) => {
+      if (cancelado) return;
+      setSobreAutor(
+        resumo
+          ? { estado: "ok", texto: resumo.texto, fonte: resumo.fonte }
+          : { estado: "vazio", texto: "", fonte: null },
+      );
+    });
+    return () => {
+      cancelado = true;
+    };
+  }, [primeiroAutor]);
 
   if (status === "loading") {
     return (
@@ -80,17 +110,28 @@ export default function Livro() {
     );
   }
 
-  if (status === "naoEncontrado") {
+  if (status === "naoEncontrado" || status === "erro") {
     return (
       <main className="livro-page">
         <div className="livro-moldura">
           <div className="livro-paginas">
-            <p>Livro não encontrado.</p>
+            <p>{status === "naoEncontrado" ? "Livro não encontrado." : mensagemErro}</p>
             <Link to="/catalogo" className="livro-botao">Voltar ao catálogo</Link>
           </div>
         </div>
       </main>
     );
+  }
+
+  // Atualiza a tela na hora e salva; se não conseguir salvar, volta ao que estava e avisa.
+  function gravar(novo) {
+    const anterior = usuario;
+    setUsuario(novo);
+    setAviso("");
+    salvarUsuario(novo).catch(() => {
+      setUsuario(anterior);
+      setAviso("Não foi possível salvar a alteração. Tente de novo.");
+    });
   }
 
   // Escolher Favoritos liga/desliga o favorito; as outras listas trocam a lista de status.
@@ -102,22 +143,18 @@ export default function Livro() {
     } else {
       novo = adicionarNaLista(usuario, livro.id, chave);
     }
-    setUsuario(novo);
-    salvarUsuario(novo);
+    gravar(novo);
     if (menuRef.current) menuRef.current.open = false;
   }
 
   // Salva a nota que o usuário escolheu (null remove).
   function avaliar(nota) {
     if (!usuario) return;
-    const novo = definirNota(usuario, livro.id, nota);
-    setUsuario(novo);
-    salvarUsuario(novo);
+    gravar(definirNota(usuario, livro.id, nota));
   }
 
   const statusAtual = usuario ? statusDoLivro(usuario, livro.id) : null;
   const jaEmLista = usuario && (statusAtual || usuario.livrosFav.includes(livro.id));
-  const extra = detalhes[livro.id] ?? {};
   const autores = livro.authors.length ? livro.authors.join(", ") : "Autor desconhecido";
 
   return (
@@ -148,7 +185,7 @@ export default function Livro() {
               <dt>Ano</dt>
               <dd>{livro.year ?? "—"}</dd>
               <dt>Editora</dt>
-              <dd>{extra.editora ?? "—"}</dd>
+              <dd>{livro.publisher ?? "—"}</dd>
             </dl>
           </aside>
 
@@ -182,6 +219,8 @@ export default function Livro() {
               </details>
             </header>
 
+            {aviso && <p className="livro-aviso" role="alert">{aviso}</p>}
+
             {/* 8. Sinopse e Sobre o autor */}
             <section className="livro-caixa">
               <h2>Sinopse:</h2>
@@ -190,7 +229,18 @@ export default function Livro() {
 
             <section className="livro-caixa">
               <h2>Sobre o autor:</h2>
-              <p>{extra.sobreAutor ?? "Ainda não há informações sobre o autor."}</p>
+              {sobreAutor.estado === "carregando" && <p>Carregando...</p>}
+              {sobreAutor.estado === "vazio" && <p>Ainda não há informações sobre o autor.</p>}
+              {sobreAutor.estado === "ok" && (
+                <>
+                  <p>{sobreAutor.texto}</p>
+                  {sobreAutor.fonte && (
+                    <p className="livro-fonte">
+                      Fonte: <a href={sobreAutor.fonte} target="_blank" rel="noreferrer">Wikipédia</a>
+                    </p>
+                  )}
+                </>
+              )}
             </section>
           </div>
         </div>

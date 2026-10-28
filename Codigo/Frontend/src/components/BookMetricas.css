@@ -1,20 +1,73 @@
+/* Sem caixa: a capa é o destaque, como nos cards do Catálogo e do Perfil. */
 .card-livro {
-    width: 100px;
-    padding: 16px;
-    border-radius: 12px;
-    background-color: #fff9ef;
-    text-align: center;
-    border: 2px solid #8B7355;
-    border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: var(--capa-largura, 100px);
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
 }
 
-.card-livro img {
-    width: 80px;
-    height: 120px;
-    object-fit: cover;
+.card-livro:hover .book-cover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgb(90 64 35 / 28%);
+}
+
+.card-livro:focus-visible {
+  outline: 2px solid #8e7048;
+  outline-offset: 4px;
+  border-radius: 6px;
 }
 
 .card-livro h3 {
-    color: #1e1e1e;
-    font-size: 12px;
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 8px 0 0;
+  color: #2f2212;
+  font-family: var(--bm-display, Georgia, "Times New Roman", serif);
+  font-size: 0.95rem;
+  font-weight: 650;
+  line-height: 1.2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.card-livro p {
+  overflow: hidden;
+  margin: 0;
+  color: #6f5f48;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* capa de reserva menor, para caber nas listas compactas */
+.card-livro .book-cover--fallback {
+  padding: 12px 8px 10px 14px;
+  border-left-width: 5px;
+}
+
+.card-livro .book-cover__title {
+  font-size: 0.8rem;
+}
+
+.card-livro .book-cover__brand {
+  font-size: 0.45rem;
+}
+
+/* títulos longos quebram em vez de serem cortados; nas capas pequenas a letra é menor */
+.card-livro .book-cover__title {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.favoritos-lista .card-livro .book-cover__title {
+  font-size: 0.68rem;
+}
+
+@media (max-width: 650px) {
+  .card-livro .book-cover__title {
+    font-size: 0.62rem;
+  }
 }

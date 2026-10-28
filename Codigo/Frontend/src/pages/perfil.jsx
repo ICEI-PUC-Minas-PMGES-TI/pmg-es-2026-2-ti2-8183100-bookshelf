@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { searchBooks } from "../services/booksService";
+import { buscarLivrosPorIds } from "../services/booksService";
 import {
   LISTAS,
   obterUsuario,
@@ -8,40 +8,33 @@ import {
   adicionarNaLista,
   removerDaLista,
 } from "../services/listasService";
+import CapaLivro from "../components/CapaLivro";
 import "../components/BookCard.css";
 import "./perfil.css";
 
-// Capa do livro (usa a imagem ou, se não houver, a capa de reserva).
-function CapaLivro({ livro }) {
-  if (livro.thumbnail) {
-    return <img className="book-cover" src={livro.thumbnail} alt={`Capa de ${livro.title}`} draggable="false" />;
-  }
-  return (
-    <div className="book-cover book-cover--fallback">
-      <span className="book-cover__brand">Bookmark</span>
-      <span className="book-cover__title">{livro.title}</span>
-      <span className="book-cover__line" />
-    </div>
-  );
-}
+// Foto usada quando o usuário não tem foto (ou a foto não carrega).
+const FOTO_PADRAO = "https://www.gravatar.com/avatar/?d=mp&s=300";
 
 export default function Perfil() {
   const [usuario, setUsuario] = useState(null);
   const [livros, setLivros] = useState([]);
   const [listaAlvo, setListaAlvo] = useState(null); // lista que está recebendo o arraste
   const [erro, setErro] = useState(false);
+  const [aviso, setAviso] = useState("");
 
-  // Carrega o usuário e o catálogo (para transformar os ids em livros).
+  // Carrega o usuário e, depois, cada livro que aparece nas listas dele.
   useEffect(() => {
-    Promise.all([obterUsuario(), searchBooks("")])
-      .then(([dadosUsuario, todosLivros]) => {
+    obterUsuario()
+      .then(async (dadosUsuario) => {
+        const ids = LISTAS.flatMap((lista) => dadosUsuario[lista.chave]);
+        const encontrados = await buscarLivrosPorIds(ids);
         setUsuario(dadosUsuario);
-        setLivros(todosLivros);
+        setLivros(encontrados);
       })
       .catch(() => setErro(true));
   }, []);
 
-  if (erro) return <main className="perfil-page"><p>Não foi possível carregar o perfil.</p></main>;
+  if (erro) return <main className="perfil-page"><p>Não foi possível carregar o perfil. Verifique sua conexão e recarregue a página.</p></main>;
   if (!usuario) return <main className="perfil-page"><p>Carregando perfil...</p></main>;
 
   function livrosDaLista(chave) {
@@ -51,9 +44,15 @@ export default function Perfil() {
   }
 
   // Atualiza a tela na hora e salva em seguida.
+  // Se não conseguir salvar, volta ao que estava e avisa.
   function atualizar(novoUsuario) {
+    const anterior = usuario;
     setUsuario(novoUsuario);
-    salvarUsuario(novoUsuario).catch(() => setErro(true));
+    setAviso("");
+    salvarUsuario(novoUsuario).catch(() => {
+      setUsuario(anterior);
+      setAviso("Não foi possível salvar a alteração. Tente de novo.");
+    });
   }
 
   function remover(livroId, chave) {
@@ -85,12 +84,20 @@ export default function Perfil() {
         <div className="perfil-layout">
           {/* 2. Menu lateral do perfil */}
           <aside className="perfil-menu">
-            <img className="perfil-foto" src={usuario.perfil.foto} alt="Foto de perfil" />
-            <h1 className="perfil-usuario">{usuario.userName}</h1>
+            <img
+              className="perfil-foto"
+              src={usuario.perfil?.foto || FOTO_PADRAO}
+              alt="Foto de perfil"
+              onError={(e) => {
+                // foto inválida ou fora do ar: troca pela padrão (sem entrar em loop)
+                if (e.currentTarget.src !== FOTO_PADRAO) e.currentTarget.src = FOTO_PADRAO;
+              }}
+            />
+            <h1 className="perfil-usuario">{usuario.userName || usuario.nome}</h1>
             <p className="perfil-seguidores">
-              <strong>{usuario.seguidores}</strong> seguidores · <strong>{usuario.seguindo}</strong> seguindo
+              <strong>{usuario.seguidores ?? 0}</strong> seguidores · <strong>{usuario.seguindo ?? 0}</strong> seguindo
             </p>
-            <p className="perfil-bio">{usuario.perfil.bio}</p>
+            {usuario.perfil?.bio && <p className="perfil-bio">{usuario.perfil.bio}</p>}
 
             <nav className="perfil-botoes" aria-label="Menu do perfil">
               <a className="perfil-botao" href="#favoritos">Favoritos</a>
@@ -101,6 +108,7 @@ export default function Perfil() {
 
           {/* 3. Listas de livros */}
           <section className="perfil-listas">
+            {aviso && <p className="perfil-aviso" role="alert">{aviso}</p>}
             {LISTAS.map((lista) => {
               const itens = livrosDaLista(lista.chave);
               return (
