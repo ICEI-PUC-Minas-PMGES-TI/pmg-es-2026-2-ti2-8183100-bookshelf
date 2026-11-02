@@ -14,6 +14,7 @@ import Home from "./pages/home";
 import Perfil from "./pages/perfil";
 import Catalogo from "./pages/catalogo";
 import Livro from "./pages/livro";
+import Login from "./pages/login";
 
 import "./App.css";
 
@@ -50,6 +51,7 @@ function App() {
       <Suspense fallback={<p>Carregando página...</p>}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/feed" element={<Feed />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/metricas" element={<Metricas />} />
