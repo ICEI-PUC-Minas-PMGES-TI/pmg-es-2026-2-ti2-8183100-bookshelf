@@ -1,13 +1,39 @@
 import { useState } from "react";
+import API_URL from "../services/api";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
+        console.log(senha);
+        
+        try {
+            const response = await fetch(
+                `http://localhost:3001/api/auth/login`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email,
+                        senha
+                    })
+                }
+            );
 
-        console.log(email, senha);
+            const dados = await response.json();
+
+            if (!response.ok) {
+                throw new Error(dados.erro || "Falha no login");
+            }
+
+            console.log("Login realizado!");
+        } catch (error) {
+            console.error(error.message);
+        }
     }
 
     return (

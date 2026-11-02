@@ -3,6 +3,7 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
+/* const jwt = require("jsonwebtoken"); */
 
 dotenv.config();
 
@@ -24,6 +25,34 @@ async function iniciarServidor() {
 
 		app.get("/", (req, res) => {
 			res.json({ mensagem: "API Bookshelf funcionando!" });
+		});
+
+		app.post("/api/auth/login", async (req, res) => {
+			try {
+				const { email, senha } = req.body;
+
+				if (!email || !senha) {
+					return res.status(400).json({
+						erro: "Informe o e-mail e a senha."
+					});
+				}
+
+				const usuario = await db
+					.collection("usuarios")
+					.findOne({ email: email });
+
+				if (!usuario || usuario.senha !== senha) {
+					return res.status(401).json({
+						erro: "E-mail ou senha incorretos."
+					});
+				}
+
+				return res.status(200).json(usuario);
+			} catch (erro) {
+				res.status(500).json({
+					erro: "Erro ao buscar usuários."
+				});
+			}
 		});
 
 		// CRUD DE USUARIO
