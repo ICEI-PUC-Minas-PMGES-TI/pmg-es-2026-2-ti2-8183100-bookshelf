@@ -7,45 +7,49 @@ import API_URL from "../services/api";
 import { buscarLivrosPorIds } from "../services/booksService";
 
 async function logUser(userId) {
-    try {
-		console.log("URL da API:", API_URL);
-        const response = await fetch(`${API_URL}/api/usuarios/${userId}`, {
-            method: "GET",
-        });
+	try {
+		const token = localStorage.getItem("token");
 
-        if (!response.ok) {
-            throw new Error("Erro ao buscar usuário");
-        }
+		const response = await fetch(`http://localhost:3001/api/usuarios/${userId}`, {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		});
 
-        const data = await response.json();
+		if (!response.ok) {
+			throw new Error("Erro ao buscar usuário");
+		}
 
-        return data;
-    } catch (error) {
-        console.error("Erro ao buscar dados do usuário:", error);
-        throw error;
-    }
+		const data = await response.json();
+
+		return data;
+	} catch (error) {
+		console.error("Erro ao buscar dados do usuário:", error);
+		throw error;
+	}
 }
 
 export default function Metricas() {
 	const [usuario, setUsuario] = useState(null);
 	const [livros, setLivros] = useState([]);
 
-    useEffect(() => {
-        async function carregarUsuario() {
-            try {
-                const data = await logUser(1);
-                setUsuario(data);
-                // Livros das listas "Lendo" e "Favoritos" (um livro pode estar nas duas)
-                const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
-                setLivros(await buscarLivrosPorIds(ids));
-            } catch (error) {
+	useEffect(() => {
+		async function carregarUsuario() {
+			try {
+				const data = await logUser(1);
+				setUsuario(data);
+				// Livros das listas "Lendo" e "Favoritos" (um livro pode estar nas duas)
+				const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
+				setLivros(await buscarLivrosPorIds(ids));
+			} catch (error) {
 				console.error(error);
-            }
-        }
-		
-        carregarUsuario();
-    }, []);
-	
+			}
+		}
+
+		carregarUsuario();
+	}, []);
+
 	// Transforma os ids de uma lista do usuário nos livros já carregados.
 	function livrosDa(lista) {
 		return (usuario?.[lista] ?? [])

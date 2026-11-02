@@ -3,7 +3,8 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
-/* const jwt = require("jsonwebtoken"); */
+import jwt from "jsonwebtoken";
+import { autenticarToken } from "./authMiddleware.js";
 
 dotenv.config();
 
@@ -47,10 +48,25 @@ async function iniciarServidor() {
 					});
 				}
 
-				return res.status(200).json(usuario);
+				const token = jwt.sign(
+					{ id: usuario._id },
+					process.env.JWT_SECRET,
+					{ expiresIn: "1h" }
+				);
+
+				return res.status(200).json({
+					mensagem: "Login realizado com sucesso!",
+					token: token,
+					usuario: {
+						id: usuario._id,
+						nome: usuario.nome,
+						userName: usuario.userName,
+						email: usuario.email
+					}
+				});
 			} catch (erro) {
 				res.status(500).json({
-					erro: "Erro ao buscar usuários."
+					erro: "Erro interno ao realizar login."
 				});
 			}
 		});
@@ -89,7 +105,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/usuarios/:id", async (req, res) => {
+		app.get("/api/usuarios/:id",autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -109,7 +125,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/usuarios/:id", async (req, res) => {
+		app.put("/api/usuarios/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 				const dados = { ...req.body };
@@ -135,7 +151,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/usuarios/:id", async (req, res) => {
+		app.delete("/api/usuarios/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 

@@ -8,7 +8,7 @@ export default function Login() {
     async function handleSubmit(event) {
         event.preventDefault();
         console.log(senha);
-        
+
         try {
             const response = await fetch(
                 `http://localhost:3001/api/auth/login`,
@@ -30,7 +30,14 @@ export default function Login() {
                 throw new Error(dados.erro || "Falha no login");
             }
 
-            console.log("Login realizado!");
+            localStorage.setItem("token", dados.token);
+
+            localStorage.setItem(
+                "usuario",
+                JSON.stringify(dados.usuario)
+            );
+
+            console.log("Login realizado!", dados);
         } catch (error) {
             console.error(error.message);
         }
