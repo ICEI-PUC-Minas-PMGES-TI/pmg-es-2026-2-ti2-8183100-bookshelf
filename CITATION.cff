@@ -1,31 +1,40 @@
-cff-version: 1.0.1
-message: Please cite this software using these metadata.
-title: 
+cff-version: 1.2.0
+message: "Please cite this software using these metadata."
+type: software
+title: "BookMark"
+abstract: "O BookMark é uma aplicação web desenvolvida para incentivar o hábito da leitura."
+
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names:
-  - name-suffix: Professor
-    affiliation: PUC Minas
-    family-names: 
-    given-names: 
-  - name-suffix: Professor
-    affiliation: PUC Minas
-    family-names: 
-    given-names: 
+  - family-names: "de Souza"
+    given-names: "Carolina Almeida Mendes"
+    affiliation: "PUC Minas"
+  - family-names: "Assis"
+    given-names: "Gabriel do Carmo"
+    affiliation: "PUC Minas"
+  - family-names: "Mota"
+    given-names: "Giovanni Arenare"
+    affiliation: "PUC Minas"
+  - family-names: "Candeia"
+    given-names: "Lukas Nathan Matos"
+    affiliation: "PUC Minas"
+  - family-names: "Tavares"
+    given-names: "Cleiton Silva"
+    affiliation: "PUC Minas"
+  - family-names: "Diniz"
+    given-names: "Rafael Henriques Nogueira"
+    affiliation: "PUC Minas"
+  - family-names: "Carneiro"
+    given-names: "Rommel Vieira"
+    affiliation: "PUC Minas"
+
 keywords:
-  - 
-  - 
-repository-code: 
+  - "Leitura"
+  - "Livros"
+  - "Hábito de leitura"
+  - "Comunidade de leitores"
+  - "Aplicação web"
+
+repository-code: "https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti2-8183100-bookshelf"
 license: CC-BY-4.0
 version: 1.0.0
-date-released: 2022-07-14
+date-released: "2026-11-02"
