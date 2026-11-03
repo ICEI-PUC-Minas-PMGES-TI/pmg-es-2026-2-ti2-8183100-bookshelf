@@ -37,7 +37,6 @@ export default function CadastroModal({ aberto, fechar }) {
                     )
                 }
             );
-
             const dados = await response.json();
 
             if (response.status === 409) {
@@ -48,6 +47,9 @@ export default function CadastroModal({ aberto, fechar }) {
             if (!response.ok) {
                 throw new Error(dados.erro || "Erro ao cadastrar usuário.");
             }
+
+            alert("Cadastro realizado com sucesso!");
+            fechar();
 
         } catch (error) {
             console.error(error.message);

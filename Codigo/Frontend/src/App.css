@@ -106,6 +106,20 @@
   outline-offset: 3px;
 }
 
+.perfil-login {
+    text-decoration: none;
+    color: #000;
+    background-color: #DEC6A0;
+    padding: 10px 22px;
+    border-radius: 20px;
+    font-size: 18px;
+}
+
+.perfil-login:hover {
+    background-color: #C6815B;
+    color: white;
+}
+
 @media (max-width: 700px) {
   .navbar {
     height: 68px;

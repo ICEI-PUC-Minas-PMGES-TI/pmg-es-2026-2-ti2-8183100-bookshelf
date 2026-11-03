@@ -2,15 +2,16 @@ import { useState } from "react";
 import API_URL from "../services/api";
 import CadastroModal from "../components/popUpCadastro";
 import "./login.css"
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [cadastro, setCadastro] = useState(false);
+    const navigate = useNavigate();
 
     async function handleSubmit(event) {
         event.preventDefault();
-        console.log(senha);
 
         try {
             const response = await fetch(
@@ -35,6 +36,8 @@ export default function Login() {
                 "usuario",
                 JSON.stringify(dados.usuario)
             );
+            navigate("/");
+            window.location.reload();
         } catch (error) {
             console.error(error.message);
         }
