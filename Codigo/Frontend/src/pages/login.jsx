@@ -57,7 +57,7 @@ export default function Login() {
             <section className="login-conteudo">
 
                 <h1>
-                    ‘Para o login para continuar
+                    ‘Faça o login para continuar
                     sua jornada de leitura’
                 </h1>
 
