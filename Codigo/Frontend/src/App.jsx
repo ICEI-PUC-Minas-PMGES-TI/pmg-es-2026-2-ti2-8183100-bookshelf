@@ -19,6 +19,8 @@ import Login from "./pages/login";
 import "./App.css";
 
 function App() {
+  
+
   return (
     <BrowserRouter>
       <nav className="navbar">

@@ -1,0 +1,211 @@
+
+.login-container {
+    display: grid;
+    grid-template-columns: 42% 58%;
+    min-height: calc(100vh - 94px);
+    background-color: #FFE7C2;
+}
+
+/* LADO DA ILUSTRAÇÃO */
+
+.login-ilustracao {
+    background-image: url("/images/login-ilustracao.png");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    color: #000;
+}
+
+.login-ilustracao p {
+    font-family: Georgia, serif;
+    font-size: 28px;
+    margin: 0;
+    max-width: 550px;
+}
+
+.login-ilustracao span {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    align-self: flex-end;
+}
+
+/* LADO DO LOGIN */
+
+.login-conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login-conteudo h1 {
+    width: 100%;
+    min-height: 205px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 25px;
+    margin: 0;
+    border-bottom: 2px solid #C1A67C;
+
+    font-family: Georgia, serif;
+    font-size: 52px;
+    font-weight: normal;
+    color: #756D67;
+}
+
+/* CARD DO FORMULÁRIO */
+
+.login-card {
+    width: 60%;
+    max-width: 455px;
+    margin-top: 55px;
+    padding: 60px 26px 45px;
+    background-color: #C1A67C;
+    border-radius: 32px;
+}
+
+.login-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.login-card label {
+    font-family: Georgia, serif;
+    font-size: 30px;
+    color: #55504A;
+}
+
+.login-card input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 16px;
+    border: none;
+    border-radius: 9px;
+    background-color: #DEC6A0;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 48px;
+}
+
+.login-card input:focus {
+    box-shadow: 0 0 0 2px #C6815B;
+}
+
+.login-card p {
+    font-family: Georgia, serif;
+    font-size: 18px;
+    color: #655B4D;
+    margin: -20px 0 0;
+}
+
+.login-card p button {
+    background: none;
+    border: none;
+    color: #C6815B;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* BOTÕES */
+
+.login-botoes {
+    display: flex;
+    justify-content: center;
+    gap: 27px;
+    margin-top: 54px;
+}
+
+.login-botoes button {
+    width: 263px;
+    padding: 8px;
+    border: 1px solid #1E1E1E;
+    border-radius: 9px;
+    font-family: Georgia, serif;
+    font-size: 30px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-cancelar {
+    background-color: #DEC6A0;
+    color: #1E1E1E;
+}
+
+.btn-entrar {
+    background-color: #C6815B;
+    color: white;
+}
+
+.login-botoes button:hover {
+    filter: brightness(0.95);
+    transform: translateY(-2px);
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 900px) {
+    .login-container {
+        grid-template-columns: 1fr;
+    }
+
+    .login-ilustracao {
+        min-height: 300px;
+    }
+
+    .login-conteudo h1 {
+        font-size: 36px;
+        min-height: 130px;
+    }
+
+    .login-card {
+        width: 80%;
+        margin-top: 30px;
+    }
+
+    .login-botoes {
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 500px) {
+    .login-ilustracao {
+        min-height: 220px;
+    }
+
+    .login-ilustracao p {
+        font-size: 22px;
+    }
+
+    .login-conteudo h1 {
+        font-size: 29px;
+    }
+
+    .login-card {
+        width: 85%;
+        padding: 35px 22px;
+    }
+
+    .login-card label {
+        font-size: 23px;
+    }
+
+    .login-botoes {
+        width: 85%;
+        gap: 12px;
+    }
+
+    .login-botoes button {
+        width: 100%;
+    }
+}
