@@ -1,8 +1,10 @@
 
 import express from "express";
-import { MongoClient } from "mongodb";
+import { MongoClient,ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
+import jwt from "jsonwebtoken";
+import { autenticarToken } from "./authMiddleware.js";
 
 dotenv.config();
 
@@ -26,8 +28,51 @@ async function iniciarServidor() {
 			res.json({ mensagem: "API Bookshelf funcionando!" });
 		});
 
+		app.post("/api/auth/login", async (req, res) => {
+			try {
+				const { email, senha } = req.body;
+
+				if (!email || !senha) {
+					return res.status(400).json({
+						erro: "Informe o e-mail e a senha."
+					});
+				}
+
+				const usuario = await db
+					.collection("usuarios")
+					.findOne({ email: email });
+
+				if (!usuario || usuario.senha !== senha) {
+					return res.status(401).json({
+						erro: "E-mail ou senha incorretos."
+					});
+				}
+
+				const token = jwt.sign(
+					{ id: usuario._id },
+					process.env.JWT_SECRET,
+					{ expiresIn: "1h" }
+				);
+
+				return res.status(200).json({
+					mensagem: "Login realizado com sucesso!",
+					token: token,
+					usuario: {
+						id: usuario._id,
+						nome: usuario.nome,
+						userName: usuario.userName,
+						email: usuario.email
+					}
+				});
+			} catch (erro) {
+				res.status(500).json({
+					erro: "Erro interno ao realizar login."
+				});
+			}
+		});
+
 		// CRUD DE USUARIO
-		app.get("/api/usuarios", async (req, res) => {
+		app.get("/api/usuarios", autenticarToken, async (req, res) => {
 			try {
 				const usuarios = await db
 					.collection("usuarios")
@@ -44,7 +89,52 @@ async function iniciarServidor() {
 
 		app.post("/api/usuarios", async (req, res) => {
 			try {
-				const novoUsuario = req.body;
+				const {
+					nome,
+					userName,
+					email,
+					senha,
+					dataNascimento
+				} = req.body;
+
+				const usuario = await db
+					.collection("usuarios")
+					.findOne({ email });
+
+				if (usuario) {
+					return res.status(409).json({
+						erro: "Este e-mail já está cadastrado."
+					});
+				}
+				
+
+				const novoUsuario = {
+					nome,
+					userName,
+					email,
+					senha,
+					dataNascimento,
+
+					dataCadastro: new Date().toISOString().split("T")[0],
+
+					perfil: {
+						bio: "",
+						foto: ""
+					},
+
+					livrosFav: [],
+					livrosLerDepois: [],
+					livrosLidos: [],
+					livrosLendo: [],
+
+					metricas: [],
+
+					sequencia: 0,
+					minLidos: 0,
+					pagsLidas: 0,
+
+					avaliacoes: {}
+				};
 
 				const resultado = await db
 					.collection("usuarios")
@@ -60,13 +150,13 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/usuarios/:id", async (req, res) => {
+		app.get("/api/usuarios/:id", autenticarToken, async (req, res) => {
 			try {
-				const id = Number(req.params.id);
+				const id = req.params.id;
 
 				const usuario = await db
 					.collection("usuarios")
-					.findOne({ _id: id });
+					.findOne({ _id: new ObjectId(id) });
 
 				if (!usuario) {
 					return res.status(404).json({
@@ -80,7 +170,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/usuarios/:id", async (req, res) => {
+		app.put("/api/usuarios/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 				const dados = { ...req.body };
@@ -106,7 +196,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/usuarios/:id", async (req, res) => {
+		app.delete("/api/usuarios/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -129,7 +219,7 @@ async function iniciarServidor() {
 
 
 		// CRUD DE MÉTRICAS
-		app.get("/api/metricas", async (req, res) => {
+		app.get("/api/metricas", autenticarToken, async (req, res) => {
 			try {
 				const metricas = await db
 					.collection("metricas")
@@ -143,7 +233,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/metricas/:id", async (req, res) => {
+		app.get("/api/metricas/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -162,7 +252,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.post("/api/metricas", async (req, res) => {
+		app.post("/api/metricas", autenticarToken, async (req, res) => {
 			try {
 				const resultado = await db
 					.collection("metricas")
@@ -178,7 +268,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/metricas/:id", async (req, res) => {
+		app.put("/api/metricas/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 				const dados = { ...req.body };
@@ -199,7 +289,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/metricas/:id", async (req, res) => {
+		app.delete("/api/metricas/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -219,7 +309,7 @@ async function iniciarServidor() {
 		});
 
 		// CRUD DE PUBLICACAO
-		app.get("/api/publicacao", async (req, res) => {
+		app.get("/api/publicacao", autenticarToken, async (req, res) => {
 			try {
 				const publicacoes = await db
 					.collection("publicacao")
@@ -233,7 +323,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/publicacao/:id", async (req, res) => {
+		app.get("/api/publicacao/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -254,7 +344,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.post("/api/publicacao", async (req, res) => {
+		app.post("/api/publicacao", autenticarToken, async (req, res) => {
 			try {
 				const resultado = await db
 					.collection("publicacao")
@@ -270,7 +360,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/publicacao/:id", async (req, res) => {
+		app.put("/api/publicacao/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 				const dados = { ...req.body };
@@ -293,7 +383,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/publicacao/:id", async (req, res) => {
+		app.delete("/api/publicacao/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
