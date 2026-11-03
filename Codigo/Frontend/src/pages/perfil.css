@@ -278,3 +278,21 @@
   color: #7a2323;
   font-size: 0.9rem;
 }
+
+/* nome (abaixo do nome de usuário) */
+.perfil-nome {
+  margin: 0 0 6px;
+  color: var(--bm-muted);
+  font-size: 0.95rem;
+}
+
+/* mensagem de perfil salvo */
+.perfil-sucesso {
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid #9bb98f;
+  border-radius: 8px;
+  background: #edf6e9;
+  color: #2c5424;
+  font-size: 0.9rem;
+}
