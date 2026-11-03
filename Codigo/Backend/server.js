@@ -72,7 +72,7 @@ async function iniciarServidor() {
 		});
 
 		// CRUD DE USUARIO
-		app.get("/api/usuarios", async (req, res) => {
+		app.get("/api/usuarios",autenticarToken, async (req, res) => {
 			try {
 				const usuarios = await db
 					.collection("usuarios")
@@ -174,7 +174,7 @@ async function iniciarServidor() {
 
 
 		// CRUD DE MÉTRICAS
-		app.get("/api/metricas", async (req, res) => {
+		app.get("/api/metricas",autenticarToken, async (req, res) => {
 			try {
 				const metricas = await db
 					.collection("metricas")
@@ -188,7 +188,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/metricas/:id", async (req, res) => {
+		app.get("/api/metricas/:id",autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -207,7 +207,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.post("/api/metricas", async (req, res) => {
+		app.post("/api/metricas",autenticarToken, async (req, res) => {
 			try {
 				const resultado = await db
 					.collection("metricas")
@@ -223,7 +223,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/metricas/:id", async (req, res) => {
+		app.put("/api/metricas/:id",autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 				const dados = { ...req.body };
@@ -244,7 +244,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/metricas/:id", async (req, res) => {
+		app.delete("/api/metricas/:id",autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -264,7 +264,7 @@ async function iniciarServidor() {
 		});
 
 		// CRUD DE PUBLICACAO
-		app.get("/api/publicacao", async (req, res) => {
+		app.get("/api/publicacao",autenticarToken, async (req, res) => {
 			try {
 				const publicacoes = await db
 					.collection("publicacao")
@@ -278,7 +278,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/publicacao/:id", async (req, res) => {
+		app.get("/api/publicacao/:id",autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -299,7 +299,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.post("/api/publicacao", async (req, res) => {
+		app.post("/api/publicacao",autenticarToken, async (req, res) => {
 			try {
 				const resultado = await db
 					.collection("publicacao")
@@ -315,7 +315,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/publicacao/:id", async (req, res) => {
+		app.put("/api/publicacao/:id",autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 				const dados = { ...req.body };
@@ -338,7 +338,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/publicacao/:id", async (req, res) => {
+		app.delete("/api/publicacao/:id",autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 

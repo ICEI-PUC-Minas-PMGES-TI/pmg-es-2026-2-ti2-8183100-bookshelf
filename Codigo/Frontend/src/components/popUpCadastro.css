@@ -1,0 +1,68 @@
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.modal-container {
+    position: relative;
+    background-color: #FFE7C2;
+    width: 100%;
+    max-width: 420px;
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-container h2 {
+    margin-top: 0;
+    color: #1E1E1E;
+}
+
+.modal-container p {
+    color: #555;
+    margin-bottom: 24px;
+}
+
+.modal-fechar {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.modal-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-container input {
+    padding: 12px;
+    border: 1px solid #C1A67C;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.modal-container form button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #C6815B;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-container form button:hover {
+    opacity: 0.9;
+}

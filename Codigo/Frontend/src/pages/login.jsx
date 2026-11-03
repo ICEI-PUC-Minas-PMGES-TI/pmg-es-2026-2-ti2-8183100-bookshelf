@@ -1,9 +1,11 @@
 import { useState } from "react";
 import API_URL from "../services/api";
+import CadastroModal from "../components/popUpCadastro";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [cadastro, setCadastro] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -44,24 +46,41 @@ export default function Login() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="email"
-                placeholder="E-mail"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-            />
+        <main>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="email"
+                    placeholder="E-mail"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    required
+                />
 
-            <input
-                type="password"
-                placeholder="Senha"
-                value={senha}
-                onChange={(event) => setSenha(event.target.value)}
-                required
-            />
+                <input
+                    type="password"
+                    placeholder="Senha"
+                    value={senha}
+                    onChange={(event) => setSenha(event.target.value)}
+                    required
+                />
+                <button type="submit">Entrar</button>
+            </form>
+            <section>
+                <p>
+                    Não tem uma conta?{" "}
+                    <button
+                        type="button"
+                        onClick={() => setCadastro(true)}
+                    >
+                        Cadastre-se
+                    </button>
+                </p>
 
-            <button type="submit">Entrar</button>
-        </form>
+                <CadastroModal
+                    aberto={cadastro}
+                    fechar={() => setCadastro(false)}
+                />
+            </section>
+        </main>
     );
 }
