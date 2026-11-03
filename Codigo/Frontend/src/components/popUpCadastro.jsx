@@ -26,7 +26,7 @@ export default function CadastroModal({ aberto, fechar }) {
 
         try {
             const response = await fetch(
-                `http://localhost:3001/api/usuarios`,
+                `${API_URL}/api/usuarios`,
                 {
                     method: "POST",
                     headers: {

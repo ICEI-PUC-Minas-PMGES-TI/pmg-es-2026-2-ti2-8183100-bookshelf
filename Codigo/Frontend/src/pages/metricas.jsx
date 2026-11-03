@@ -10,7 +10,7 @@ async function logUser(userId) {
 	try {
 		const token = localStorage.getItem("token");
 
-		const response = await fetch(`http://localhost:3001/api/usuarios/${userId}`, {
+		const response = await fetch(`${API_URL}/api/usuarios/${userId}`, {
 			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`
