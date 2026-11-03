@@ -1,5 +1,44 @@
+
+import { useEffect, useState } from "react";
 import PulseHeart from "./PulseHeart";
+import CapaLivro from "./CapaLivro";
+import { buscarLivros } from "../services/booksService";
 import "./PublicacaoCard.css";
+
+// Evita pesquisar novamente títulos que já foram consultados.
+const cacheCapas = new Map();
+
+async function buscarCapaLivro(titulo) {
+    const chave = titulo.trim().toLowerCase();
+
+    if (cacheCapas.has(chave)) {
+        return cacheCapas.get(chave);
+    }
+
+    const busca = buscarLivros(titulo)
+        .then((livros) => {
+            if (!livros.length) return null;
+
+            const normalizar = (texto) =>
+                texto.normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                    .trim();
+
+            return (
+                livros.find(
+                    (livro) => normalizar(livro.title) === normalizar(titulo)
+                ) || livros[0]
+            );
+        })
+        .catch((erro) => {
+            console.error("Erro ao buscar capa do livro:", erro);
+            return null;
+        });
+
+    cacheCapas.set(chave, busca);
+    return busca;
+}
 
 function PublicacaoCard({ publicacao, onCurtir }) {
     const {
@@ -11,13 +50,36 @@ function PublicacaoCard({ publicacao, onCurtir }) {
         avaliacao,
     } = publicacao;
 
-    const iniciais = usuario
+    const [livroEncontrado, setLivroEncontrado] = useState(null);
+
+    useEffect(() => {
+        let ativo = true;
+
+        setLivroEncontrado(null);
+
+        buscarCapaLivro(tituloLivro).then((livro) => {
+            if (ativo) {
+                setLivroEncontrado(livro);
+            }
+        });
+
+        return () => {
+            ativo = false;
+        };
+    }, [tituloLivro]);
+
+    const iniciais = (usuario || "Usuário")
         .split(" ")
         .filter(Boolean)
         .slice(0, 2)
         .map((parte) => parte[0])
         .join("")
         .toUpperCase();
+
+    const livroParaExibir = livroEncontrado || {
+        title: tituloLivro,
+        thumbnail: null,
+    };
 
     return (
         <article className="publicacao-card">
@@ -39,12 +101,8 @@ function PublicacaoCard({ publicacao, onCurtir }) {
             </header>
 
             <div className="publicacao-livro">
-                <div className="publicacao-capa" aria-hidden="true">
-                    <span className="publicacao-capa-detalhe">BOOKMARK</span>
-                    <span className="publicacao-capa-titulo">
-                        {tituloLivro}
-                    </span>
-                    <span className="publicacao-capa-linha" />
+                <div className="publicacao-capa">
+                    <CapaLivro livro={livroParaExibir} />
                 </div>
 
                 <div className="publicacao-livro-info">
@@ -97,7 +155,7 @@ function PublicacaoCard({ publicacao, onCurtir }) {
                 />
 
                 <span className="publicacao-livro-indicador">
-                    <span aria-hidden="true">▤</span>
+                    <span aria-hidden="true">♤</span>
                     Leitura compartilhada
                 </span>
             </footer>
