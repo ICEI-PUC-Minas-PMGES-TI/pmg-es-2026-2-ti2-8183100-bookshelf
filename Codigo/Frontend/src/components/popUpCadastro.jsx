@@ -1,11 +1,12 @@
 import { useState } from "react";
 import "./popUpCadastro.css";
+import API_URL from "../services/api";
 
 export default function CadastroModal({ aberto, fechar }) {
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const [usuario, setUsuario] = useState("");
+    const [userName, setUserName] = useState("");
     const [dataNascimento, setDataNascimento] = useState("");
 
     if (!aberto) {
@@ -17,15 +18,42 @@ export default function CadastroModal({ aberto, fechar }) {
 
         const dadosUsuario = {
             nome,
-            usuario,
-            dataNascimento,
+            userName,
             email,
-            senha
+            senha,
+            dataNascimento
         };
 
-        console.log(dadosUsuario);
+        try {
+            const response = await fetch(
+                `http://localhost:3001/api/usuarios`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(
+                        dadosUsuario
+                    )
+                }
+            );
 
-        
+            const dados = await response.json();
+
+            if (response.status === 409) {
+                alert(dados.erro);
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(dados.erro || "Erro ao cadastrar usuário.");
+            }
+
+        } catch (error) {
+            console.error(error.message);
+        }
+
+
     }
 
     return (
@@ -57,8 +85,8 @@ export default function CadastroModal({ aberto, fechar }) {
                     <label>Nome de usuário</label>
                     <input
                         type="text"
-                        value={usuario}
-                        onChange={(event) => setUsuario(event.target.value)}
+                        value={userName}
+                        onChange={(event) => setUserName(event.target.value)}
                         required
                     />
 

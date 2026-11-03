@@ -33,13 +33,15 @@ async function logUser(userId) {
 export default function Metricas() {
 	const [usuario, setUsuario] = useState(null);
 	const [livros, setLivros] = useState([]);
+	const userLog = JSON.parse(localStorage.getItem("usuario"));
+	console.log(userLog.id);
+	
 
 	useEffect(() => {
 		async function carregarUsuario() {
 			try {
-				const data = await logUser(1);
+				const data = await logUser(userLog.id);
 				setUsuario(data);
-				// Livros das listas "Lendo" e "Favoritos" (um livro pode estar nas duas)
 				const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
 				setLivros(await buscarLivrosPorIds(ids));
 			} catch (error) {
@@ -50,7 +52,6 @@ export default function Metricas() {
 		carregarUsuario();
 	}, []);
 
-	// Transforma os ids de uma lista do usuário nos livros já carregados.
 	function livrosDa(lista) {
 		return (usuario?.[lista] ?? [])
 			.map((id) => livros.find((livro) => livro.id === id))

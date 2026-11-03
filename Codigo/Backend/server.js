@@ -1,6 +1,6 @@
 
 import express from "express";
-import { MongoClient } from "mongodb";
+import { MongoClient,ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -72,7 +72,7 @@ async function iniciarServidor() {
 		});
 
 		// CRUD DE USUARIO
-		app.get("/api/usuarios",autenticarToken, async (req, res) => {
+		app.get("/api/usuarios", autenticarToken, async (req, res) => {
 			try {
 				const usuarios = await db
 					.collection("usuarios")
@@ -89,7 +89,52 @@ async function iniciarServidor() {
 
 		app.post("/api/usuarios", async (req, res) => {
 			try {
-				const novoUsuario = req.body;
+				const {
+					nome,
+					userName,
+					email,
+					senha,
+					dataNascimento
+				} = req.body;
+
+				const usuario = await db
+					.collection("usuarios")
+					.findOne({ email });
+
+				if (usuario) {
+					return res.status(409).json({
+						erro: "Este e-mail já está cadastrado."
+					});
+				}
+				
+
+				const novoUsuario = {
+					nome,
+					userName,
+					email,
+					senha,
+					dataNascimento,
+
+					dataCadastro: new Date().toISOString().split("T")[0],
+
+					perfil: {
+						bio: "",
+						foto: ""
+					},
+
+					livrosFav: [],
+					livrosLerDepois: [],
+					livrosLidos: [],
+					livrosLendo: [],
+
+					metricas: [],
+
+					sequencia: 0,
+					minLidos: 0,
+					pagsLidas: 0,
+
+					avaliacoes: {}
+				};
 
 				const resultado = await db
 					.collection("usuarios")
@@ -105,13 +150,13 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/usuarios/:id",autenticarToken, async (req, res) => {
+		app.get("/api/usuarios/:id", autenticarToken, async (req, res) => {
 			try {
-				const id = Number(req.params.id);
+				const id = req.params.id;
 
 				const usuario = await db
 					.collection("usuarios")
-					.findOne({ _id: id });
+					.findOne({ _id: new ObjectId(id) });
 
 				if (!usuario) {
 					return res.status(404).json({
@@ -174,7 +219,7 @@ async function iniciarServidor() {
 
 
 		// CRUD DE MÉTRICAS
-		app.get("/api/metricas",autenticarToken, async (req, res) => {
+		app.get("/api/metricas", autenticarToken, async (req, res) => {
 			try {
 				const metricas = await db
 					.collection("metricas")
@@ -188,7 +233,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/metricas/:id",autenticarToken, async (req, res) => {
+		app.get("/api/metricas/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -207,7 +252,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.post("/api/metricas",autenticarToken, async (req, res) => {
+		app.post("/api/metricas", autenticarToken, async (req, res) => {
 			try {
 				const resultado = await db
 					.collection("metricas")
@@ -223,7 +268,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/metricas/:id",autenticarToken, async (req, res) => {
+		app.put("/api/metricas/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 				const dados = { ...req.body };
@@ -244,7 +289,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/metricas/:id",autenticarToken, async (req, res) => {
+		app.delete("/api/metricas/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -264,7 +309,7 @@ async function iniciarServidor() {
 		});
 
 		// CRUD DE PUBLICACAO
-		app.get("/api/publicacao",autenticarToken, async (req, res) => {
+		app.get("/api/publicacao", autenticarToken, async (req, res) => {
 			try {
 				const publicacoes = await db
 					.collection("publicacao")
@@ -278,7 +323,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.get("/api/publicacao/:id",autenticarToken, async (req, res) => {
+		app.get("/api/publicacao/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
@@ -299,7 +344,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.post("/api/publicacao",autenticarToken, async (req, res) => {
+		app.post("/api/publicacao", autenticarToken, async (req, res) => {
 			try {
 				const resultado = await db
 					.collection("publicacao")
@@ -315,7 +360,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/publicacao/:id",autenticarToken, async (req, res) => {
+		app.put("/api/publicacao/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 				const dados = { ...req.body };
@@ -338,7 +383,7 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/publicacao/:id",autenticarToken, async (req, res) => {
+		app.delete("/api/publicacao/:id", autenticarToken, async (req, res) => {
 			try {
 				const id = Number(req.params.id);
 
