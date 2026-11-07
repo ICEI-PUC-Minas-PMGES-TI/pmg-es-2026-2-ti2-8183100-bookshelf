@@ -1,37 +1,116 @@
+import API_URL from "./api";
 
-import publicacoesMock from "../mocks/jsonPublicacoes.json";
+// Busca as publicações cadastradas no MongoDB.
+export async function obterPublicacoes() {
+    const token = localStorage.getItem("token");
 
-const CHAVE_STORAGE = "bookmark_publicacoes";
+    const headers = {};
 
-export function obterPublicacoes() {
-  try {
-    const dadosSalvos = localStorage.getItem(CHAVE_STORAGE);
-
-    // Se já existem dados salvos, utiliza esses dados.
-    if (dadosSalvos !== null) {
-      return JSON.parse(dadosSalvos);
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
     }
 
-    // Na primeira visita, utiliza o JSON mock.
-    localStorage.setItem(
-      CHAVE_STORAGE,
-      JSON.stringify(publicacoesMock)
-    );
+    const response = await fetch(`${API_URL}/api/publicacao`, {
+        method: "GET",
+        headers
+    });
 
-    return publicacoesMock;
-  } catch (erro) {
-    console.error("Erro ao carregar publicações:", erro);
-    return publicacoesMock;
-  }
+    const dados = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            dados.erro || `Erro HTTP ${response.status}`
+        );
+    }
+
+    if (!Array.isArray(dados)) {
+        throw new Error(
+            "A API não retornou uma lista de publicações."
+        );
+    }
+
+    return dados.map((publicacao) => {
+        // Trata resenhas que chegam como objeto ou texto.
+        const textoResenha =
+            typeof publicacao.resenha === "string"
+                ? publicacao.resenha
+                : publicacao.resenha?.conteudo || "";
+
+        const nota =
+            publicacao.avaliacao ??
+            publicacao.resenha?.avaliacao ??
+            0;
+
+        return {
+            ...publicacao,
+            id: publicacao._id,
+            usuario: publicacao.usuario || "Usuário desconhecido",
+            userName: publicacao.userName || "leitor",
+            resenha: textoResenha,
+            avaliacao: Number(nota),
+            dataOrdenacao: publicacao.dataPublicacao,
+            dataPublicacao: publicacao.dataPublicacao
+                ? new Date(
+                    publicacao.dataPublicacao
+                ).toLocaleDateString("pt-BR")
+                : "",
+            curtidas: Number(publicacao.curtidas || 0),
+            curtiu: Boolean(publicacao.curtiu)
+        };
+    });
 }
 
-export function salvarPublicacoes(publicacoes) {
-  try {
-    localStorage.setItem(
-      CHAVE_STORAGE,
-      JSON.stringify(publicacoes)
+// Cadastra uma nova publicação no MongoDB.
+export async function criarPublicacao(publicacao) {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/api/publicacao`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(publicacao)
+    });
+
+    const dados = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            dados.erro || "Erro ao cadastrar publicação."
+        );
+    }
+
+    return dados;
+}
+
+// Alterna a curtida de uma publicação no MongoDB.
+export async function alternarCurtidaAPI(id) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        throw new Error(
+            "Você precisa fazer login para curtir uma publicação."
+        );
+    }
+
+    const response = await fetch(
+        `${API_URL}/api/publicacao/${id}/curtir`,
+        {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
     );
-  } catch (erro) {
-    console.error("Erro ao salvar publicações:", erro);
-  }
+
+    const dados = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            dados.erro || "Erro ao atualizar curtida."
+        );
+    }
+
+    return dados;
 }

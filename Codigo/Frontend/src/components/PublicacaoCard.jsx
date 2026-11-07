@@ -3,13 +3,18 @@ import "./PublicacaoCard.css";
 
 function PublicacaoCard({ publicacao, onCurtir }) {
     const {
-        usuario,
-        userName,
-        tituloLivro,
+        usuario = "Usuário desconhecido",
+        userName = "leitor",
+        tituloLivro = "Livro sem título",
         dataPublicacao,
         resenha,
-        avaliacao,
+        avaliacao = 0,
     } = publicacao;
+
+    const textoResenha =
+        typeof resenha === "string"
+            ? resenha
+            : resenha?.conteudo || "";
 
     const iniciais = usuario
         .split(" ")
@@ -77,7 +82,7 @@ function PublicacaoCard({ publicacao, onCurtir }) {
             </div>
 
             <div className="publicacao-resenha">
-                <p>{resenha}</p>
+                <p>{textoResenha}</p>
             </div>
 
             <footer className="publicacao-footer">
