@@ -9,6 +9,8 @@ import {
     alternarCurtidaAPI
 } from "../services/feedService";
 
+import { buscarLivros } from "../services/booksService";
+
 const filtrosNota = [
     { valor: "todas", texto: "Todas" },
     { valor: "5", texto: "5 estrelas" },
@@ -22,11 +24,20 @@ function Feed() {
     const [publicacoes, setPublicacoes] = useState([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
+    const [erroAcao, setErroAcao] = useState("");
 
     const [formAberto, setFormAberto] = useState(false);
-    const [tituloLivro, setTituloLivro] = useState("");
+
+    // Busca e seleção de livros.
+    const [buscaLivro, setBuscaLivro] = useState("");
+    const [livroSelecionado, setLivroSelecionado] = useState(null);
+    const [livrosEncontrados, setLivrosEncontrados] = useState([]);
+    const [buscandoLivros, setBuscandoLivros] = useState(false);
+    const [erroBuscaLivro, setErroBuscaLivro] = useState("");
+
     const [resenha, setResenha] = useState("");
     const [avaliacao, setAvaliacao] = useState(5);
+    const [publicando, setPublicando] = useState(false);
 
     const [pesquisa, setPesquisa] = useState("");
     const [filtroNota, setFiltroNota] = useState("todas");
@@ -42,11 +53,7 @@ function Feed() {
                 const dados = await obterPublicacoes();
                 setPublicacoes(dados);
             } catch (error) {
-                console.error(
-                    "Erro ao carregar publicações:",
-                    error
-                );
-
+                console.error("Erro ao carregar publicações:", error);
                 setErro(error.message);
             } finally {
                 setCarregando(false);
@@ -56,10 +63,77 @@ function Feed() {
         carregarPublicacoes();
     }, []);
 
+    // Pesquisa livros no mesmo serviço utilizado pelo Catálogo.
+    useEffect(() => {
+        if (!formAberto || livroSelecionado || buscaLivro.trim().length < 2) {
+            setLivrosEncontrados([]);
+            setBuscandoLivros(false);
+            setErroBuscaLivro("");
+            return;
+        }
+
+        let cancelado = false;
+
+        const temporizador = setTimeout(async () => {
+            try {
+                setBuscandoLivros(true);
+                setErroBuscaLivro("");
+
+                const resultados = await buscarLivros(buscaLivro.trim());
+
+                if (!cancelado) {
+                    setLivrosEncontrados(resultados);
+                }
+            } catch (error) {
+                if (!cancelado) {
+                    console.error("Erro ao pesquisar livros:", error);
+                    setLivrosEncontrados([]);
+                    setErroBuscaLivro(
+                        "Não foi possível pesquisar os livros. Tente novamente."
+                    );
+                }
+            } finally {
+                if (!cancelado) {
+                    setBuscandoLivros(false);
+                }
+            }
+        }, 400);
+
+        return () => {
+            cancelado = true;
+            clearTimeout(temporizador);
+        };
+    }, [buscaLivro, livroSelecionado, formAberto]);
+
+    // Seleciona um livro encontrado.
+    function selecionarLivro(livro) {
+        setLivroSelecionado(livro);
+        setBuscaLivro(livro.title);
+        setLivrosEncontrados([]);
+        setErroBuscaLivro("");
+    }
+
+    // Remove o livro selecionado.
+    function removerLivroSelecionado() {
+        setLivroSelecionado(null);
+        setBuscaLivro("");
+        setLivrosEncontrados([]);
+    }
+
+    // Limpa o formulário.
+    function limparFormulario() {
+        setBuscaLivro("");
+        setLivroSelecionado(null);
+        setLivrosEncontrados([]);
+        setResenha("");
+        setAvaliacao(5);
+        setErroBuscaLivro("");
+    }
+
     // Alterna a curtida e salva a alteração no MongoDB.
     async function alternarCurtida(id) {
         try {
-            setErro("");
+            setErroAcao("");
 
             const dados = await alternarCurtidaAPI(id);
 
@@ -77,50 +151,49 @@ function Feed() {
                 })
             );
         } catch (error) {
-            console.error(
-                "Erro ao atualizar curtida:",
-                error
-            );
-
-            setErro(error.message);
+            console.error("Erro ao atualizar curtida:", error);
+            setErroAcao(error.message);
         }
     }
 
-    // Publica uma nova resenha na API.
+    // Publica uma nova resenha associada a um livro selecionado.
     async function publicarResenha(event) {
         event.preventDefault();
 
-        if (!tituloLivro.trim() || !resenha.trim()) {
+        if (!livroSelecionado || !resenha.trim()) {
             return;
         }
 
         try {
-            setErro("");
+            setPublicando(true);
+            setErroAcao("");
 
             await criarPublicacao({
-                tituloLivro: tituloLivro.trim(),
+                tituloLivro: livroSelecionado.title,
+                livro: {
+                    id: livroSelecionado.id,
+                    titulo: livroSelecionado.title,
+                    autores: livroSelecionado.authors || [],
+                    capa: livroSelecionado.thumbnail || null,
+                    ano: livroSelecionado.year || null
+                },
                 resenha: resenha.trim(),
                 avaliacao: Number(avaliacao)
             });
 
-            // Busca novamente as publicações para atualizar o Feed.
             const dados = await obterPublicacoes();
             setPublicacoes(dados);
 
-            setTituloLivro("");
-            setResenha("");
-            setAvaliacao(5);
+            limparFormulario();
             setFormAberto(false);
             setPesquisa("");
             setFiltroNota("todas");
             setOrdenacao("recentes");
         } catch (error) {
-            console.error(
-                "Erro ao publicar resenha:",
-                error
-            );
-
-            setErro(error.message);
+            console.error("Erro ao publicar resenha:", error);
+            setErroAcao(error.message);
+        } finally {
+            setPublicando(false);
         }
     }
 
@@ -129,6 +202,11 @@ function Feed() {
         const termo = pesquisa.trim().toLowerCase();
 
         const resultado = publicacoes.filter((publicacao) => {
+            const textoResenha =
+                typeof publicacao.resenha === "string"
+                    ? publicacao.resenha
+                    : publicacao.resenha?.conteudo || "";
+
             const correspondePesquisa =
                 (publicacao.tituloLivro || "")
                     .toLowerCase()
@@ -139,31 +217,22 @@ function Feed() {
                 (publicacao.userName || "")
                     .toLowerCase()
                     .includes(termo) ||
-                (publicacao.resenha || "")
-                    .toLowerCase()
-                    .includes(termo);
+                textoResenha.toLowerCase().includes(termo);
 
             const correspondeNota =
                 filtroNota === "todas" ||
-                Number(publicacao.avaliacao) ===
-                    Number(filtroNota);
+                Number(publicacao.avaliacao) === Number(filtroNota);
 
             return correspondePesquisa && correspondeNota;
         });
 
         return resultado.sort((a, b) => {
             if (ordenacao === "curtidas") {
-                return (
-                    Number(b.curtidas || 0) -
-                    Number(a.curtidas || 0)
-                );
+                return Number(b.curtidas || 0) - Number(a.curtidas || 0);
             }
 
             if (ordenacao === "avaliacao") {
-                return (
-                    Number(b.avaliacao || 0) -
-                    Number(a.avaliacao || 0)
-                );
+                return Number(b.avaliacao || 0) - Number(a.avaliacao || 0);
             }
 
             return (
@@ -202,9 +271,7 @@ function Feed() {
                             <button
                                 className="feed-create-button"
                                 type="button"
-                                onClick={() =>
-                                    setFormAberto((aberto) => !aberto)
-                                }
+                                onClick={() => setFormAberto((aberto) => !aberto)}
                             >
                                 <span aria-hidden="true">+</span>
                                 Escrever resenha
@@ -213,10 +280,7 @@ function Feed() {
                     </header>
 
                     {formAberto && (
-                        <form
-                            className="feed-form"
-                            onSubmit={publicarResenha}
-                        >
+                        <form className="feed-form" onSubmit={publicarResenha}>
                             <div className="feed-form-header">
                                 <div>
                                     <span className="feed-eyebrow">
@@ -237,19 +301,113 @@ function Feed() {
                             </div>
 
                             <label htmlFor="tituloLivro">
-                                Nome do livro
+                                Pesquisar livro
                             </label>
 
-                            <input
-                                id="tituloLivro"
-                                type="text"
-                                placeholder="Qual livro você leu?"
-                                value={tituloLivro}
-                                onChange={(event) =>
-                                    setTituloLivro(event.target.value)
-                                }
-                                required
-                            />
+                            <div className="feed-book-search">
+                                <input
+                                    id="tituloLivro"
+                                    type="search"
+                                    placeholder="Digite o título do livro..."
+                                    value={buscaLivro}
+                                    onChange={(event) => {
+                                        setBuscaLivro(event.target.value);
+                                        setLivroSelecionado(null);
+                                        setErroBuscaLivro("");
+                                    }}
+                                    autoComplete="off"
+                                    required
+                                />
+
+                                {livroSelecionado && (
+                                    <button
+                                        type="button"
+                                        className="feed-book-remove"
+                                        onClick={removerLivroSelecionado}
+                                        aria-label="Remover livro selecionado"
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {buscandoLivros && (
+                                <p className="feed-book-search-message">
+                                    Pesquisando livros...
+                                </p>
+                            )}
+
+                            {erroBuscaLivro && (
+                                <p className="feed-book-search-error">
+                                    {erroBuscaLivro}
+                                </p>
+                            )}
+
+                            {!livroSelecionado &&
+                                buscaLivro.trim().length >= 2 &&
+                                !buscandoLivros &&
+                                !erroBuscaLivro &&
+                                livrosEncontrados.length === 0 && (
+                                    <p className="feed-book-search-message">
+                                        Nenhum livro encontrado.
+                                    </p>
+                                )}
+
+                            {livrosEncontrados.length > 0 && !livroSelecionado && (
+                                <div className="feed-book-suggestions">
+                                    {livrosEncontrados.map((livro) => (
+                                        <button
+                                            key={livro.id}
+                                            type="button"
+                                            className="feed-book-suggestion"
+                                            onClick={() => selecionarLivro(livro)}
+                                        >
+                                            {livro.thumbnail ? (
+                                                <img
+                                                    src={livro.thumbnail}
+                                                    alt=""
+                                                />
+                                            ) : (
+                                                <span className="feed-book-suggestion-placeholder">
+                                                    📖
+                                                </span>
+                                            )}
+
+                                            <span className="feed-book-suggestion-info">
+                                                <strong>{livro.title}</strong>
+                                                <small>
+                                                    {livro.authors?.join(", ") ||
+                                                        "Autor desconhecido"}
+                                                </small>
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
+                            {livroSelecionado && (
+                                <div className="feed-selected-book">
+                                    {livroSelecionado.thumbnail ? (
+                                        <img
+                                            src={livroSelecionado.thumbnail}
+                                            alt={`Capa de ${livroSelecionado.title}`}
+                                        />
+                                    ) : (
+                                        <span className="feed-book-suggestion-placeholder">
+                                            📖
+                                        </span>
+                                    )}
+
+                                    <div>
+                                        <strong>{livroSelecionado.title}</strong>
+                                        <span>
+                                            {livroSelecionado.authors?.join(", ") ||
+                                                "Autor desconhecido"}
+                                        </span>
+                                        <small>Livro selecionado</small>
+                                    </div>
+                                </div>
+                            )}
 
                             <label htmlFor="avaliacao">
                                 Sua avaliação
@@ -264,39 +422,25 @@ function Feed() {
                                     <button
                                         key={estrela}
                                         type="button"
-                                        className={
-                                            estrela <= avaliacao
-                                                ? "selected"
-                                                : ""
-                                        }
-                                        onClick={() =>
-                                            setAvaliacao(estrela)
-                                        }
+                                        className={estrela <= avaliacao ? "selected" : ""}
+                                        onClick={() => setAvaliacao(estrela)}
                                         aria-label={`${estrela} ${
-                                            estrela === 1
-                                                ? "estrela"
-                                                : "estrelas"
+                                            estrela === 1 ? "estrela" : "estrelas"
                                         }`}
-                                        aria-pressed={
-                                            avaliacao === estrela
-                                        }
+                                        aria-pressed={avaliacao === estrela}
                                     >
                                         ★
                                     </button>
                                 ))}
                             </div>
 
-                            <label htmlFor="resenha">
-                                Sua resenha
-                            </label>
+                            <label htmlFor="resenha">Sua resenha</label>
 
                             <textarea
                                 id="resenha"
                                 placeholder="O que você achou dessa leitura?"
                                 value={resenha}
-                                onChange={(event) =>
-                                    setResenha(event.target.value)
-                                }
+                                onChange={(event) => setResenha(event.target.value)}
                                 rows={4}
                                 required
                             />
@@ -305,7 +449,10 @@ function Feed() {
                                 <button
                                     className="feed-cancel-button"
                                     type="button"
-                                    onClick={() => setFormAberto(false)}
+                                    onClick={() => {
+                                        limparFormulario();
+                                        setFormAberto(false);
+                                    }}
                                 >
                                     Cancelar
                                 </button>
@@ -313,14 +460,14 @@ function Feed() {
                                 <button
                                     className="feed-submit-button"
                                     type="submit"
+                                    disabled={!livroSelecionado || !resenha.trim() || publicando}
                                 >
-                                    Publicar resenha
+                                    {publicando ? "Publicando..." : "Publicar resenha"}
                                 </button>
                             </div>
                         </form>
                     )}
 
-                    {/* Barra de pesquisa */}
                     <div className="feed-search">
                         <div className="feed-search__field">
                             <Search
@@ -333,9 +480,7 @@ function Feed() {
                                 type="search"
                                 placeholder="Buscar livro, leitor ou resenha..."
                                 value={pesquisa}
-                                onChange={(event) =>
-                                    setPesquisa(event.target.value)
-                                }
+                                onChange={(event) => setPesquisa(event.target.value)}
                                 aria-label="Pesquisar publicações"
                             />
 
@@ -352,7 +497,6 @@ function Feed() {
                         </div>
                     </div>
 
-                    {/* Filtros e ordenação */}
                     <div className="feed-toolbar">
                         <div
                             className="feed-chips"
@@ -364,16 +508,10 @@ function Feed() {
                                     key={filtro.valor}
                                     type="button"
                                     className={`feed-chip ${
-                                        filtroNota === filtro.valor
-                                            ? "is-active"
-                                            : ""
+                                        filtroNota === filtro.valor ? "is-active" : ""
                                     }`}
-                                    onClick={() =>
-                                        setFiltroNota(filtro.valor)
-                                    }
-                                    aria-pressed={
-                                        filtroNota === filtro.valor
-                                    }
+                                    onClick={() => setFiltroNota(filtro.valor)}
+                                    aria-pressed={filtroNota === filtro.valor}
                                 >
                                     {filtro.texto}
                                 </button>
@@ -386,26 +524,21 @@ function Feed() {
                             <select
                                 className="feed-select"
                                 value={ordenacao}
-                                onChange={(event) =>
-                                    setOrdenacao(event.target.value)
-                                }
+                                onChange={(event) => setOrdenacao(event.target.value)}
                             >
-                                <option value="recentes">
-                                    Mais recentes
-                                </option>
-
-                                <option value="curtidas">
-                                    Mais curtidas
-                                </option>
-
-                                <option value="avaliacao">
-                                    Maior avaliação
-                                </option>
+                                <option value="recentes">Mais recentes</option>
+                                <option value="curtidas">Mais curtidas</option>
+                                <option value="avaliacao">Maior avaliação</option>
                             </select>
                         </label>
                     </div>
 
-                    {/* Lista de publicações */}
+                    {erroAcao && (
+                        <p className="feed-action-error" role="alert">
+                            {erroAcao}
+                        </p>
+                    )}
+
                     <section
                         className="feed-publications"
                         aria-label="Publicações da comunidade"
@@ -425,25 +558,19 @@ function Feed() {
                                     <PublicacaoCard
                                         key={publicacao.id}
                                         publicacao={publicacao}
-                                        onCurtir={() =>
-                                            alternarCurtida(publicacao.id)
-                                        }
+                                        onCurtir={() => alternarCurtida(publicacao.id)}
                                     />
                                 ))}
                             </div>
                         ) : (
                             <div className="feed-empty">
                                 <span aria-hidden="true">📚</span>
-
                                 <h3>Nenhuma publicação encontrada</h3>
-
                                 <p>
-                                    Tente mudar a pesquisa ou selecionar
-                                    outra avaliação.
+                                    Tente mudar a pesquisa ou selecionar outra avaliação.
                                 </p>
 
-                                {(pesquisa ||
-                                    filtroNota !== "todas") && (
+                                {(pesquisa || filtroNota !== "todas") && (
                                     <button
                                         className="feed-cancel-button"
                                         type="button"

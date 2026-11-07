@@ -537,6 +537,142 @@
 }
 
 
+/* Busca e seleção de livros no formulário */
+
+.feed-book-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.feed-book-search input {
+    width: 100%;
+}
+
+.feed-book-remove {
+    position: absolute;
+    right: 12px;
+    border: none;
+    background: transparent;
+    color: #1E1E1E;
+    cursor: pointer;
+}
+
+.feed-book-suggestions {
+    display: flex;
+    flex-direction: column;
+    max-height: 280px;
+    overflow-y: auto;
+    margin-top: 8px;
+    border: 1px solid #DEC6A0;
+    border-radius: 10px;
+    background: #FFF9F0;
+}
+
+.feed-book-suggestion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #DEC6A0;
+    background: transparent;
+    color: #1E1E1E;
+    text-align: left;
+    cursor: pointer;
+}
+
+.feed-book-suggestion:last-child {
+    border-bottom: none;
+}
+
+.feed-book-suggestion:hover {
+    background: #F1E3D0;
+}
+
+.feed-book-suggestion img,
+.feed-selected-book img {
+    width: 42px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.feed-book-suggestion-info,
+.feed-selected-book > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.feed-book-suggestion-info strong,
+.feed-selected-book strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.feed-book-suggestion-info small,
+.feed-selected-book span {
+    color: #76634F;
+}
+
+.feed-selected-book {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0 18px;
+    padding: 12px;
+    border: 1px solid #C1A67C;
+    border-radius: 10px;
+    background: #F1E3D0;
+}
+
+.feed-selected-book small {
+    color: #8B684D;
+    font-size: 0.75rem;
+}
+
+.feed-book-suggestion-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background: #DEC6A0;
+}
+
+.feed-book-search-message,
+.feed-book-search-error {
+    margin: 8px 0;
+    font-size: 0.85rem;
+}
+
+.feed-book-search-message {
+    color: #76634F;
+}
+
+.feed-book-search-error {
+    color: #B23A32;
+}
+
+.feed-submit-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.feed-action-error {
+    color: #b42318;
+    background: #fce8e6;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 12px 0;
+}
+
+
 @media (max-width: 700px) {
     .feed-page {
         padding: 24px 14px 40px;
