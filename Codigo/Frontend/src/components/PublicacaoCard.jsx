@@ -1,3 +1,4 @@
+
 import PulseHeart from "./PulseHeart";
 import "./PublicacaoCard.css";
 
@@ -9,12 +10,17 @@ function PublicacaoCard({ publicacao, onCurtir }) {
         dataPublicacao,
         resenha,
         avaliacao = 0,
+        livro
     } = publicacao;
 
     const textoResenha =
         typeof resenha === "string"
             ? resenha
             : resenha?.conteudo || "";
+
+    const titulo = livro?.titulo || tituloLivro;
+    const capa = livro?.capa || livro?.thumbnail || null;
+    const autores = livro?.autores || livro?.authors || [];
 
     const iniciais = usuario
         .split(" ")
@@ -44,17 +50,38 @@ function PublicacaoCard({ publicacao, onCurtir }) {
             </header>
 
             <div className="publicacao-livro">
-                <div className="publicacao-capa" aria-hidden="true">
-                    <span className="publicacao-capa-detalhe">BOOKMARK</span>
-                    <span className="publicacao-capa-titulo">
-                        {tituloLivro}
-                    </span>
-                    <span className="publicacao-capa-linha" />
-                </div>
+                {capa ? (
+                    <div className="publicacao-capa publicacao-capa-real">
+                        <img
+                            src={capa}
+                            alt={`Capa do livro ${titulo}`}
+                            loading="lazy"
+                        />
+                    </div>
+                ) : (
+                    <div className="publicacao-capa" aria-hidden="true">
+                        <span className="publicacao-capa-detalhe">
+                            BOOKMARK
+                        </span>
+                        <span className="publicacao-capa-titulo">
+                            {titulo}
+                        </span>
+                        <span className="publicacao-capa-linha" />
+                    </div>
+                )}
 
                 <div className="publicacao-livro-info">
-                    <span className="publicacao-label">RESENHA DE LIVRO</span>
-                    <h4>{tituloLivro}</h4>
+                    <span className="publicacao-label">
+                        RESENHA DE LIVRO
+                    </span>
+
+                    <h4>{titulo}</h4>
+
+                    {autores.length > 0 && (
+                        <span className="publicacao-livro-autores">
+                            {autores.join(", ")}
+                        </span>
+                    )}
 
                     <div
                         className="publicacao-avaliacao"
