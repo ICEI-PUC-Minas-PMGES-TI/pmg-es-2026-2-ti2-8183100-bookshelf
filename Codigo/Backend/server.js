@@ -1,6 +1,6 @@
 
 import express from "express";
-import { MongoClient,ObjectId } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -106,7 +106,7 @@ async function iniciarServidor() {
 						erro: "Este e-mail já está cadastrado."
 					});
 				}
-				
+
 
 				const novoUsuario = {
 					nome,
@@ -309,17 +309,52 @@ async function iniciarServidor() {
 		});
 
 		// CRUD DE PUBLICACAO
-		app.get("/api/publicacao", autenticarToken, async (req, res) => {
+		app.get("/api/publicacao", async (req, res) => {
 			try {
 				const publicacoes = await db
 					.collection("publicacao")
-					.find({})
+					.aggregate([
+						{
+							$lookup: {
+								from: "usuarios",
+								localField: "usuarioId",
+								foreignField: "_id",
+								as: "autor"
+							}
+						},
+						{
+							$unwind: {
+								path: "$autor",
+								preserveNullAndEmptyArrays: true
+							}
+						},
+						{
+							$sort: {
+								dataPublicacao: -1
+							}
+						},
+						{
+							$project: {
+								tituloLivro: 1,
+								resenha: 1,
+								avaliacao: 1,
+								curtidas: 1,
+								dataPublicacao: 1,
+								usuario: "$autor.nome",
+								userName: "$autor.userName"
+							}
+						}
+					])
 					.toArray();
 
 				res.json(publicacoes);
+
 			} catch (erro) {
 				console.error(erro);
-				res.status(500).json({ erro: "Erro ao buscar publicações." });
+
+				res.status(500).json({
+					erro: "Erro ao buscar publicações."
+				});
 			}
 		});
 
@@ -346,17 +381,46 @@ async function iniciarServidor() {
 
 		app.post("/api/publicacao", autenticarToken, async (req, res) => {
 			try {
+				const { tituloLivro, resenha, avaliacao } = req.body;
+
+				if (!tituloLivro || !resenha || !avaliacao) {
+					return res.status(400).json({
+						erro: "Preencha todos os campos da publicação."
+					});
+				}
+
+				if (avaliacao < 1 || avaliacao > 5) {
+					return res.status(400).json({
+						erro: "A avaliação deve estar entre 1 e 5."
+					});
+				}
+
+				const usuarioId = new ObjectId(req.usuario.id);
+
+				const novaPublicacao = {
+					usuarioId,
+					tituloLivro: tituloLivro.trim(),
+					resenha: resenha.trim(),
+					avaliacao: Number(avaliacao),
+					curtidas: 0,
+					dataPublicacao: new Date()
+				};
+
 				const resultado = await db
 					.collection("publicacao")
-					.insertOne(req.body);
+					.insertOne(novaPublicacao);
 
 				res.status(201).json({
 					mensagem: "Publicação cadastrada com sucesso!",
 					id: resultado.insertedId
 				});
+
 			} catch (erro) {
 				console.error(erro);
-				res.status(500).json({ erro: "Erro ao cadastrar publicação." });
+
+				res.status(500).json({
+					erro: "Erro ao cadastrar publicação."
+				});
 			}
 		});
 
