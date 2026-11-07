@@ -20,7 +20,11 @@ function PublicacaoCard({ publicacao, onCurtir }) {
 
     const titulo = livro?.titulo || tituloLivro;
     const capa = livro?.capa || livro?.thumbnail || null;
-    const autores = livro?.autores || livro?.authors || [];
+    const autores = Array.isArray(livro?.autores)
+        ? livro.autores
+        : Array.isArray(livro?.authors)
+            ? livro.authors
+            : [];
 
     const iniciais = usuario
         .split(" ")
