@@ -3,7 +3,7 @@ import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
 import jwt from "jsonwebtoken";
-import { autenticarToken } from "./authMiddleware.js";
+import { autenticarToken, autenticarTokenOpcional } from "./authMiddleware.js";
 
 dotenv.config();
 
@@ -12,23 +12,6 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-
-// Verifica o token quando disponível, mas permite consultar o Feed
-// sem estar logado.
-function autenticarTokenOpcional(req, res, next) {
-	const authHeader = req.headers["authorization"];
-	const token = authHeader && authHeader.split(" ")[1];
-
-	if (!token) {
-		req.usuario = null;
-		return next();
-	}
-
-	jwt.verify(token, process.env.JWT_SECRET, (erro, usuario) => {
-		req.usuario = erro ? null : usuario;
-		next();
-	});
-}
 
 const client = new MongoClient(process.env.MONGODB_URI);
 

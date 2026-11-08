@@ -23,3 +23,18 @@ export function autenticarToken(req, res, next) {
         next();
     });
 }
+
+export function autenticarTokenOpcional(req, res, next) {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+        req.usuario = null;
+        return next();
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (erro, usuario) => {
+        req.usuario = erro ? null : usuario;
+        next();
+    });
+}
