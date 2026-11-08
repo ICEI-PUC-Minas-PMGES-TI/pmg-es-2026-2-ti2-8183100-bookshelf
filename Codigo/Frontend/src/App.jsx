@@ -1,12 +1,12 @@
 
 import { Suspense } from "react";
 import {
-  BrowserRouter,
   Routes,
   Route,
   NavLink,
   Link,
 } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Feed from "./pages/Feed";
 import Metricas from "./pages/metricas";
@@ -20,7 +20,7 @@ import "./App.css";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <nav className="navbar">
         <Link to="/" className="logo" aria-label="BookMark - Início">
           <img src="/logo.png" alt="BookMark" />
@@ -65,13 +65,16 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/feed" element={<Feed />} />
-          <Route path="/perfil" element={<Perfil />} />
-          <Route path="/metricas" element={<Metricas />} />
           <Route path="/catalogo" element={<Catalogo />} />
-          <Route path="/livro/:id" element={<Livro />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/metricas" element={<Metricas />} />
+            <Route path="/livro/:id" element={<Livro />} />
+          </Route>
         </Routes>
       </Suspense>
-    </BrowserRouter>
+    </>
   );
 }
 

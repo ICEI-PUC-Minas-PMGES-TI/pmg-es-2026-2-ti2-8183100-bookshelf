@@ -34,7 +34,6 @@ export default function Metricas() {
 	const [usuario, setUsuario] = useState(null);
 	const [livros, setLivros] = useState([]);
 	const userLog = JSON.parse(localStorage.getItem("usuario"));
-	console.log(userLog.id);
 	
 
 	useEffect(() => {
@@ -60,7 +59,7 @@ export default function Metricas() {
 
 	const lendo = livrosDa("livrosLendo");
 	const favoritos = livrosDa("livrosFav");
-
+	
 	return (
 		<main className="metricas-main">
 			<section className="metricas-layout">
