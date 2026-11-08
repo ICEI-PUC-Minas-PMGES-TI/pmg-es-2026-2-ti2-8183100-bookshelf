@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Calendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import BookMetricas from "../components/BookMetricas";
+import MetricasModal from "../components/MetricasModal";
 import { buscarLivrosPorIds } from "../services/booksService";
 import { logUser } from "../services/metricasService";
 
@@ -11,7 +12,7 @@ export default function Metricas() {
 	const [usuario, setUsuario] = useState(null);
 	const [livros, setLivros] = useState([]);
 	const userLog = JSON.parse(localStorage.getItem("usuario"));
-	
+	const [popUp, setPopUp] = useState(false);
 
 	useEffect(() => {
 		async function carregarUsuario() {
@@ -36,7 +37,7 @@ export default function Metricas() {
 
 	const lendo = livrosDa("livrosLendo");
 	const favoritos = livrosDa("livrosFav");
-	
+
 	return (
 		<main className="metricas-main">
 			<section className="metricas-layout">
@@ -97,10 +98,18 @@ export default function Metricas() {
 				</section>
 
 				<div className="metricas-acoes">
-					<button type="button" className="botao-circulo">
+					<button
+						type="button"
+						onClick={() => setPopUp(true)}
+						className="botao-circulo"
+					>
 						CIRCULO +
 					</button>
 				</div>
+				<MetricasModal
+					aberto={popUp}
+					fechar={() => setPopUp(false)}
+				/>
 			</section>
 		</main>
 	);
