@@ -1,3 +1,5 @@
+import API_URL from "../services/api";
+
 export async function verificarToken() {
     const token = localStorage.getItem("token");
 
@@ -7,7 +9,7 @@ export async function verificarToken() {
 
     try {
         const response = await fetch(
-            "http://localhost:3001/api/usuarios",
+            `${API_URL}/api/usuarios`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`

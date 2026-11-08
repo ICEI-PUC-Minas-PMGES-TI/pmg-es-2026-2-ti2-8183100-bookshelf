@@ -7,6 +7,7 @@ import {
   Link,
 } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { useState } from "react";
 
 import Feed from "./pages/Feed";
 import Metricas from "./pages/metricas";
@@ -19,6 +20,9 @@ import Login from "./pages/login";
 import "./App.css";
 
 function App() {
+  const [logado, setLogado] = useState(
+    !!localStorage.getItem("token")
+  );
   return (
     <>
       <nav className="navbar">
@@ -40,7 +44,7 @@ function App() {
           </NavLink>
         </div>
 
-        {localStorage.getItem("token") ? (
+        {logado ? (
           <NavLink
             to="/perfil"
             className={({ isActive }) =>

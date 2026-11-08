@@ -9,8 +9,17 @@ function ProtectedRoute() {
     async function verificar() {
       try {
         const valido = await verificarToken();
+
+        if (!valido) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("usuario");
+          window.location.href = "/login";
+        }
+
         setAutorizado(valido);
       } catch (erro) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("usuario");
         setAutorizado(false);
       }
     }
