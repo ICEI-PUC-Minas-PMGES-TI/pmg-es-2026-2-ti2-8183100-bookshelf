@@ -1,6 +1,6 @@
 import API_URL from "./api";
 
-const ID_USUARIO = 1;
+const ID_USUARIO = JSON.parse(localStorage.getItem("usuario")).id;
 
 // Nomes dos campos do usuário que guardam cada lista.
 export const LISTAS = [
@@ -32,7 +32,13 @@ function urlDoUsuario() {
 }
 
 export async function obterUsuario() {
-  const resposta = await fetch(urlDoUsuario());
+  const token = localStorage.getItem("token");
+  const resposta = await fetch(urlDoUsuario(), {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		});
   if (resposta.status === 404) throw new Error("Usuário não encontrado.");
   if (!resposta.ok) throw new Error(`A API respondeu com status ${resposta.status}`);
   return normalizarUsuario(await resposta.json());
@@ -41,9 +47,13 @@ export async function obterUsuario() {
 // Salva só o que esta parte do app altera (listas e notas), para não sobrescrever o resto do usuário.
 export async function salvarUsuario(usuario) {
   const { livrosFav, livrosLendo, livrosLerDepois, livrosLidos, avaliacoes } = usuario;
+  const token = localStorage.getItem("token");
   const resposta = await fetch(urlDoUsuario(), {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+     },
     body: JSON.stringify({ livrosFav, livrosLendo, livrosLerDepois, livrosLidos, avaliacoes }),
   });
   if (!resposta.ok) throw new Error(`A API respondeu com status ${resposta.status}`);

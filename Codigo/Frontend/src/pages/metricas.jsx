@@ -3,39 +3,16 @@ import { useEffect, useState } from "react";
 import { Calendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import BookMetricas from "../components/BookMetricas";
-import API_URL from "../services/api";
+import MetricasModal from "../components/MetricasModal";
 import { buscarLivrosPorIds } from "../services/booksService";
+import { logUser } from "../services/metricasService";
 
-async function logUser(userId) {
-	try {
-		const token = localStorage.getItem("token");
-
-		const response = await fetch(`${API_URL}/api/usuarios/${userId}`, {
-			method: "GET",
-			headers: {
-				"Authorization": `Bearer ${token}`
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error("Erro ao buscar usuário");
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error("Erro ao buscar dados do usuário:", error);
-		throw error;
-	}
-}
 
 export default function Metricas() {
 	const [usuario, setUsuario] = useState(null);
 	const [livros, setLivros] = useState([]);
 	const userLog = JSON.parse(localStorage.getItem("usuario"));
-	console.log(userLog.id);
-	
+	const [popUp, setPopUp] = useState(false);
 
 	useEffect(() => {
 		async function carregarUsuario() {
@@ -121,10 +98,18 @@ export default function Metricas() {
 				</section>
 
 				<div className="metricas-acoes">
-					<button type="button" className="botao-circulo">
+					<button
+						type="button"
+						onClick={() => setPopUp(true)}
+						className="botao-circulo"
+					>
 						CIRCULO +
 					</button>
 				</div>
+				<MetricasModal
+					aberto={popUp}
+					fechar={() => setPopUp(false)}
+				/>
 			</section>
 		</main>
 	);

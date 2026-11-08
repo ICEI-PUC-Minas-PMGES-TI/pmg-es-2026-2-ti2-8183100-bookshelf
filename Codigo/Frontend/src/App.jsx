@@ -1,12 +1,13 @@
 
 import { Suspense } from "react";
 import {
-  BrowserRouter,
   Routes,
   Route,
   NavLink,
   Link,
 } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useState } from "react";
 
 import Feed from "./pages/Feed";
 import Metricas from "./pages/metricas";
@@ -19,8 +20,11 @@ import Login from "./pages/login";
 import "./App.css";
 
 function App() {
+  const [logado, setLogado] = useState(
+    !!localStorage.getItem("token")
+  );
   return (
-    <BrowserRouter>
+    <>
       <nav className="navbar">
         <Link to="/" className="logo" aria-label="BookMark - Início">
           <img src="/logo.png" alt="BookMark" />
@@ -40,7 +44,7 @@ function App() {
           </NavLink>
         </div>
 
-        {localStorage.getItem("token") ? (
+        {logado ? (
           <NavLink
             to="/perfil"
             className={({ isActive }) =>
@@ -65,13 +69,16 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/feed" element={<Feed />} />
-          <Route path="/perfil" element={<Perfil />} />
-          <Route path="/metricas" element={<Metricas />} />
           <Route path="/catalogo" element={<Catalogo />} />
-          <Route path="/livro/:id" element={<Livro />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/metricas" element={<Metricas />} />
+            <Route path="/livro/:id" element={<Livro />} />
+          </Route>
         </Routes>
       </Suspense>
-    </BrowserRouter>
+    </>
   );
 }
 
