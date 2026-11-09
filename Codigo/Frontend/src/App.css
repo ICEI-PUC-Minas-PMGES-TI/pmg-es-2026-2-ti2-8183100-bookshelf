@@ -1,67 +1,79 @@
 .navbar {
-  position: relative;
+  position: sticky;
+  top: 14px;
   z-index: 10;
-  width: 100%;
-  height: 76px;
+  width: min(1180px, calc(100% - 32px));
+  min-height: 72px;
+  margin: 14px auto 0;
   box-sizing: border-box;
-  padding: 0 32px;
+  padding: 10px 14px 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  background-color: #c1a67c;
-  border-bottom: 1px solid #b09262;
-  box-shadow: 0 2px 8px rgb(73 54 33 / 12%);
-  border-radius: 50px;
+  gap: 18px;
+  background: rgb(255 253 249 / 92%);
+  border: 1px solid rgb(228 210 189 / 88%);
+  border-radius: 22px;
+  box-shadow: 0 14px 34px rgb(74 47 36 / 10%);
+  backdrop-filter: blur(16px);
 }
 
 .logo {
   display: flex;
   align-items: center;
+  gap: 10px;
   flex-shrink: 0;
+  color: var(--bm-espresso);
+  text-decoration: none;
 }
 
 .logo img {
   display: block;
-  width: 90px;
-  height: 64px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
+}
+
+.logo::after {
+  content: "BookMark";
+  color: var(--bm-espresso);
+  font-family: var(--bm-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 4px;
+  margin-left: auto;
 }
 
 .nav-link {
   position: relative;
-
-  padding: 10px 16px;
-  border-radius: 10px;
-
-  color: #1e1e1e;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: var(--bm-muted);
   text-decoration: none;
-  font-size: 15px;
+  font-size: 0.88rem;
   font-weight: 600;
-
-  transition:
-    color 180ms ease,
-    background-color 180ms ease;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
 }
 
 .nav-link:hover {
-  background-color: rgb(255 247 235 / 35%);
+  background-color: var(--bm-latte);
+  color: var(--bm-coffee);
 }
 
 .nav-link.active {
-  background-color: #493621;
-  color: #ffe7c2;
+  background: var(--bm-espresso);
+  color: var(--bm-paper);
 }
 
 .nav-link.active:hover {
-  background-color: #60482d;
+  background: var(--bm-coffee);
 }
 
 .perfil {
@@ -70,13 +82,11 @@
   justify-content: center;
   flex-shrink: 0;
 
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   box-sizing: border-box;
-
-  border: 2px solid #ffe7c2;
+  border: 2px solid var(--bm-sand);
   border-radius: 50%;
-
   transition:
     transform 180ms ease,
     border-color 180ms ease,
@@ -93,56 +103,74 @@
 
 .perfil:hover {
   transform: scale(1.06);
-  border-color: #493621;
+  border-color: var(--bm-caramel);
 }
 
 .perfil.active {
-  border-color: #493621;
-  box-shadow: 0 0 0 3px rgb(255 231 194 / 60%);
+  border-color: var(--bm-caramel);
+  box-shadow: 0 0 0 3px rgb(183 121 77 / 18%);
 }
 
 .navbar a:focus-visible {
-  outline: 2px solid #493621;
+  outline: 2px solid var(--bm-caramel);
   outline-offset: 3px;
 }
 
 .perfil-login {
-    text-decoration: none;
-    color: #000;
-    background-color: #DEC6A0;
-    padding: 10px 22px;
-    border-radius: 20px;
-    font-size: 18px;
+  padding: 10px 17px;
+  border: 1px solid var(--bm-coffee);
+  border-radius: 12px;
+  background: var(--bm-coffee);
+  color: var(--bm-paper);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 180ms ease, transform 180ms ease;
 }
 
 .perfil-login:hover {
-    background-color: #C6815B;
-    color: white;
+  background: var(--bm-espresso);
+  color: white;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 700px) {
   .navbar {
-    height: 68px;
-    padding: 0 12px;
+    top: 8px;
+    width: calc(100% - 16px);
+    min-height: 62px;
+    margin-top: 8px;
+    padding: 8px 10px 8px 12px;
     gap: 8px;
   }
 
   .logo img {
-    width: 60px;
-    height: 52px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .logo::after {
+    display: none;
   }
 
   .nav-links {
-    gap: 2px;
+    gap: 0;
+    overflow-x: auto;
   }
 
   .nav-link {
     padding: 9px 8px;
-    font-size: 12px;
+    font-size: 0.75rem;
+    white-space: nowrap;
   }
 
   .perfil {
     width: 36px;
     height: 36px;
+  }
+
+  .perfil-login {
+    padding: 9px 11px;
+    font-size: 0.75rem;
   }
 }

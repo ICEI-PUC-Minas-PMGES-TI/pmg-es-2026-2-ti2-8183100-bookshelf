@@ -1,68 +1,69 @@
-
 .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 16px;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgb(42 26 20 / 62%);
+  backdrop-filter: blur(5px);
 }
 
 .modal-container {
-    position: relative;
-    background-color: #FFE7C2;
-    width: 100%;
-    max-width: 420px;
-    padding: 32px;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  border: 1px solid var(--bm-line);
+  border-radius: 20px;
+  background: var(--bm-paper);
+  box-shadow: 0 24px 60px rgb(42 26 20 / 28%);
 }
 
-.modal-container h2 {
-    margin-top: 0;
-    color: #1E1E1E;
-}
-
-.modal-container p {
-    color: #555;
-    margin-bottom: 24px;
-}
+.modal-container h2 { margin: 0; color: var(--bm-espresso); }
+.modal-container p { margin: 8px 0 22px; color: var(--bm-muted); line-height: 1.55; }
 
 .modal-fechar {
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    background: none;
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--bm-coffee);
+  font-size: 1.45rem;
+  cursor: pointer;
 }
 
-.modal-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+.modal-fechar:hover { background: var(--bm-latte); }
+
+.modal-container form { display: flex; flex-direction: column; gap: 10px; }
 
 .modal-container input {
-    padding: 12px;
-    border: 1px solid #C1A67C;
-    border-radius: 8px;
-    margin-bottom: 10px;
+  padding: 12px;
+  border: 1px solid var(--bm-line);
+  border-radius: 10px;
+  background: var(--bm-cream);
+  color: var(--bm-espresso);
+}
+
+.modal-container input:focus {
+  outline: none;
+  border-color: var(--bm-caramel);
+  box-shadow: 0 0 0 4px rgb(183 121 77 / 14%);
 }
 
 .modal-container form button {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background-color: #C6815B;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
+  padding: 12px;
+  border: 1px solid var(--bm-espresso);
+  border-radius: 10px;
+  background: var(--bm-espresso);
+  color: var(--bm-paper);
+  font-weight: 800;
+  cursor: pointer;
 }
 
-.modal-container form button:hover {
-    opacity: 0.9;
-}
+.modal-container form button:hover { background: var(--bm-coffee); }

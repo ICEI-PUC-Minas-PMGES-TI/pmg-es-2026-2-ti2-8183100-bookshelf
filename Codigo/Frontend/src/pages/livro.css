@@ -1,134 +1,81 @@
-/* Livro — mesma moldura "livro" do Feed e do Perfil. */
 .livro-page {
-  --bm-tan: #c1a67c;
-  --bm-tan-hover: #b09262;
-  --bm-tan-border: #8e7048;
-  --bm-soft: #f6ebd6;
-  --bm-title: #493621;
-  --bm-muted: #766650;
-  --bm-ink: #1e1e1e;
-  --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
-
-  width: 100%;
-  max-width: 1100px;
+  width: min(1100px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 40px 28px 64px;
-  box-sizing: border-box;
-  color: var(--bm-ink);
+  padding: 56px 0 72px;
+  color: var(--bm-espresso);
 }
 
 .livro-moldura {
-  padding: 14px;
-  border: 1px solid #b09262;
-  border-radius: 18px;
-  background: var(--bm-tan);
-  box-shadow:
-    0 18px 40px rgb(90 64 35 / 15%),
-    inset 0 0 0 2px rgb(255 247 235 / 18%);
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--bm-line);
+  border-radius: 30px;
+  background: rgb(255 253 249 / 92%);
+  box-shadow: 0 22px 55px rgb(74 47 36 / 9%);
 }
 
 .livro-paginas {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: 28px;
-  padding: clamp(18px, 3vw, 36px);
-  border: 1px solid #dec6a0;
-  border-radius: 10px;
-  background: #fff9ef;
-  box-shadow:
-    inset 0 0 24px rgb(128 92 49 / 8%),
-    0 2px 5px rgb(90 64 35 / 8%);
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 48px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
-/* ---- coluna da capa ---- */
 .livro-lateral {
   display: flex;
   flex-direction: column;
   align-items: center;
   align-self: start;
-  gap: 14px;
+  gap: 16px;
 }
 
-.livro-avaliacao {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
+.livro-lateral > .book-cover { box-shadow: 0 16px 30px rgb(74 47 36 / 17%); }
 
-.livro-estrelas {
-  display: flex;
-  gap: 2px;
-}
+.livro-avaliacao { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.livro-estrelas { display: flex; gap: 2px; }
 
 .livro-estrela {
   padding: 0 2px;
   border: 0;
   background: none;
-  color: #e3d6bd;
-  font-size: 1.6rem;
+  color: var(--bm-line);
+  font-size: 1.55rem;
   line-height: 1;
   cursor: pointer;
-  transition:
-    color 120ms ease,
-    transform 120ms ease;
+  transition: color 120ms ease, transform 120ms ease;
 }
 
-.livro-estrela.is-cheia {
-  color: #b58a3c;
-}
-
-/* estrelas da nota do próprio usuário ficam mais escuras que a média */
-.livro-estrela.is-sua.is-cheia {
-  color: #8e5a14;
-}
-
-.livro-estrela:hover {
-  transform: scale(1.15);
-}
-
-.livro-nota-texto {
-  color: var(--bm-muted);
-  font-size: 0.8rem;
-  text-align: center;
-}
+.livro-estrela.is-cheia { color: var(--bm-caramel); }
+.livro-estrela.is-sua.is-cheia { color: var(--bm-coffee); }
+.livro-estrela:hover { transform: scale(1.15); }
+.livro-nota-texto { color: var(--bm-muted); font-size: 0.75rem; text-align: center; }
 
 .livro-ficha {
   width: 100%;
   box-sizing: border-box;
   margin: 0;
-  padding: 14px 16px;
-  border: 1px solid #dec6a0;
-  border-radius: 12px;
-  background: #f7efdf;
-  font-size: 0.9rem;
+  padding: 15px;
+  border: 1px solid var(--bm-line);
+  border-radius: 14px;
+  background: var(--bm-latte);
+  font-size: 0.86rem;
 }
 
 .livro-ficha dt {
-  margin-top: 8px;
-  color: var(--bm-muted);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  margin-top: 11px;
+  color: var(--bm-caramel);
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-.livro-ficha dt:first-child {
-  margin-top: 0;
-}
+.livro-ficha dt:first-child { margin-top: 0; }
+.livro-ficha dd { margin: 3px 0 0; color: var(--bm-coffee); line-height: 1.4; }
 
-.livro-ficha dd {
-  margin: 2px 0 0;
-  color: var(--bm-title);
-}
-
-/* ---- coluna de conteúdo ---- */
-.livro-conteudo {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-width: 0;
-}
+.livro-conteudo { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 
 .livro-cabecalho {
   display: flex;
@@ -139,143 +86,111 @@
 }
 
 .livro-titulo {
-  margin: 0 0 8px;
-  color: var(--bm-title);
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  line-height: 1.1;
+  margin: 0 0 10px;
+  color: var(--bm-espresso);
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 600;
+  line-height: 0.98;
 }
 
 .livro-categoria {
   display: inline-block;
-  padding: 4px 12px;
+  padding: 5px 11px;
   border-radius: 999px;
-  background: var(--bm-soft);
-  color: #6b4e27;
-  font-size: 0.82rem;
-  font-weight: 600;
+  background: var(--bm-latte);
+  color: var(--bm-coffee);
+  font-size: 0.76rem;
+  font-weight: 750;
 }
 
 .livro-botao {
   display: inline-block;
-  padding: 10px 18px;
-  border: 1px solid var(--bm-tan-border);
-  border-radius: 8px;
-  background: var(--bm-tan);
-  color: var(--bm-ink);
-  font: inherit;
+  padding: 11px 15px;
+  border: 1px solid var(--bm-espresso);
+  border-radius: 11px;
+  background: var(--bm-espresso);
+  color: var(--bm-paper);
+  font-size: 0.82rem;
+  font-weight: 750;
   text-decoration: none;
   cursor: pointer;
   list-style: none;
-  transition: background 180ms ease;
+  transition: background 180ms ease, transform 180ms ease;
 }
 
-.livro-botao::-webkit-details-marker {
-  display: none;
-}
+.livro-botao::-webkit-details-marker { display: none; }
+.livro-botao:hover { background: var(--bm-coffee); transform: translateY(-1px); }
 
-.livro-botao:hover {
-  background: var(--bm-tan-hover);
-}
-
-/* menu de listas (abre sem JavaScript, usando <details>) */
-.livro-adicionar {
-  position: relative;
-}
+.livro-adicionar { position: relative; }
 
 .livro-adicionar__opcoes {
   position: absolute;
   z-index: 5;
   right: 0;
   min-width: 100%;
-  margin: 6px 0 0;
+  margin: 7px 0 0;
   padding: 6px;
   list-style: none;
-  border: 1px solid #dec6a0;
-  border-radius: 10px;
-  background: #fffefb;
-  box-shadow: 0 10px 24px rgb(90 64 35 / 18%);
+  border: 1px solid var(--bm-line);
+  border-radius: 12px;
+  background: var(--bm-paper);
+  box-shadow: 0 14px 28px rgb(74 47 36 / 16%);
 }
 
 .livro-adicionar__opcoes button {
   display: block;
   width: 100%;
-  padding: 9px 14px;
+  padding: 9px 12px;
   border: 0;
-  border-radius: 6px;
+  border-radius: 7px;
   background: transparent;
-  color: var(--bm-title);
-  font: inherit;
+  color: var(--bm-coffee);
+  font-size: 0.82rem;
   text-align: left;
   white-space: nowrap;
   cursor: pointer;
 }
 
-.livro-adicionar__opcoes button:hover {
-  background: var(--bm-soft);
-}
+.livro-adicionar__opcoes button:hover,
+.livro-adicionar__opcoes button.is-ativa { background: var(--bm-latte); }
+.livro-adicionar__opcoes button.is-ativa { font-weight: 750; }
 
-/* caixas de sinopse e autor */
 .livro-caixa {
-  padding: 18px 22px;
-  border: 1px solid #dec6a0;
-  border-radius: 14px;
-  background: #f7efdf;
+  padding: 19px 21px;
+  border: 1px solid var(--bm-line);
+  border-radius: 16px;
+  background: rgb(241 226 207 / 45%);
 }
 
-.livro-caixa h2 {
-  margin: 0 0 8px;
-  color: var(--bm-title);
-  font-size: 1.2rem;
-}
-
-.livro-caixa p {
-  margin: 0;
-  color: #3d3020;
-  line-height: 1.65;
-}
+.livro-caixa h2 { margin: 0 0 9px; color: var(--bm-coffee); font-size: 1.2rem; }
+.livro-caixa p { margin: 0; color: #5f4a3d; line-height: 1.72; }
 
 .livro-page :is(a, button, summary):focus-visible {
-  outline: 2px solid var(--bm-tan-border);
-  outline-offset: 2px;
-}
-
-@media (max-width: 800px) {
-  .livro-page {
-    padding: 16px 12px 40px;
-  }
-
-  .livro-paginas {
-    grid-template-columns: 1fr;
-  }
-
-  .livro-lateral {
-    max-width: 240px;
-    margin: 0 auto;
-  }
-}
-
-/* lista onde o livro já está */
-.livro-adicionar__opcoes button.is-ativa {
-  background: var(--bm-soft);
-  font-weight: 600;
+  outline: 2px solid var(--bm-caramel);
+  outline-offset: 3px;
 }
 
 .livro-aviso {
   margin: 0;
   padding: 10px 14px;
-  border: 1px solid #c98b8b;
-  border-radius: 8px;
-  background: #fbeaea;
-  color: #7a2323;
-  font-size: 0.9rem;
+  border: 1px solid #e1a79e;
+  border-radius: 10px;
+  background: #fff1ed;
+  color: #8d2d20;
+  font-size: 0.86rem;
 }
 
-.livro-caixa p.livro-fonte {
-  margin-top: 8px;
-  color: var(--bm-muted);
-  font-size: 0.8rem;
-}
+.livro-caixa p.livro-fonte { margin-top: 9px; color: var(--bm-muted); font-size: 0.78rem; }
+.livro-fonte a { color: var(--bm-caramel); }
 
-.livro-fonte a {
-  color: inherit;
+@media (max-width: 800px) {
+  .livro-page {
+    width: min(100% - 24px, 620px);
+    padding: 30px 0 48px;
+  }
+
+  .livro-moldura { padding: 22px 16px 28px; border-radius: 22px; }
+  .livro-paginas { grid-template-columns: 1fr; padding: 0; border-radius: 0; }
+  .livro-lateral { max-width: 230px; margin: 0 auto; }
+  .livro-cabecalho { flex-direction: column; }
 }
