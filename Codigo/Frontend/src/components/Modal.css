@@ -1,0 +1,94 @@
+/* Popup: mesma paleta do Feed e do Perfil (papel creme com borda marrom). */
+.modal {
+  width: min(520px, calc(100% - 24px));
+  max-height: calc(100vh - 24px);
+  padding: 0;
+  border: 1px solid #b09262;
+  border-radius: 16px;
+  background: #fff9ef;
+  color: #1e1e1e;
+  box-shadow: 0 24px 60px rgb(46 33 18 / 35%);
+}
+
+.modal::backdrop {
+  background: rgb(46 33 18 / 55%);
+}
+
+.modal[open] {
+  display: flex;
+  flex-direction: column;
+  animation: modal-entrada 180ms ease;
+}
+
+@keyframes modal-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+/* o fundo não rola enquanto o popup está aberto */
+body:has(dialog.modal[open]) {
+  overflow: hidden;
+}
+
+.modal__janela {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: calc(100vh - 24px);
+}
+
+.modal__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid #dec6a0;
+  background: #f7efdf;
+}
+
+.modal__titulo {
+  margin: 0;
+  color: #493621;
+  font-size: 1.3rem;
+}
+
+.modal__fechar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #80613e;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 180ms ease;
+}
+
+.modal__fechar:hover {
+  background: #dec6a0;
+}
+
+.modal__corpo {
+  min-height: 0;
+  padding: 20px 22px 22px;
+  overflow-y: auto;
+}
+
+.modal :is(button, input, textarea):focus-visible {
+  outline: 2px solid #8e7048;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal[open] {
+    animation: none;
+  }
+}
