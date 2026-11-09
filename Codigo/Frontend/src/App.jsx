@@ -7,7 +7,7 @@ import {
   Link,
 } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Feed from "./pages/Feed";
 import Metricas from "./pages/metricas";
@@ -16,6 +16,8 @@ import Perfil from "./pages/perfil";
 import Catalogo from "./pages/catalogo";
 import Livro from "./pages/livro";
 import Login from "./pages/login";
+import { obterUsuario } from "./services/listasService";
+import { FOTO_PADRAO, ouvirPerfilAtualizado } from "./services/perfilService";
 
 import "./App.css";
 
@@ -23,6 +25,19 @@ function App() {
   const [logado, setLogado] = useState(
     !!localStorage.getItem("token")
   );
+
+  // Foto do usuário na barra de navegação (usa a foto padrão enquanto carrega ou se falhar).
+  const [fotoDoUsuario, setFotoDoUsuario] = useState("");
+
+  useEffect(() => {
+    if (!logado) return;
+    obterUsuario()
+      .then((usuario) => setFotoDoUsuario(usuario.perfil?.foto ?? ""))
+      .catch(() => setFotoDoUsuario(""));
+
+    // Quando o perfil é editado, a foto daqui muda junto.
+    return ouvirPerfilAtualizado(setFotoDoUsuario);
+  }, [logado]);
   return (
     <>
       <nav className="navbar">
@@ -53,8 +68,11 @@ function App() {
             aria-label="Meu perfil"
           >
             <img
-              src="https://www.gravatar.com/avatar/?d=mp&s=100"
+              src={fotoDoUsuario || FOTO_PADRAO}
               alt="Foto de perfil"
+              onError={(e) => {
+                if (e.currentTarget.src !== FOTO_PADRAO) e.currentTarget.src = FOTO_PADRAO;
+              }}
             />
           </NavLink>
         ) : (
