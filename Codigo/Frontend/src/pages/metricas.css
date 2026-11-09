@@ -183,6 +183,24 @@
 .calendario-card .react-calendar__tile--active:enabled:hover {
   color: #FFFFFF !important;
 }
+
+.calendario-card .react-calendar__tile.dia-com-streak {
+    background-color: #C6815B;
+    color: #FFFFFF;
+    font-weight: bold;
+    border-radius: 10px;
+    border: 1px solid #A65F3E;
+}
+
+.calendario-card .react-calendar__tile.dia-com-streak:enabled:hover {
+    background-color: #A65F3E;
+    color: #FFFFFF;
+}
+.calendario-card .react-calendar__tile.dia-com-streak.react-calendar__tile--active {
+    background-color: #A65F3E !important;
+    color: #FFFFFF !important;
+}
+
 .metricas-direita {
   grid-column: 3;
   grid-row: 1;
