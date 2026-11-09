@@ -5,8 +5,7 @@ import PublicacaoCard from "../components/PublicacaoCard";
 
 import {
   obterPublicacoes,
-  criarPublicacao,
-  alternarCurtidaAPI
+  criarPublicacao
 } from "../services/feedService";
 
 import { buscarLivros } from "../services/booksService";
@@ -130,32 +129,6 @@ function Feed() {
     setErroBuscaLivro("");
   }
 
-  // Alterna a curtida e salva a alteração no MongoDB.
-  async function alternarCurtida(id) {
-    try {
-      setErroAcao("");
-
-      const dados = await alternarCurtidaAPI(id);
-
-      setPublicacoes((atuais) =>
-        atuais.map((publicacao) => {
-          if (publicacao.id !== id) {
-            return publicacao;
-          }
-
-          return {
-            ...publicacao,
-            curtiu: dados.curtiu,
-            curtidas: dados.curtidas
-          };
-        })
-      );
-    } catch (error) {
-      console.error("Erro ao atualizar curtida:", error);
-      setErroAcao(error.message);
-    }
-  }
-
   // Publica uma nova resenha associada a um livro selecionado.
   async function publicarResenha(event) {
     event.preventDefault();
@@ -230,10 +203,6 @@ function Feed() {
     });
 
     return resultado.sort((a, b) => {
-      if (ordenacao === "curtidas") {
-        return Number(b.curtidas || 0) - Number(a.curtidas || 0);
-      }
-
       if (ordenacao === "avaliacao") {
         return Number(b.avaliacao || 0) - Number(a.avaliacao || 0);
       }
@@ -251,15 +220,10 @@ function Feed() {
         <div className="feed-book-pages">
           <header className="feed-header">
             <div>
-              <span className="feed-eyebrow">
-                COMUNIDADE BOOKMARK
-              </span>
-
               <h1>Feed</h1>
 
               <p>
-                Descubra leituras, compartilhe opiniões e acompanhe
-                a jornada <br /> de outros leitores.
+                Descubra leituras e acompanhe as histórias de outros leitores.
               </p>
             </div>
 
@@ -286,10 +250,6 @@ function Feed() {
             <form className="feed-form" onSubmit={publicarResenha}>
               <div className="feed-form-header">
                 <div>
-                  <span className="feed-eyebrow">
-                    SUA LEITURA
-                  </span>
-
                   <h2>Compartilhe sua opinião</h2>
                 </div>
 
@@ -503,6 +463,12 @@ function Feed() {
           </div>
 
           <div className="feed-toolbar">
+            <label className="feed-nota-mobile">
+              Avaliação
+              <select className="feed-select" value={filtroNota} onChange={(e) => setFiltroNota(e.target.value)}>
+                {filtrosNota.map((filtro) => <option key={filtro.valor} value={filtro.valor}>{filtro.texto}</option>)}
+              </select>
+            </label>
             <div
               className="feed-chips"
               role="group"
@@ -531,7 +497,6 @@ function Feed() {
                 onChange={(event) => setOrdenacao(event.target.value)}
               >
                 <option value="recentes">Mais recentes</option>
-                <option value="curtidas">Mais curtidas</option>
                 <option value="avaliacao">Maior avaliação</option>
               </select>
             </label>
@@ -562,7 +527,6 @@ function Feed() {
                   <PublicacaoCard
                     key={publicacao.id}
                     publicacao={publicacao}
-                    onCurtir={() => alternarCurtida(publicacao.id)}
                   />
                 ))}
               </div>
