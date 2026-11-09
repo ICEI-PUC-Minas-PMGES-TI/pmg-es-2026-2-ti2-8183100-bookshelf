@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./popUpCadastro.css";
 import API_URL from "../services/api";
 
-export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDepois, usuarioId }) {
+export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDepois, usuarioId, carregarUsuario }) {
     const [livroId, setLivroId] = useState("");
     const [pagInicial, setPagInicial] = useState("");
     const [pagFinal, setPagFinal] = useState("");
@@ -67,6 +67,7 @@ export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDep
             }
 
             alert("Cadastro realizado com sucesso!");
+            carregarUsuario();
             fechar();
 
         } catch (error) {

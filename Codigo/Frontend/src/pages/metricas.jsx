@@ -9,23 +9,22 @@ import { logUser } from "../services/metricasService";
 
 
 export default function Metricas() {
+	async function carregarUsuario() {
+		try {
+			const data = await logUser(userLog.id);
+			setUsuario(data);
+			const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
+			setLivros(await buscarLivrosPorIds(ids));
+		} catch (error) {
+			console.error(error);
+		}
+	}
 	const [usuario, setUsuario] = useState(null);
 	const [livros, setLivros] = useState([]);
 	const userLog = JSON.parse(localStorage.getItem("usuario"));
 	const [popUp, setPopUp] = useState(false);
 
 	useEffect(() => {
-		async function carregarUsuario() {
-			try {
-				const data = await logUser(userLog.id);
-				setUsuario(data);
-				const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
-				setLivros(await buscarLivrosPorIds(ids));
-			} catch (error) {
-				console.error(error);
-			}
-		}
-
 		carregarUsuario();
 	}, []);
 
@@ -115,6 +114,8 @@ export default function Metricas() {
 					favoritos={favoritos}
 					lerDepois={lerDepois}
 					usuarioId={userLog?.id}
+					usuario={userLog}
+					carregarUsuario={() => carregarUsuario()}
 				/>
 			</section>
 		</main>
