@@ -15,7 +15,7 @@
 }
 
 .card-livro:focus-visible {
-  outline: 2px solid #8e7048;
+  outline: 2px solid var(--tema-contorno, #8e7048);
   outline-offset: 4px;
   border-radius: 6px;
 }
@@ -24,7 +24,7 @@
   display: -webkit-box;
   overflow: hidden;
   margin: 8px 0 0;
-  color: #2f2212;
+  color: var(--tema-titulo-forte, #2f2212);
   font-family: var(--bm-display, Georgia, "Times New Roman", serif);
   font-size: 0.95rem;
   font-weight: 650;
@@ -36,7 +36,7 @@
 .card-livro p {
   overflow: hidden;
   margin: 0;
-  color: #6f5f48;
+  color: var(--tema-secundario-catalogo, #6f5f48);
   font-size: 0.78rem;
   text-overflow: ellipsis;
   white-space: nowrap;

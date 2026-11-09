@@ -1,8 +1,8 @@
 .publicacao-card {
     overflow: hidden;
-    border: 1px solid #DEC6A0;
+    border: 1px solid var(--tema-areia, #DEC6A0);
     border-radius: 10px;
-    background: #FFFCF6;
+    background: var(--tema-campo, #FFFCF6);
 
     box-shadow:
         0 4px 14px rgb(73 54 33 / 6%);
@@ -14,7 +14,7 @@
 }
 
 .publicacao-card:hover {
-    border-color: #C1A67C;
+    border-color: var(--tema-moldura, #C1A67C);
 
     box-shadow:
         0 8px 22px rgb(73 54 33 / 10%);
@@ -30,7 +30,7 @@
 
     padding: 20px 24px;
 
-    border-bottom: 1px solid #F0E5D3;
+    border-bottom: 1px solid var(--tema-linha-post, #F0E5D3);
 }
 
 .publicacao-usuario {
@@ -50,11 +50,11 @@
     width: 44px;
     height: 44px;
 
-    border: 1px solid #C1A67C;
+    border: 1px solid var(--tema-moldura, #C1A67C);
     border-radius: 50%;
 
-    background: #DEC6A0;
-    color: #493621;
+    background: var(--tema-areia, #DEC6A0);
+    color: var(--tema-titulo, #493621);
 
     font-size: 0.85rem;
     font-weight: 700;
@@ -69,7 +69,7 @@
 
     margin: 0 0 4px;
 
-    color: #493621;
+    color: var(--tema-titulo, #493621);
 
     font-size: 0.95rem;
     font-weight: 650;
@@ -79,14 +79,14 @@
 }
 
 .publicacao-usuario-info>span {
-    color: #88765E;
+    color: var(--tema-apoio-busca, #88765E);
     font-size: 0.82rem;
 }
 
 .publicacao-data {
     flex-shrink: 0;
 
-    color: #88765E;
+    color: var(--tema-apoio-busca, #88765E);
     font-size: 0.78rem;
 }
 
@@ -98,10 +98,10 @@
     margin: 20px 24px 0;
     padding: 18px;
 
-    border: 1px solid #E7D8BF;
+    border: 1px solid var(--tema-areia-livro, #E7D8BF);
     border-radius: 8px;
 
-    background: #F7EFDF;
+    background: var(--tema-painel, #F7EFDF);
 }
 
 .publicacao-capa {
@@ -118,11 +118,11 @@
     padding: 12px 10px;
     overflow: hidden;
 
-    border-left: 5px solid #8E7048;
+    border-left: 5px solid var(--tema-contorno, #8E7048);
     border-radius: 3px 7px 7px 3px;
 
-    background: #C1A67C;
-    color: #493621;
+    background: var(--tema-moldura, #C1A67C);
+    color: var(--tema-titulo, #493621);
 
     box-shadow:
         3px 5px 9px rgb(73 54 33 / 15%);
@@ -190,7 +190,7 @@
     width: 28px;
     height: 2px;
 
-    background: #FFE7C2;
+    background: var(--tema-fundo, #FFE7C2);
 }
 
 .publicacao-livro-info {
@@ -202,7 +202,7 @@
 
     margin-bottom: 9px;
 
-    color: #80613E;
+    color: var(--tema-detalhe, #80613E);
 
     font-size: 0.65rem;
     font-weight: 700;
@@ -212,7 +212,7 @@
 .publicacao-livro-info h4 {
     margin: 0 0 12px;
 
-    color: #493621;
+    color: var(--tema-titulo, #493621);
 
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1.3rem;
@@ -230,18 +230,18 @@
 }
 
 .publicacao-estrela {
-    color: #DEC6A0;
+    color: var(--tema-areia, #DEC6A0);
     font-size: 1rem;
 }
 
 .publicacao-estrela.ativa {
-    color: #B09262;
+    color: var(--tema-borda-forte, #B09262);
 }
 
 .publicacao-nota {
     margin-left: 6px;
 
-    color: #806F57;
+    color: var(--tema-texto-apoio, #806F57);
     font-size: 0.8rem;
 }
 
@@ -251,9 +251,9 @@
     margin: 18px 24px;
     padding: 18px 20px;
 
-    border-left: 3px solid #C1A67C;
+    border-left: 3px solid var(--tema-moldura, #C1A67C);
 
-    background: #FFF7E9;
+    background: var(--tema-papel-claro, #FFF7E9);
 }
 
 .publicacao-resenha p {
@@ -277,9 +277,9 @@
 
     padding: 14px 24px;
 
-    border-top: 1px solid #E7D8BF;
+    border-top: 1px solid var(--tema-areia-livro, #E7D8BF);
 
-    background: #F7EFDF;
+    background: var(--tema-painel, #F7EFDF);
 }
 
 .publicacao-livro-indicador {
@@ -287,17 +287,17 @@
     align-items: center;
     gap: 7px;
 
-    color: #806F57;
+    color: var(--tema-texto-apoio, #806F57);
     font-size: 0.78rem;
 }
 
 .publicacao-card:focus-within {
-    outline: 2px solid #B09262;
+    outline: 2px solid var(--tema-borda-forte, #B09262);
     outline-offset: 3px;
 }
 
 .publicacao-card button:focus-visible {
-    outline: 2px solid #80613E;
+    outline: 2px solid var(--tema-detalhe, #80613E);
     outline-offset: 3px;
 }
 

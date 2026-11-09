@@ -18,11 +18,20 @@ import Livro from "./pages/livro";
 import Login from "./pages/login";
 import { obterUsuario } from "./services/listasService";
 import { FOTO_PADRAO, ouvirPerfilAtualizado } from "./services/perfilService";
+import { Moon, Sun } from "lucide-react";
+import { obterTema, salvarTema } from "./services/temaService";
 
 import "./App.css";
+import "./tema.css";
 
 function App() {
-  const [logado, setLogado] = useState(
+  const [tema, setTema] = useState(obterTema);
+  useEffect(() => {
+    const sincronizar = () => setTema(obterTema());
+    window.addEventListener("tema-atualizado", sincronizar);
+    return () => window.removeEventListener("tema-atualizado", sincronizar);
+  }, []);
+  const [logado] = useState(
     !!localStorage.getItem("token")
   );
 
@@ -59,6 +68,12 @@ function App() {
           </NavLink>
         </div>
 
+        <div className="nav-conta">
+          <button type="button" className="tema-rapido"
+            aria-label={tema === "claro" ? "Ativar tema escuro" : "Ativar tema claro"}
+            onClick={() => salvarTema(tema === "claro" ? "escuro" : "claro")}>
+            {tema === "claro" ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
+          </button>
         {logado ? (
           <NavLink
             to="/perfil"
@@ -80,6 +95,7 @@ function App() {
             Entrar
           </NavLink>
         )}
+        </div>
       </nav>
 
       <Suspense fallback={<p>Carregando página...</p>}>

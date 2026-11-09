@@ -1,0 +1,80 @@
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --tema-branco: #342c25;
+  --tema-fundo: #211d1a;
+  --tema-moldura: #4c3c30;
+  --tema-borda-forte: #80654e;
+  --tema-contorno: #b2987c;
+  --tema-areia: #3e332b;
+  --tema-papel: #2c2621;
+  --tema-campo: #29241f;
+  --tema-superficie: #2c2621;
+  --tema-painel: #342c25;
+  --tema-suave: #3e332b;
+  --tema-linha: #655344;
+  --tema-titulo: #f1dfcb;
+  --tema-titulo-forte: #f4e8da;
+  --tema-tinta: #eee3d6;
+  --tema-preto: #eee3d6;
+  --tema-secundario: #c6b5a0;
+  --tema-secundario-catalogo: #c6b5a0;
+  --tema-detalhe: #ceaf8a;
+  --tema-dados: #e3d0b8;
+  --tema-calendario: #cbb394;
+  --tema-terracota: #a55334;
+  --tema-terracota-escura: #d78e69;
+  --tema-terracota-hover: #b26748;
+  --tema-areia-clara: #574536;
+  --tema-texto-apoio: #c9b79f;
+  --tema-texto-fraco: #b7a58e;
+  --tema-dia-vizinho: #b6a38d;
+  --tema-estrela-vazia: #7b6a58;
+  --tema-alvo: #50402f;
+  --tema-linha-catalogo: #655344;
+  --tema-erro-fundo: #422b29;
+  --tema-erro-campo: #422b29;
+  --tema-erro-texto: #ffb4aa;
+  --tema-erro-titulo: #ffb4aa;
+  --tema-erro-borda: #ae7770;
+  --tema-sucesso-fundo: #293b29;
+  --tema-sucesso-texto: #b6d9a6;
+  --tema-login-titulo: #d0bba6;
+  --tema-login-rotulo: #eee3d6;
+  --tema-apoio-livro: #c6b5a0;
+  --tema-apoio-busca: #c6b5a0;
+  --tema-apoio-data: #c6b5a0;
+  --tema-apoio-tag: #dfc3a0;
+  --tema-areia-livro: #4c3c30;
+  --tema-areia-post: #3e332b;
+  --tema-linha-post: #655344;
+  --tema-papel-reserva: #342c25;
+  --tema-papel-claro: #2c2621;
+  --tema-papel-post: #2c2621;
+  --tema-papel-formulario: #2c2621;
+}
+
+:root[data-tema="escuro"] .logo img { filter: invert(0.9); }
+:root[data-tema="escuro"] .nav-link.active:hover { background: #f1dfcb; color: #211d1a; }
+
+.tema-rapido {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--tema-titulo, #493621);
+  cursor: pointer;
+}
+.tema-rapido:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.nav-conta { display: flex; align-items: center; gap: 12px; }
+@media (max-width: 450px) {
+  .navbar { padding: 0 8px; gap: 4px; }
+  .navbar .logo img { width: 32px; }
+  .navbar .nav-link { padding: 10px 6px; }
+  .nav-conta { gap: 6px; }
+  .tema-rapido { width: 34px; height: 34px; }
+}

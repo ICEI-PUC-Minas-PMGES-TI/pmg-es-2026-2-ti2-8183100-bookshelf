@@ -1,14 +1,14 @@
 /* Paleta do Feed, mas com superfícies claras. O marrom fica só nos botões e detalhes. */
 .cat-page {
-  --bm-tan: #c1a67c;
-  --bm-tan-hover: #b09262;
-  --bm-tan-border: #8e7048;
-  --bm-surface: #fffefb;
-  --bm-soft: #f6ebd6;
-  --bm-line: #e8dac0;
-  --bm-title: #2f2212;
-  --bm-muted: #6f5f48;
-  --bm-ink: #1e1e1e;
+  --bm-tan: var(--tema-moldura, #c1a67c);
+  --bm-tan-hover: var(--tema-borda-forte, #b09262);
+  --bm-tan-border: var(--tema-contorno, #8e7048);
+  --bm-surface: var(--tema-superficie, #fffefb);
+  --bm-soft: var(--tema-suave, #f6ebd6);
+  --bm-line: var(--tema-linha, #e8dac0);
+  --bm-title: var(--tema-titulo-forte, #2f2212);
+  --bm-muted: var(--tema-secundario-catalogo, #6f5f48);
+  --bm-ink: var(--tema-tinta, #1e1e1e);
   /* fonte de títulos: Fraunces (carregada no index.html) */
   --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
 
@@ -22,7 +22,7 @@
 
 .cat-panel {
   padding: clamp(20px, 3vw, 40px);
-  border: 1px solid #ebddc3;
+  border: 1px solid var(--tema-linha-catalogo, #ebddc3);
   border-radius: 20px;
   background: var(--bm-surface);
   box-shadow: 0 6px 24px rgb(90 64 35 / 8%);
@@ -94,16 +94,16 @@
   box-sizing: border-box;
   width: 100%;
   padding: 14px 16px 14px 46px;
-  border: 2px solid #d9c29b;
+  border: 2px solid var(--tema-areia-clara, #d9c29b);
   border-radius: 12px;
-  background: #fff;
+  background: var(--tema-branco, #fff);
   color: var(--bm-ink);
   font: inherit;
   font-size: 1rem;
 }
 
 .cat-search input::placeholder {
-  color: #8f806a;
+  color: var(--tema-texto-fraco, #8f806a);
 }
 
 .cat-search input:focus,
@@ -175,7 +175,7 @@
   padding: 7px 16px;
   border: 1px solid var(--bm-line);
   border-radius: 999px;
-  background: #fff;
+  background: var(--tema-branco, #fff);
   color: var(--bm-title);
   font: inherit;
   font-size: 0.9rem;
@@ -206,9 +206,9 @@
 
 .cat-select {
   padding: 9px 12px;
-  border: 1px solid #d9c29b;
+  border: 1px solid var(--tema-areia-clara, #d9c29b);
   border-radius: 10px;
-  background: #fff;
+  background: var(--tema-branco, #fff);
   color: var(--bm-ink);
   font: inherit;
   font-size: 0.9rem;
@@ -248,7 +248,7 @@
   padding: 40px 20px;
   border: 1px solid var(--bm-line);
   border-radius: 14px;
-  background: #fffaf0;
+  background: var(--tema-papel-formulario, #fffaf0);
   color: var(--bm-muted);
   text-align: center;
 }

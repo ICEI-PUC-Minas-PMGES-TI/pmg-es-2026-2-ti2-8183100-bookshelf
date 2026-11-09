@@ -12,7 +12,7 @@
 
 .modal-container {
     position: relative;
-    background-color: #FFE7C2;
+    background-color: var(--tema-fundo, #FFE7C2);
     width: 100%;
     max-width: 420px;
     padding: 32px;
@@ -22,7 +22,7 @@
 
 .modal-container h2 {
     margin-top: 0;
-    color: #1E1E1E;
+    color: var(--tema-tinta, #1E1E1E);
 }
 
 .modal-container p {
@@ -48,7 +48,7 @@
 
 .modal-container input {
     padding: 12px;
-    border: 1px solid #C1A67C;
+    border: 1px solid var(--tema-moldura, #C1A67C);
     border-radius: 8px;
     margin-bottom: 10px;
 }
@@ -57,7 +57,7 @@
     padding: 12px;
     border: none;
     border-radius: 8px;
-    background-color: #C6815B;
+    background-color: var(--tema-terracota, #C6815B);
     color: white;
     font-weight: bold;
     cursor: pointer;

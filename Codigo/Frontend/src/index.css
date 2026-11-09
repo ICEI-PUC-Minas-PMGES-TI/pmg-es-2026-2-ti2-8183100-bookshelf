@@ -1,8 +1,8 @@
 :root {
   --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
   font-family: Inter, "Segoe UI", sans-serif;
-  color: #1e1e1e;
-  background: #ffe7c2;
+  color: var(--tema-tinta, #1e1e1e);
+  background: var(--tema-fundo, #ffe7c2);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

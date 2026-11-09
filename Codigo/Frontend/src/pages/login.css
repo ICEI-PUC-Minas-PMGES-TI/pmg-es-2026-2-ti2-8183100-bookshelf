@@ -3,7 +3,7 @@
     display: grid;
     grid-template-columns: 42% 58%;
     min-height: calc(100vh - 94px);
-    background-color: #FFE7C2;
+    background-color: var(--tema-fundo, #FFE7C2);
 }
 
 /* LADO DA ILUSTRAÇÃO */
@@ -18,7 +18,7 @@
     align-items: center;
     text-align: center;
     padding: 30px;
-    color: #000;
+    color: var(--tema-preto, #000);
 }
 
 .login-ilustracao p {
@@ -52,12 +52,12 @@
     text-align: center;
     padding: 25px;
     margin: 0;
-    border-bottom: 2px solid #C1A67C;
+    border-bottom: 2px solid var(--tema-moldura, #C1A67C);
 
     font-family: Georgia, serif;
     font-size: 52px;
     font-weight: normal;
-    color: #756D67;
+    color: var(--tema-login-titulo, #756D67);
 }
 
 /* CARD DO FORMULÁRIO */
@@ -67,7 +67,7 @@
     max-width: 455px;
     margin-top: 55px;
     padding: 60px 26px 45px;
-    background-color: #C1A67C;
+    background-color: var(--tema-moldura, #C1A67C);
     border-radius: 32px;
 }
 
@@ -80,7 +80,7 @@
 .login-card label {
     font-family: Georgia, serif;
     font-size: 30px;
-    color: #55504A;
+    color: var(--tema-login-rotulo, #55504A);
 }
 
 .login-card input {
@@ -89,27 +89,27 @@
     padding: 20px 16px;
     border: none;
     border-radius: 9px;
-    background-color: #DEC6A0;
+    background-color: var(--tema-areia, #DEC6A0);
     font-size: 16px;
     outline: none;
     margin-bottom: 48px;
 }
 
 .login-card input:focus {
-    box-shadow: 0 0 0 2px #C6815B;
+    box-shadow: 0 0 0 2px var(--tema-terracota, #C6815B);
 }
 
 .login-card p {
     font-family: Georgia, serif;
     font-size: 18px;
-    color: #655B4D;
+    color: var(--tema-apoio-livro, #655B4D);
     margin: -20px 0 0;
 }
 
 .login-card p button {
     background: none;
     border: none;
-    color: #C6815B;
+    color: var(--tema-terracota, #C6815B);
     font-family: inherit;
     font-size: inherit;
     cursor: pointer;
@@ -128,7 +128,7 @@
 .login-botoes button {
     width: 263px;
     padding: 8px;
-    border: 1px solid #1E1E1E;
+    border: 1px solid var(--tema-tinta, #1E1E1E);
     border-radius: 9px;
     font-family: Georgia, serif;
     font-size: 30px;
@@ -137,12 +137,12 @@
 }
 
 .btn-cancelar {
-    background-color: #DEC6A0;
-    color: #1E1E1E;
+    background-color: var(--tema-areia, #DEC6A0);
+    color: var(--tema-tinta, #1E1E1E);
 }
 
 .btn-entrar {
-    background-color: #C6815B;
+    background-color: var(--tema-terracota, #C6815B);
     color: white;
 }
 

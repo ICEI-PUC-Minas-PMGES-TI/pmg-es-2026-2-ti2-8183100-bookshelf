@@ -38,9 +38,9 @@
   overflow: hidden;
   box-sizing: border-box;
   padding: 22px 16px 20px 24px;
-  border-left: 8px solid var(--bm-tan, #c1a67c);
-  background: #f1e3c6;
-  color: var(--bm-title, #2f2212);
+  border-left: 8px solid var(--bm-tan, var(--tema-moldura, #c1a67c));
+  background: var(--tema-alvo, #f1e3c6);
+  color: var(--bm-title, var(--tema-titulo-forte, #2f2212));
 }
 
 .book-cover--fallback::after {
@@ -59,7 +59,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--bm-muted, #6f5f48);
+  color: var(--bm-muted, var(--tema-secundario-catalogo, #6f5f48));
 }
 
 .book-cover__title {
@@ -73,7 +73,7 @@
 .book-cover__line {
   width: 28px;
   height: 3px;
-  background: var(--bm-tan, #c1a67c);
+  background: var(--bm-tan, var(--tema-moldura, #c1a67c));
 }
 
 /* ---- texto ---- */
@@ -84,8 +84,8 @@
   max-width: 100%;
   padding: 4px 12px 4px 10px;
   border-radius: 999px;
-  background: var(--bm-soft, #f6ebd6);
-  color: #6b4e27;
+  background: var(--bm-soft, var(--tema-suave, #f6ebd6));
+  color: var(--tema-apoio-tag, #6b4e27);
   font-size: 0.82rem;
   font-weight: 600;
 }
@@ -96,7 +96,7 @@
 
 .book-card__title {
   margin: 4px 0 0;
-  color: var(--bm-title, #2f2212);
+  color: var(--bm-title, var(--tema-titulo-forte, #2f2212));
   font-family: var(--bm-display, Georgia, "Times New Roman", serif);
   font-size: 1.15rem;
   font-weight: 650;
@@ -110,7 +110,7 @@
 
 .book-card__author {
   margin: 0;
-  color: var(--bm-muted, #6f5f48);
+  color: var(--bm-muted, var(--tema-secundario-catalogo, #6f5f48));
   font-size: 0.9rem;
 }
 
@@ -131,13 +131,13 @@
 }
 
 .book-card__star-off {
-  color: #e3d6bd;
+  color: var(--tema-estrela-vazia, #e3d6bd);
 }
 
 .book-card__rating-num,
 .book-card__year,
 .book-card__no-rating {
-  color: var(--bm-muted, #6f5f48);
+  color: var(--bm-muted, var(--tema-secundario-catalogo, #6f5f48));
   letter-spacing: 0;
 }
 

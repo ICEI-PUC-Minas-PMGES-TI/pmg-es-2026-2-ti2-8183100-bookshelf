@@ -1,12 +1,12 @@
 /* Livro — mesma moldura "livro" do Feed e do Perfil. */
 .livro-page {
-  --bm-tan: #c1a67c;
-  --bm-tan-hover: #b09262;
-  --bm-tan-border: #8e7048;
-  --bm-soft: #f6ebd6;
-  --bm-title: #493621;
-  --bm-muted: #766650;
-  --bm-ink: #1e1e1e;
+  --bm-tan: var(--tema-moldura, #c1a67c);
+  --bm-tan-hover: var(--tema-borda-forte, #b09262);
+  --bm-tan-border: var(--tema-contorno, #8e7048);
+  --bm-soft: var(--tema-suave, #f6ebd6);
+  --bm-title: var(--tema-titulo, #493621);
+  --bm-muted: var(--tema-secundario, #766650);
+  --bm-ink: var(--tema-tinta, #1e1e1e);
   --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
 
   width: 100%;
@@ -19,7 +19,7 @@
 
 .livro-moldura {
   padding: 14px;
-  border: 1px solid #b09262;
+  border: 1px solid var(--tema-borda-forte, #b09262);
   border-radius: 18px;
   background: var(--bm-tan);
   box-shadow:
@@ -32,9 +32,9 @@
   grid-template-columns: 240px minmax(0, 1fr);
   gap: 28px;
   padding: clamp(18px, 3vw, 36px);
-  border: 1px solid #dec6a0;
+  border: 1px solid var(--tema-areia, #dec6a0);
   border-radius: 10px;
-  background: #fff9ef;
+  background: var(--tema-papel, #fff9ef);
   box-shadow:
     inset 0 0 24px rgb(128 92 49 / 8%),
     0 2px 5px rgb(90 64 35 / 8%);
@@ -65,7 +65,7 @@
   padding: 0 2px;
   border: 0;
   background: none;
-  color: #e3d6bd;
+  color: var(--tema-estrela-vazia, #e3d6bd);
   font-size: 1.6rem;
   line-height: 1;
   cursor: pointer;
@@ -98,9 +98,9 @@
   box-sizing: border-box;
   margin: 0;
   padding: 14px 16px;
-  border: 1px solid #dec6a0;
+  border: 1px solid var(--tema-areia, #dec6a0);
   border-radius: 12px;
-  background: #f7efdf;
+  background: var(--tema-painel, #f7efdf);
   font-size: 0.9rem;
 }
 
@@ -150,7 +150,7 @@
   padding: 4px 12px;
   border-radius: 999px;
   background: var(--bm-soft);
-  color: #6b4e27;
+  color: var(--tema-apoio-tag, #6b4e27);
   font-size: 0.82rem;
   font-weight: 600;
 }
@@ -190,9 +190,9 @@
   margin: 6px 0 0;
   padding: 6px;
   list-style: none;
-  border: 1px solid #dec6a0;
+  border: 1px solid var(--tema-areia, #dec6a0);
   border-radius: 10px;
-  background: #fffefb;
+  background: var(--tema-superficie, #fffefb);
   box-shadow: 0 10px 24px rgb(90 64 35 / 18%);
 }
 
@@ -217,9 +217,9 @@
 /* caixas de sinopse e autor */
 .livro-caixa {
   padding: 18px 22px;
-  border: 1px solid #dec6a0;
+  border: 1px solid var(--tema-areia, #dec6a0);
   border-radius: 14px;
-  background: #f7efdf;
+  background: var(--tema-painel, #f7efdf);
 }
 
 .livro-caixa h2 {
@@ -263,10 +263,10 @@
 .livro-aviso {
   margin: 0;
   padding: 10px 14px;
-  border: 1px solid #c98b8b;
+  border: 1px solid var(--tema-erro-borda, #c98b8b);
   border-radius: 8px;
-  background: #fbeaea;
-  color: #7a2323;
+  background: var(--tema-erro-fundo, #fbeaea);
+  color: var(--tema-erro-titulo, #7a2323);
   font-size: 0.9rem;
 }
 

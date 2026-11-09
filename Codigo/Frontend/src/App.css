@@ -9,8 +9,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  background-color: #c1a67c;
-  border-bottom: 1px solid #b09262;
+  background-color: var(--tema-moldura, #c1a67c);
+  border-bottom: 1px solid var(--tema-borda-forte, #b09262);
   box-shadow: 0 2px 8px rgb(73 54 33 / 12%);
   border-radius: 50px;
 }
@@ -41,7 +41,7 @@
   padding: 10px 16px;
   border-radius: 10px;
 
-  color: #1e1e1e;
+  color: var(--tema-tinta, #1e1e1e);
   text-decoration: none;
   font-size: 15px;
   font-weight: 600;
@@ -56,8 +56,8 @@
 }
 
 .nav-link.active {
-  background-color: #493621;
-  color: #ffe7c2;
+  background-color: var(--tema-titulo, #493621);
+  color: var(--tema-fundo, #ffe7c2);
 }
 
 .nav-link.active:hover {
@@ -74,7 +74,7 @@
   height: 46px;
   box-sizing: border-box;
 
-  border: 2px solid #ffe7c2;
+  border: 2px solid var(--tema-fundo, #ffe7c2);
   border-radius: 50%;
 
   transition:
@@ -93,30 +93,30 @@
 
 .perfil:hover {
   transform: scale(1.06);
-  border-color: #493621;
+  border-color: var(--tema-titulo, #493621);
 }
 
 .perfil.active {
-  border-color: #493621;
+  border-color: var(--tema-titulo, #493621);
   box-shadow: 0 0 0 3px rgb(255 231 194 / 60%);
 }
 
 .navbar a:focus-visible {
-  outline: 2px solid #493621;
+  outline: 2px solid var(--tema-titulo, #493621);
   outline-offset: 3px;
 }
 
 .perfil-login {
     text-decoration: none;
-    color: #000;
-    background-color: #DEC6A0;
+    color: var(--tema-preto, #000);
+    background-color: var(--tema-areia, #DEC6A0);
     padding: 10px 22px;
     border-radius: 20px;
     font-size: 18px;
 }
 
 .perfil-login:hover {
-    background-color: #C6815B;
+    background-color: var(--tema-terracota, #C6815B);
     color: white;
 }
 

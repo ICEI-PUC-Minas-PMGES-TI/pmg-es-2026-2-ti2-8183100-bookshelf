@@ -3,10 +3,10 @@
   width: min(520px, calc(100% - 24px));
   max-height: calc(100vh - 24px);
   padding: 0;
-  border: 1px solid #b09262;
+  border: 1px solid var(--tema-borda-forte, #b09262);
   border-radius: 16px;
-  background: #fff9ef;
-  color: #1e1e1e;
+  background: var(--tema-papel, #fff9ef);
+  color: var(--tema-tinta, #1e1e1e);
   box-shadow: 0 24px 60px rgb(46 33 18 / 35%);
 }
 
@@ -45,13 +45,13 @@ body:has(dialog.modal[open]) {
   justify-content: space-between;
   gap: 12px;
   padding: 18px 22px;
-  border-bottom: 1px solid #dec6a0;
-  background: #f7efdf;
+  border-bottom: 1px solid var(--tema-areia, #dec6a0);
+  background: var(--tema-painel, #f7efdf);
 }
 
 .modal__titulo {
   margin: 0;
-  color: #493621;
+  color: var(--tema-titulo, #493621);
   font-size: 1.3rem;
 }
 
@@ -65,7 +65,7 @@ body:has(dialog.modal[open]) {
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #80613e;
+  color: var(--tema-detalhe, #80613e);
   font-size: 1.7rem;
   line-height: 1;
   cursor: pointer;
@@ -73,7 +73,7 @@ body:has(dialog.modal[open]) {
 }
 
 .modal__fechar:hover {
-  background: #dec6a0;
+  background: var(--tema-areia, #dec6a0);
 }
 
 .modal__corpo {
@@ -83,7 +83,7 @@ body:has(dialog.modal[open]) {
 }
 
 .modal :is(button, input, textarea):focus-visible {
-  outline: 2px solid #8e7048;
+  outline: 2px solid var(--tema-contorno, #8e7048);
   outline-offset: 2px;
 }
 
