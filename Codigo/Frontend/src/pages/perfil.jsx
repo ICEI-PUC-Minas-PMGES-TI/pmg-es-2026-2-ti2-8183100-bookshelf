@@ -102,6 +102,12 @@ export default function Perfil() {
     atualizar(adicionarNaLista(usuario, dados.livroId, chaveDestino));
   }
 
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    window.location.href = "/login";
+  }
+
   return (
     <main className="perfil-page">
       <div className="perfil-moldura">
@@ -130,6 +136,9 @@ export default function Perfil() {
                 Editar perfil
               </button>
               <button type="button" className="perfil-botao">Configurações</button>
+              <button type="button" className="perfil-botao perfil-botao--logout" onClick={logout}>
+                Logout
+              </button>
             </nav>
           </aside>
 

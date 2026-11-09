@@ -119,6 +119,17 @@
   transform: scale(0.98);
 }
 
+.perfil-botao--logout {
+  border-color: #7f6040;
+  background: linear-gradient(180deg, #8f6a45, #7b5a3c);
+  color: #fff8ee;
+  font-weight: 600;
+}
+
+.perfil-botao--logout:hover {
+  background: linear-gradient(180deg, #7b5a3c, #694c31);
+}
+
 /* ---- listas ---- */
 .perfil-listas {
   display: flex;
