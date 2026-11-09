@@ -5,8 +5,8 @@
   padding: 0;
   border: 1px solid var(--tema-borda-forte, #b09262);
   border-radius: 16px;
-  background: var(--tema-papel, #fff9ef);
-  color: var(--tema-tinta, #1e1e1e);
+  background: var(--bm-paper);
+  color: var(--bm-espresso);
   box-shadow: 0 24px 60px rgb(46 33 18 / 35%);
 }
 
@@ -46,12 +46,12 @@ body:has(dialog.modal[open]) {
   gap: 12px;
   padding: 18px 22px;
   border-bottom: 1px solid var(--tema-areia, #dec6a0);
-  background: var(--tema-painel, #f7efdf);
+  background: var(--bm-paper);
 }
 
 .modal__titulo {
   margin: 0;
-  color: var(--tema-titulo, #493621);
+  color: var(--bm-coffee);
   font-size: 1.3rem;
 }
 

@@ -5,6 +5,7 @@ import {
   Route,
   NavLink,
   Link,
+  useLocation,
 } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useEffect, useState } from "react";
@@ -18,13 +19,15 @@ import Livro from "./pages/livro";
 import Login from "./pages/login";
 import { obterUsuario } from "./services/listasService";
 import { FOTO_PADRAO, ouvirPerfilAtualizado } from "./services/perfilService";
-import { Moon, Sun } from "lucide-react";
+import { Bookmark, Moon, Sun } from "lucide-react";
 import { obterTema, salvarTema } from "./services/temaService";
 
 import "./App.css";
 import "./tema.css";
 
 function App() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   const [tema, setTema] = useState(obterTema);
   useEffect(() => {
     const sincronizar = () => setTema(obterTema());
@@ -49,9 +52,10 @@ function App() {
   }, [logado]);
   return (
     <>
-      <nav className="navbar">
+      <nav className="navbar" aria-label="Navegação principal">
         <Link to="/" className="logo" aria-label="BookMark - Início">
-          <img src="/logo.png" alt="BookMark" />
+          <Bookmark aria-hidden="true" />
+          <span>BookMark</span>
         </Link>
 
         <div className="nav-links">

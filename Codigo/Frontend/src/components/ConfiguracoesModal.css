@@ -1,11 +1,11 @@
 .modal-configuracoes {
-  --config-papel: #fffdf9;
-  --config-tinta: #35251f;
-  --config-suave: #75675f;
-  --config-linha: #d9cfc5;
-  --config-apoio: #f1eae1;
-  --config-acao: #983d29;
-  --config-contraste: #ffffff;
+  --config-papel: var(--bm-paper);
+  --config-tinta: var(--bm-espresso);
+  --config-suave: var(--bm-muted);
+  --config-linha: var(--bm-line);
+  --config-apoio: var(--bm-latte);
+  --config-acao: var(--bm-coffee);
+  --config-contraste: var(--bm-on-action);
   width: min(820px, calc(100% - 32px));
   border: 1px solid var(--config-linha);
   border-radius: 10px;
@@ -24,7 +24,7 @@
 
 .modal-configuracoes .modal__titulo {
   color: var(--config-tinta);
-  font-family: "Baskervville", Georgia, serif;
+  font-family: var(--bm-display);
   font-size: 32px;
   font-weight: 400;
   line-height: 1.15;
@@ -54,7 +54,7 @@
 .config-nav button:hover { background: var(--config-apoio); color: var(--config-tinta); }
 .config-nav button[aria-current] { border-left-color: var(--config-acao); background: var(--config-apoio); color: var(--config-acao); font-weight: 600; }
 .config-conteudo { min-width: 0; padding: 30px 36px 32px; }
-.config-conteudo h3, .config-descarte h3 { margin: 0 0 8px; color: var(--config-tinta); font-size: 24px; font-weight: 400; font-family: "Baskervville", Georgia, serif; }
+.config-conteudo h3, .config-descarte h3 { margin: 0 0 8px; color: var(--config-tinta); font-size: 24px; font-weight: 400; font-family: var(--bm-display); }
 .config-intro { margin: 0 0 26px; color: var(--config-suave); max-width: 46ch; }
 .config-conteudo fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
 .config-campo { margin-bottom: 18px; }
@@ -95,15 +95,6 @@
 .config-botao--perigo { background: #a32f28; border-color: #a32f28; color: white; }
 .config-descarte { padding: 32px; }
 
-:root[data-tema="escuro"] .modal-configuracoes {
-  --config-papel: #292421;
-  --config-tinta: #f2e9df;
-  --config-suave: #c1b3a5;
-  --config-linha: #615248;
-  --config-apoio: #382e28;
-  --config-acao: #efaa8e;
-  --config-contraste: #302019;
-}
 :root[data-tema="escuro"] .config-erro, :root[data-tema="escuro"] .config-link-perigo { color: #ffb4aa; }
 :root[data-tema="escuro"] .config-sucesso { color: #b6d9a6; }
 

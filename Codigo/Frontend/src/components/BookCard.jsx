@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./BookCard.css";
+import CapaLivro from "./CapaLivro";
 
 function BookIcon() {
   return (
@@ -27,27 +28,13 @@ function Stars({ rating }) {
 }
 
 // Capa de reserva quando o livro não tem imagem (mesma linguagem das capas do Feed).
-function CoverFallback({ title }) {
-  return (
-    <div className="book-cover book-cover--fallback">
-      <span className="book-cover__brand">Bookmark</span>
-      <span className="book-cover__title">{title}</span>
-      <span className="book-cover__line" />
-    </div>
-  );
-}
-
 export default function BookCard({ book }) {
   const authors = book.authors.length ? book.authors.join(", ") : "Autor desconhecido";
 
   return (
     <article className="book-card">
       <Link to={`/livro/${book.id}`} className="book-card__cover book-card__link">
-        {book.thumbnail ? (
-          <img className="book-cover" src={book.thumbnail} alt={`Capa de ${book.title}`} loading="lazy" />
-        ) : (
-          <CoverFallback title={book.title} />
-        )}
+        <CapaLivro livro={book} />
       </Link>
 
       {book.category && (
