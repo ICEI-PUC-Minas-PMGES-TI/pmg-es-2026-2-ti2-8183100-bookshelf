@@ -11,6 +11,7 @@ import {
 import { FOTO_PADRAO, atualizarPerfil, avisarPerfilAtualizado } from "../services/perfilService";
 import CapaLivro from "../components/CapaLivro";
 import EditarPerfilModal from "../components/EditarPerfilModal";
+import ConfiguracoesModal from "../components/ConfiguracoesModal";
 import "../components/BookCard.css";
 import "./perfil.css";
 
@@ -21,6 +22,7 @@ export default function Perfil() {
   const [erro, setErro] = useState(false);
   const [aviso, setAviso] = useState("");
   const [editando, setEditando] = useState(false); // popup de edição de perfil aberto?
+  const [configurando, setConfigurando] = useState(false);
   const [sucesso, setSucesso] = useState(""); // mensagem depois de salvar o perfil
 
   // Carrega o usuário e, depois, cada livro que aparece nas listas dele.
@@ -135,7 +137,7 @@ export default function Perfil() {
               <button type="button" className="perfil-botao" onClick={() => setEditando(true)}>
                 Editar perfil
               </button>
-              <button type="button" className="perfil-botao">Configurações</button>
+              <button type="button" className="perfil-botao" onClick={() => setConfigurando(true)}>Configurações</button>
               <button type="button" className="perfil-botao perfil-botao--logout" onClick={logout}>
                 Logout
               </button>
@@ -208,6 +210,12 @@ export default function Perfil() {
         usuario={usuario}
         aoSalvar={salvarEdicaoDoPerfil}
         aoFechar={() => setEditando(false)}
+      />
+      <ConfiguracoesModal
+        aberto={configurando}
+        usuario={usuario}
+        aoAtualizar={(dados) => setUsuario((atual) => ({ ...atual, ...dados }))}
+        aoFechar={() => setConfigurando(false)}
       />
     </main>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import "./Modal.css";
 
 // Popup (janela sobre a página) usando o <dialog> do próprio navegador.
@@ -8,8 +8,9 @@ import "./Modal.css";
 //   <Modal aberto={aberto} aoFechar={() => setAberto(false)} titulo="Meu título">
 //     ...conteúdo...
 //   </Modal>
-export default function Modal({ aberto, aoFechar, titulo, children }) {
+export default function Modal({ aberto, aoFechar, titulo, children, classe = "" }) {
   const dialogo = useRef(null);
+  const tituloId = useId();
 
   // Abre ou fecha o <dialog> sempre que a prop "aberto" mudar.
   useEffect(() => {
@@ -34,14 +35,14 @@ export default function Modal({ aberto, aoFechar, titulo, children }) {
   return (
     <dialog
       ref={dialogo}
-      className="modal"
-      aria-labelledby="modal-titulo"
+      className={`modal ${classe}`}
+      aria-labelledby={tituloId}
       onClick={aoClicar}
       onCancel={aoApertarEsc}
     >
       <div className="modal__janela">
         <header className="modal__topo">
-          <h2 id="modal-titulo" className="modal__titulo">{titulo}</h2>
+          <h2 id={tituloId} className="modal__titulo">{titulo}</h2>
           <button type="button" className="modal__fechar" onClick={aoFechar} aria-label="Fechar">
             ×
           </button>
