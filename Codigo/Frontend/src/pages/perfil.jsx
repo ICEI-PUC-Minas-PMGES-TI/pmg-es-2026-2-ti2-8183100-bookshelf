@@ -1,222 +1,194 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Heart, Settings, Pencil, LogOut, X } from "lucide-react";
 import { buscarLivrosPorIds } from "../services/booksService";
-import {
-  LISTAS,
-  obterUsuario,
-  salvarUsuario,
-  adicionarNaLista,
-  removerDaLista,
-} from "../services/listasService";
+import { LISTAS, LISTAS_STATUS, obterUsuario, salvarUsuario, adicionarNaLista, removerDaLista, statusDoLivro } from "../services/listasService";
 import { FOTO_PADRAO, atualizarPerfil, avisarPerfilAtualizado } from "../services/perfilService";
 import CapaLivro from "../components/CapaLivro";
 import EditarPerfilModal from "../components/EditarPerfilModal";
 import ConfiguracoesModal from "../components/ConfiguracoesModal";
-import "../components/BookCard.css";
 import "./perfil.css";
+
+const ABAS = ["livrosLendo", "livrosLerDepois", "livrosLidos", "livrosFav"]
+  .map((chave) => LISTAS.find((lista) => lista.chave === chave));
 
 export default function Perfil() {
   const [usuario, setUsuario] = useState(null);
   const [livros, setLivros] = useState([]);
-  const [listaAlvo, setListaAlvo] = useState(null); // lista que está recebendo o arraste
+  const [listaAtiva, setListaAtiva] = useState("livrosLendo");
+  const [listaAlvo, setListaAlvo] = useState(null);
   const [erro, setErro] = useState(false);
   const [aviso, setAviso] = useState("");
-  const [editando, setEditando] = useState(false); // popup de edição de perfil aberto?
+  const [editando, setEditando] = useState(false);
   const [configurando, setConfigurando] = useState(false);
-  const [sucesso, setSucesso] = useState(""); // mensagem depois de salvar o perfil
+  const [sucesso, setSucesso] = useState("");
+  const [salvandoLista, setSalvandoLista] = useState(false);
+  const gravando = useRef(false);
 
-  // Carrega o usuário e, depois, cada livro que aparece nas listas dele.
   useEffect(() => {
-    obterUsuario()
-      .then(async (dadosUsuario) => {
-        const ids = LISTAS.flatMap((lista) => dadosUsuario[lista.chave]);
-        const encontrados = await buscarLivrosPorIds(ids);
-        setUsuario(dadosUsuario);
+    let cancelado = false;
+    obterUsuario().then(async (dados) => {
+      const ids = [...new Set(LISTAS.flatMap((lista) => dados[lista.chave]))];
+      const encontrados = await buscarLivrosPorIds(ids);
+      if (!cancelado) {
+        setUsuario(dados);
         setLivros(encontrados);
-      })
-      .catch(() => setErro(true));
+      }
+    }).catch(() => { if (!cancelado) setErro(true); });
+    return () => { cancelado = true; };
   }, []);
 
-  // A mensagem de sucesso some sozinha depois de alguns segundos.
   useEffect(() => {
     if (!sucesso) return;
     const temporizador = setTimeout(() => setSucesso(""), 4000);
     return () => clearTimeout(temporizador);
   }, [sucesso]);
 
-  if (erro) return <main className="perfil-page"><p>Não foi possível carregar o perfil. Verifique sua conexão e recarregue a página.</p></main>;
-  if (!usuario) return <main className="perfil-page"><p>Carregando perfil...</p></main>;
-
-  function livrosDaLista(chave) {
-    return usuario[chave]
-      .map((id) => livros.find((livro) => livro.id === id))
-      .filter(Boolean);
-  }
-
-  // Atualiza a tela na hora e salva em seguida.
-  // Se não conseguir salvar, volta ao que estava e avisa.
-  function atualizar(novoUsuario) {
+  async function atualizar(novoUsuario) {
+    if (gravando.current) return;
+    gravando.current = true;
+    setSalvandoLista(true);
     const anterior = usuario;
     setUsuario(novoUsuario);
     setAviso("");
-    salvarUsuario(novoUsuario).catch(() => {
+    try {
+      await salvarUsuario(novoUsuario);
+    } catch {
       setUsuario(anterior);
-      setAviso("Não foi possível salvar a alteração. Tente de novo.");
-    });
+      setAviso("Não foi possível salvar a alteração. Tente novamente.");
+    } finally {
+      gravando.current = false;
+      setSalvandoLista(false);
+    }
   }
 
-  // Salva o perfil editado no popup. Se o servidor recusar, o erro volta para o popup,
-  // que continua aberto mostrando a mensagem.
   async function salvarEdicaoDoPerfil({ nome, userName, bio, foto }) {
     await atualizarPerfil({ nome, userName, bio, foto });
-
-    setUsuario({
-      ...usuario,
+    setUsuario((atual) => ({
+      ...atual,
       nome: nome.trim(),
       userName: userName.trim(),
-      perfil: { ...usuario.perfil, bio: bio.trim(), foto },
-    });
-    avisarPerfilAtualizado(foto); // a foto da barra de navegação acompanha
+      perfil: { ...atual.perfil, bio: bio.trim(), foto },
+    }));
+    avisarPerfilAtualizado(foto);
     setEditando(false);
     setSucesso("Perfil atualizado com sucesso!");
   }
 
-  function remover(livroId, chave) {
-    atualizar(removerDaLista(usuario, livroId, chave));
+  function navegarAbas(evento, indice) {
+    const teclas = {
+      ArrowRight: (indice + 1) % ABAS.length,
+      ArrowLeft: (indice + ABAS.length - 1) % ABAS.length,
+      Home: 0,
+      End: ABAS.length - 1,
+    };
+    const proxima = teclas[evento.key];
+    if (proxima === undefined) return;
+    evento.preventDefault();
+    setListaAtiva(ABAS[proxima].chave);
+    document.getElementById(`aba-${ABAS[proxima].chave}`).focus();
   }
 
-  // Guarda qual livro está sendo arrastado e de qual lista ele saiu.
-  function iniciarArraste(e, livroId, chave) {
-    e.dataTransfer.setData("text/plain", JSON.stringify({ livroId, origem: chave }));
-    e.dataTransfer.effectAllowed = "move";
-  }
-
-  function soltar(e, chaveDestino) {
-    e.preventDefault();
+  function soltar(evento, destino) {
+    evento.preventDefault();
     setListaAlvo(null);
+    if (gravando.current) return;
     let dados;
     try {
-      dados = JSON.parse(e.dataTransfer.getData("text/plain"));
+      dados = JSON.parse(evento.dataTransfer.getData("text/plain"));
     } catch {
       return;
     }
-    if (dados.origem === chaveDestino) return;
-    atualizar(adicionarNaLista(usuario, dados.livroId, chaveDestino));
+    if (!LISTAS_STATUS.includes(dados.origem) || !usuario[dados.origem].includes(dados.livroId)) return;
+    if (dados.origem === destino) return;
+    atualizar(adicionarNaLista(usuario, dados.livroId, destino));
+  }
+
+  function mudarStatus(livroId, destino) {
+    const atual = statusDoLivro(usuario, livroId);
+    if (atual === destino || (!atual && !destino)) return;
+    atualizar(destino ? adicionarNaLista(usuario, livroId, destino) : removerDaLista(usuario, livroId, atual));
   }
 
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("usuario");
-    window.location.href = "/login";
+    window.location.assign("/login");
   }
+
+  if (erro) return <main className="perfil-page"><p role="alert">Não foi possível carregar o perfil. Verifique sua conexão e recarregue a página.</p></main>;
+  if (!usuario) return <main className="perfil-page" aria-busy="true"><p>Carregando sua biblioteca…</p></main>;
 
   return (
     <main className="perfil-page">
-      <div className="perfil-moldura">
-        <div className="perfil-layout">
-          {/* 2. Menu lateral do perfil */}
-          <aside className="perfil-menu">
-            <img
-              className="perfil-foto"
-              src={usuario.perfil?.foto || FOTO_PADRAO}
-              alt="Foto de perfil"
-              onError={(e) => {
-                // foto inválida ou fora do ar: troca pela padrão (sem entrar em loop)
-                if (e.currentTarget.src !== FOTO_PADRAO) e.currentTarget.src = FOTO_PADRAO;
-              }}
-            />
-            <h1 className="perfil-usuario">{usuario.userName || usuario.nome}</h1>
-            {usuario.nome && usuario.userName && <p className="perfil-nome">{usuario.nome}</p>}
-            <p className="perfil-seguidores">
-              <strong>{usuario.seguidores ?? 0}</strong> seguidores · <strong>{usuario.seguindo ?? 0}</strong> seguindo
-            </p>
-            {usuario.perfil?.bio && <p className="perfil-bio">{usuario.perfil.bio}</p>}
-
-            <nav className="perfil-botoes" aria-label="Menu do perfil">
-              <a className="perfil-botao" href="#favoritos">Favoritos</a>
-              <button type="button" className="perfil-botao" onClick={() => setEditando(true)}>
-                Editar perfil
-              </button>
-              <button type="button" className="perfil-botao" onClick={() => setConfigurando(true)}>Configurações</button>
-              <button type="button" className="perfil-botao perfil-botao--logout" onClick={logout}>
-                Logout
-              </button>
-            </nav>
-          </aside>
-
-          {/* 3. Listas de livros */}
-          <section className="perfil-listas">
-            {sucesso && <p className="perfil-sucesso" role="status">{sucesso}</p>}
-            {aviso && <p className="perfil-aviso" role="alert">{aviso}</p>}
-            {LISTAS.map((lista) => {
-              const itens = livrosDaLista(lista.chave);
-              return (
-                <article
-                  key={lista.chave}
-                  id={lista.chave === "livrosFav" ? "favoritos" : undefined}
-                  className={`perfil-lista ${listaAlvo === lista.chave ? "is-alvo" : ""}`}
-                  onDragOver={(e) => {
-                    e.preventDefault(); // permite soltar aqui
-                    e.dataTransfer.dropEffect = "move";
-                    setListaAlvo(lista.chave);
-                  }}
-                  onDragLeave={(e) => {
-                    if (!e.currentTarget.contains(e.relatedTarget)) setListaAlvo(null);
-                  }}
-                  onDrop={(e) => soltar(e, lista.chave)}
-                >
-                  <header className="perfil-lista__topo">
-                    <h2>{lista.titulo}</h2>
-                    <span className="perfil-lista__contagem">{itens.length}</span>
-                  </header>
-
-                  <div className="perfil-lista__capas">
-                    {itens.length === 0 && (
-                      <p className="perfil-lista__vazia">Nenhum livro nesta lista.</p>
-                    )}
-                    {itens.map((livro) => (
-                      <div
-                        key={livro.id}
-                        className="perfil-livro"
-                        draggable={lista.chave !== "livrosFav"}
-                        onDragStart={(e) => iniciarArraste(e, livro.id, lista.chave)}
-                        onDragEnd={() => setListaAlvo(null)}
-                      >
-                        <Link to={`/livro/${livro.id}`} className="perfil-livro__link" title={livro.title} draggable="false">
-                          <CapaLivro livro={livro} />
-                        </Link>
-                        {/* 5. Remover livro da lista */}
-                        <button
-                          type="button"
-                          className="perfil-livro__remover"
-                          onClick={() => remover(livro.id, lista.chave)}
-                          aria-label={`Remover ${livro.title} da lista ${lista.titulo}`}
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </article>
-              );
-            })}
-          </section>
+      <header className="perfil-cabecalho">
+        <img className="perfil-foto" src={usuario.perfil?.foto || FOTO_PADRAO} alt="Foto de perfil"
+          onError={(e) => { if (e.currentTarget.src !== FOTO_PADRAO) e.currentTarget.src = FOTO_PADRAO; }} />
+        <div className="perfil-identidade">
+          <h1>{usuario.nome || usuario.userName}</h1>
+          <p className="perfil-usuario">@{usuario.userName}</p>
+          {usuario.perfil?.bio && <p className="perfil-bio">{usuario.perfil.bio}</p>}
+          <p className="perfil-seguidores"><strong>{usuario.seguidores ?? 0}</strong> seguidores <span aria-hidden="true">·</span> <strong>{usuario.seguindo ?? 0}</strong> seguindo</p>
         </div>
-      </div>
+        <nav className="perfil-botoes" aria-label="Ações do perfil">
+          <button className="perfil-botao" onClick={() => setEditando(true)}><Pencil size={16} aria-hidden="true" />Editar perfil</button>
+          <button className="perfil-botao" onClick={() => setConfigurando(true)}><Settings size={16} aria-hidden="true" />Configurações</button>
+          <button className="perfil-sair" onClick={logout}><LogOut size={16} aria-hidden="true" />Sair</button>
+        </nav>
+      </header>
 
-      {/* Popup de edição de perfil */}
-      <EditarPerfilModal
-        aberto={editando}
-        usuario={usuario}
-        aoSalvar={salvarEdicaoDoPerfil}
-        aoFechar={() => setEditando(false)}
-      />
-      <ConfiguracoesModal
-        aberto={configurando}
-        usuario={usuario}
-        aoAtualizar={(dados) => setUsuario((atual) => ({ ...atual, ...dados }))}
-        aoFechar={() => setConfigurando(false)}
-      />
+      <section className="perfil-biblioteca" aria-labelledby="biblioteca-titulo">
+        <div className="perfil-biblioteca-topo"><h2 id="biblioteca-titulo">Minha biblioteca</h2><Link to="/catalogo">Explorar catálogo</Link></div>
+        {sucesso && <p className="perfil-sucesso" role="status">{sucesso}</p>}
+        {aviso && <p className="perfil-aviso" role="alert">{aviso}</p>}
+        <div className="perfil-abas" role="tablist" aria-label="Listas de leitura">
+          {ABAS.map((lista, indice) => (
+            <button type="button" role="tab" key={lista.chave} id={`aba-${lista.chave}`}
+              aria-selected={listaAtiva === lista.chave} aria-controls={`painel-${lista.chave}`} tabIndex={listaAtiva === lista.chave ? 0 : -1}
+              className={listaAlvo === lista.chave ? "is-alvo" : ""}
+              onClick={() => setListaAtiva(lista.chave)} onKeyDown={(e) => navegarAbas(e, indice)}
+              onDragOver={(e) => { e.preventDefault(); setListaAlvo(lista.chave); }}
+              onDragLeave={() => setListaAlvo(null)} onDrop={(e) => soltar(e, lista.chave)}>
+              {lista.titulo}<span>{usuario[lista.chave].length}</span>
+            </button>
+          ))}
+        </div>
+        {ABAS.map((lista) => {
+          const itens = usuario[lista.chave].map((id) => livros.find((livro) => livro.id === id)).filter(Boolean);
+          return (
+            <div role="tabpanel" id={`painel-${lista.chave}`} aria-labelledby={`aba-${lista.chave}`} key={lista.chave}
+              hidden={listaAtiva !== lista.chave} tabIndex={0} aria-busy={salvandoLista}>
+              {itens.length === 0 ? (
+                <div className="perfil-vazio"><h3>{lista.chave === "livrosLendo" ? "Sua próxima leitura começa aqui" : "Nenhum livro nesta lista"}</h3><p>Encontre um livro no catálogo e adicione à sua biblioteca.</p><Link className="perfil-botao perfil-botao--principal" to="/catalogo">Encontrar um livro</Link></div>
+              ) : (
+                <div className="perfil-grade">
+                  {itens.map((livro) => (
+                    <article className="perfil-livro" key={livro.id} draggable={!salvandoLista && lista.chave !== "livrosFav"}
+                      onDragStart={(e) => { e.dataTransfer.setData("text/plain", JSON.stringify({ livroId: livro.id, origem: lista.chave })); e.dataTransfer.effectAllowed = "move"; }}>
+                      <Link to={`/livro/${livro.id}`} className="perfil-livro__link" draggable="false" title={livro.title}><CapaLivro livro={livro} /><h3>{livro.title}</h3></Link>
+                      <p>{livro.authors?.join(", ") || "Autor desconhecido"}</p>
+                      <div className="perfil-livro__acoes">
+                        <button type="button" aria-label={`Favoritar ${livro.title}`} aria-pressed={usuario.livrosFav.includes(livro.id)} disabled={salvandoLista}
+                          onClick={() => atualizar(usuario.livrosFav.includes(livro.id) ? removerDaLista(usuario, livro.id, "livrosFav") : adicionarNaLista(usuario, livro.id, "livrosFav"))}>
+                          <Heart size={18} fill={usuario.livrosFav.includes(livro.id) ? "currentColor" : "none"} aria-hidden="true" />
+                        </button>
+                        <select aria-label={`Lista de leitura de ${livro.title}`} value={statusDoLivro(usuario, livro.id) ?? ""} disabled={salvandoLista} onChange={(e) => mudarStatus(livro.id, e.target.value)}>
+                          <option value="">Sem lista</option>
+                          {ABAS.filter((aba) => aba.chave !== "livrosFav").map((aba) => <option key={aba.chave} value={aba.chave}>{aba.titulo}</option>)}
+                        </select>
+                        {lista.chave !== "livrosFav" && <button type="button" aria-label={`Remover ${livro.title} da lista ${lista.titulo}`} disabled={salvandoLista} onClick={() => atualizar(removerDaLista(usuario, livro.id, lista.chave))}><X size={16} aria-hidden="true" /></button>}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {salvandoLista && <p className="perfil-salvando" role="status">Salvando biblioteca…</p>}
+      </section>
+      <EditarPerfilModal aberto={editando} usuario={usuario} aoSalvar={salvarEdicaoDoPerfil} aoFechar={() => setEditando(false)} />
+      <ConfiguracoesModal aberto={configurando} usuario={usuario} aoAtualizar={(dados) => setUsuario((atual) => ({ ...atual, ...dados }))} aoFechar={() => setConfigurando(false)} />
     </main>
   );
 }
