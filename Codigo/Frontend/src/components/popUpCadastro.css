@@ -66,3 +66,49 @@
 .modal-container form button:hover {
     opacity: 0.9;
 }
+
+.tempo-inputs {
+    display: flex;
+    gap: 15px;
+}
+
+.tempo-inputs div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.tempo-inputs input {
+    width: 100%;
+    min-width: 0;
+}
+
+.tempo-inputs span {
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.avaliacao-estrelas {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0 16px;
+}
+
+.estrela {
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #ccc;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.estrela.selecionada {
+    color: #e6ad35;
+}
+
+.estrela:hover {
+    transform: scale(1.15);
+}

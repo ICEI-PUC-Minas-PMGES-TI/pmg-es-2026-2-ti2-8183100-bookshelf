@@ -37,6 +37,7 @@ export default function Metricas() {
 
 	const lendo = livrosDa("livrosLendo");
 	const favoritos = livrosDa("livrosFav");
+	const lerDepois = livrosDa("livrosLerDepois");
 
 	return (
 		<main className="metricas-main">
@@ -92,6 +93,7 @@ export default function Metricas() {
 					<div className="favoritos-lista">
 						{favoritos.length === 0 && <p className="metricas-vazio">Nenhum livro favorito.</p>}
 						{favoritos.map((livro) => (
+							console.log(livro),
 							<BookMetricas key={livro.id} livro={livro} />
 						))}
 					</div>
@@ -109,6 +111,10 @@ export default function Metricas() {
 				<MetricasModal
 					aberto={popUp}
 					fechar={() => setPopUp(false)}
+					lendo={lendo}
+					favoritos={favoritos}
+					lerDepois={lerDepois}
+					usuarioId={userLog?.id}
 				/>
 			</section>
 		</main>

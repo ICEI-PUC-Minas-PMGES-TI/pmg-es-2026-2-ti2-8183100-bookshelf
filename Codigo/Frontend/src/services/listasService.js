@@ -1,6 +1,6 @@
 import API_URL from "./api";
 
-const ID_USUARIO = JSON.parse(localStorage.getItem("usuario")).id;
+const ID_USUARIO = JSON.parse(localStorage.getItem("usuario"))?.id;
 
 // Nomes dos campos do usuário que guardam cada lista.
 export const LISTAS = [
