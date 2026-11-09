@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import { autenticarToken, autenticarTokenOpcional } from "./authMiddleware.js";
+import { validarEdicaoPerfil } from "./validacoes.js";
 
 dotenv.config();
 
@@ -11,7 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
-app.use(express.json());
+// A foto de perfil chega como texto (base64), por isso o limite é maior que o padrão (100 kb).
+app.use(express.json({ limit: "1mb" }));
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -189,6 +191,33 @@ async function iniciarServidor() {
 
 				const dados = { ...req.body };
 				delete dados._id;
+
+				// Valida os campos da edição de perfil (nome, nome de usuário, descrição e foto).
+				const erroValidacao = validarEdicaoPerfil(dados);
+				if (erroValidacao) {
+					return res.status(400).json({ erro: erroValidacao });
+				}
+
+				// O nome de usuário não pode ser igual ao de outra pessoa (sem diferenciar maiúsculas).
+				if (dados.userName !== undefined) {
+					dados.userName = String(dados.userName).trim();
+
+					const repetido = await db
+						.collection("usuarios")
+						.findOne(
+							{
+								userName: dados.userName,
+								_id: { $ne: new ObjectId(req.params.id) }
+							},
+							{ collation: { locale: "pt", strength: 2 } }
+						);
+
+					if (repetido) {
+						return res.status(409).json({
+							erro: "Nome de usuário já está em uso."
+						});
+					}
+				}
 
 				const resultado = await db
 					.collection("usuarios")

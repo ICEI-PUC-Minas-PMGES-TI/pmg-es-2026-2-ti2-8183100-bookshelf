@@ -8,12 +8,11 @@ import {
   adicionarNaLista,
   removerDaLista,
 } from "../services/listasService";
+import { FOTO_PADRAO, atualizarPerfil, avisarPerfilAtualizado } from "../services/perfilService";
 import CapaLivro from "../components/CapaLivro";
+import EditarPerfilModal from "../components/EditarPerfilModal";
 import "../components/BookCard.css";
 import "./perfil.css";
-
-// Foto usada quando o usuário não tem foto (ou a foto não carrega).
-const FOTO_PADRAO = "https://www.gravatar.com/avatar/?d=mp&s=300";
 
 export default function Perfil() {
   const [usuario, setUsuario] = useState(null);
@@ -21,6 +20,8 @@ export default function Perfil() {
   const [listaAlvo, setListaAlvo] = useState(null); // lista que está recebendo o arraste
   const [erro, setErro] = useState(false);
   const [aviso, setAviso] = useState("");
+  const [editando, setEditando] = useState(false); // popup de edição de perfil aberto?
+  const [sucesso, setSucesso] = useState(""); // mensagem depois de salvar o perfil
 
   // Carrega o usuário e, depois, cada livro que aparece nas listas dele.
   useEffect(() => {
@@ -33,6 +34,13 @@ export default function Perfil() {
       })
       .catch(() => setErro(true));
   }, []);
+
+  // A mensagem de sucesso some sozinha depois de alguns segundos.
+  useEffect(() => {
+    if (!sucesso) return;
+    const temporizador = setTimeout(() => setSucesso(""), 4000);
+    return () => clearTimeout(temporizador);
+  }, [sucesso]);
 
   if (erro) return <main className="perfil-page"><p>Não foi possível carregar o perfil. Verifique sua conexão e recarregue a página.</p></main>;
   if (!usuario) return <main className="perfil-page"><p>Carregando perfil...</p></main>;
@@ -53,6 +61,22 @@ export default function Perfil() {
       setUsuario(anterior);
       setAviso("Não foi possível salvar a alteração. Tente de novo.");
     });
+  }
+
+  // Salva o perfil editado no popup. Se o servidor recusar, o erro volta para o popup,
+  // que continua aberto mostrando a mensagem.
+  async function salvarEdicaoDoPerfil({ nome, userName, bio, foto }) {
+    await atualizarPerfil({ nome, userName, bio, foto });
+
+    setUsuario({
+      ...usuario,
+      nome: nome.trim(),
+      userName: userName.trim(),
+      perfil: { ...usuario.perfil, bio: bio.trim(), foto },
+    });
+    avisarPerfilAtualizado(foto); // a foto da barra de navegação acompanha
+    setEditando(false);
+    setSucesso("Perfil atualizado com sucesso!");
   }
 
   function remover(livroId, chave) {
@@ -78,6 +102,12 @@ export default function Perfil() {
     atualizar(adicionarNaLista(usuario, dados.livroId, chaveDestino));
   }
 
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    window.location.href = "/login";
+  }
+
   return (
     <main className="perfil-page">
       <div className="perfil-moldura">
@@ -94,6 +124,7 @@ export default function Perfil() {
               }}
             />
             <h1 className="perfil-usuario">{usuario.userName || usuario.nome}</h1>
+            {usuario.nome && usuario.userName && <p className="perfil-nome">{usuario.nome}</p>}
             <p className="perfil-seguidores">
               <strong>{usuario.seguidores ?? 0}</strong> seguidores · <strong>{usuario.seguindo ?? 0}</strong> seguindo
             </p>
@@ -101,13 +132,19 @@ export default function Perfil() {
 
             <nav className="perfil-botoes" aria-label="Menu do perfil">
               <a className="perfil-botao" href="#favoritos">Favoritos</a>
-              <button type="button" className="perfil-botao">Editar perfil</button>
+              <button type="button" className="perfil-botao" onClick={() => setEditando(true)}>
+                Editar perfil
+              </button>
               <button type="button" className="perfil-botao">Configurações</button>
+              <button type="button" className="perfil-botao perfil-botao--logout" onClick={logout}>
+                Logout
+              </button>
             </nav>
           </aside>
 
           {/* 3. Listas de livros */}
           <section className="perfil-listas">
+            {sucesso && <p className="perfil-sucesso" role="status">{sucesso}</p>}
             {aviso && <p className="perfil-aviso" role="alert">{aviso}</p>}
             {LISTAS.map((lista) => {
               const itens = livrosDaLista(lista.chave);
@@ -164,6 +201,14 @@ export default function Perfil() {
           </section>
         </div>
       </div>
+
+      {/* Popup de edição de perfil */}
+      <EditarPerfilModal
+        aberto={editando}
+        usuario={usuario}
+        aoSalvar={salvarEdicaoDoPerfil}
+        aoFechar={() => setEditando(false)}
+      />
     </main>
   );
 }

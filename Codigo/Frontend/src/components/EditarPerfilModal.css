@@ -1,0 +1,157 @@
+/* Formulário do popup de edição de perfil. */
+.editar {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- foto ---- */
+.editar__foto {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 8px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e8dac0;
+}
+
+.editar__foto-previa {
+  flex-shrink: 0;
+  width: 104px;
+  height: 104px;
+  border: 3px solid #ffe7c2;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+  box-shadow: 0 4px 14px rgb(90 64 35 / 22%);
+}
+
+.editar__foto-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.editar__dica {
+  flex-basis: 100%;
+  margin: 0;
+  color: #766650;
+  font-size: 0.8rem;
+}
+
+/* ---- campos ---- */
+.editar__rotulo {
+  margin: 16px 0 6px;
+  color: #493621;
+  font-weight: 600;
+}
+
+.editar__campo {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  border: 1px solid #dec6a0;
+  border-radius: 8px;
+  background: #fffcf6;
+  color: #1e1e1e;
+  font: inherit;
+}
+
+.editar__campo--area {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.editar__campo:focus {
+  outline: none;
+  border-color: #b09262;
+  box-shadow: 0 0 0 3px rgb(193 166 124 / 25%);
+}
+
+.editar__campo.tem-erro {
+  border-color: #b3403f;
+  background: #fff7f6;
+}
+
+.editar__contador {
+  margin: 4px 0 0;
+  color: #766650;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.editar__erro {
+  margin: 6px 0 0;
+  color: #9a2f2f;
+  font-size: 0.85rem;
+}
+
+.editar__erro--geral {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border: 1px solid #c98b8b;
+  border-radius: 8px;
+  background: #fbeaea;
+}
+
+/* ---- botões ---- */
+.editar__acoes {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.editar__botao {
+  padding: 10px 18px;
+  border: 1px solid #8e7048;
+  border-radius: 8px;
+  background: #c1a67c;
+  color: #1e1e1e;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.editar__botao:hover:not(:disabled) {
+  background: #b09262;
+}
+
+.editar__botao:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.editar__botao:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.editar__botao--claro {
+  border-color: #c1a67c;
+  background: transparent;
+  color: #493621;
+}
+
+.editar__botao--claro:hover:not(:disabled) {
+  background: #dec6a0;
+}
+
+@media (max-width: 520px) {
+  .editar__foto {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .editar__acoes {
+    flex-direction: column-reverse;
+  }
+
+  .editar__acoes .editar__botao {
+    width: 100%;
+  }
+}
