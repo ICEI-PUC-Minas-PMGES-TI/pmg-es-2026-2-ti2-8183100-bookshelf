@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import BookCard from "../components/BookCard.jsx";
-import { buscarLivros } from "../services/booksService";
+import { buscarPaginaLivros } from "../services/booksService";
 import "./catalogo.css";
 
 const ORDENACOES = {
@@ -25,6 +25,8 @@ export default function Catalogo() {
   const [estadoCarga, setEstadoCarga] = useState("carregando"); // carregando | sucesso | erro
   const [mensagemErro, setMensagemErro] = useState("");
   const [chaveRecarregamento, setChaveRecarregamento] = useState(0);
+  const [pagina, setPagina] = useState(1);
+  const [temProxima, setTemProxima] = useState(false);
   
   // Filtros locais em memória (não fazem requisição)
   const [categoriaAtual, setCategoriaAtual] = useState("todos");
@@ -32,12 +34,12 @@ export default function Catalogo() {
 
   useEffect(() => {
     let cancelado = false;
-    setEstadoCarga("carregando");
     
-    buscarLivros(pesquisaAtiva, filtrosAtivos)
+    buscarPaginaLivros(pesquisaAtiva, filtrosAtivos, pagina)
       .then((dados) => {
         if (cancelado) return;
-        setLivros(dados);
+        setLivros(dados.livros);
+        setTemProxima(dados.temProxima);
         setEstadoCarga("sucesso");
       })
       .catch((erro) => {
@@ -50,12 +52,12 @@ export default function Catalogo() {
     return () => {
       cancelado = true;
     };
-  }, [pesquisaAtiva, filtrosAtivos, chaveRecarregamento]);
+  }, [pesquisaAtiva, filtrosAtivos, chaveRecarregamento, pagina]);
 
   // Extrai as categorias únicas dos livros retornados pela API
   const categoriasDisponiveis = useMemo(
-    () => [...new Set(livros.map((livro) => livro.category).filter(Boolean))].sort(),
-    [livros]
+    () => [...new Set([...livros.map((livro) => livro.category), categoriaAtual === "todos" ? null : categoriaAtual].filter(Boolean))].sort(),
+    [livros, categoriaAtual]
   );
 
   // Aplica o filtro de categoria local e a ordenação selecionada
@@ -71,17 +73,27 @@ export default function Catalogo() {
   function submeterPesquisa(evento) {
     evento.preventDefault();
     setCategoriaAtual("todos");
+    setPagina(1);
+    setEstadoCarga("carregando");
     setPesquisaAtiva(textoBusca);
     setFiltrosAtivos({ idioma: idiomaSelecionado, tipoPublicacao: tipoPublicacaoSelecionado });
   }
 
   function limparPesquisa() {
+    setPagina(1);
+    setEstadoCarga("carregando");
     setTextoBusca("");
     setIdiomaSelecionado("");
     setTipoPublicacaoSelecionado("all");
     setCategoriaAtual("todos");
     setPesquisaAtiva("");
     setFiltrosAtivos({ idioma: "", tipoPublicacao: "all" });
+  }
+
+  function mudarPagina(proxima) {
+    setPagina(proxima);
+    setEstadoCarga("carregando");
+    document.querySelector(".cat-page")?.scrollIntoView({ block: "start" });
   }
 
   return (
@@ -93,7 +105,7 @@ export default function Catalogo() {
             <p className="cat-subtitle">Encontre o próximo livro, veja as notas e escolha o que ler.</p>
           </div>
           <span className="cat-count">
-            <strong>{estadoCarga === "sucesso" ? livrosVisiveis.length : "–"}</strong> livros
+            <strong>{estadoCarga === "sucesso" ? livrosVisiveis.length : "–"}</strong> livros nesta página
           </span>
         </header>
 
@@ -143,10 +155,18 @@ export default function Catalogo() {
         </form>
 
         <div className="cat-toolbar">
+          <label className="cat-categoria-mobile">
+            Gênero
+            <select className="cat-select" value={categoriaAtual} onChange={(e) => setCategoriaAtual(e.target.value)}>
+              <option value="todos">Todos</option>
+              {categoriasDisponiveis.map((categoria) => <option key={categoria} value={categoria}>{categoria}</option>)}
+            </select>
+          </label>
           <div className="cat-chips" role="group" aria-label="Filtrar por gênero">
             <button
               type="button"
               className={`cat-chip ${categoriaAtual === "todos" ? "is-active" : ""}`}
+              aria-pressed={categoriaAtual === "todos"}
               onClick={() => setCategoriaAtual("todos")}
             >
               Todos
@@ -156,6 +176,7 @@ export default function Catalogo() {
                 key={categoria}
                 type="button"
                 className={`cat-chip ${categoriaAtual === categoria ? "is-active" : ""}`}
+                aria-pressed={categoriaAtual === categoria}
                 onClick={() => setCategoriaAtual(categoria)}
               >
                 {categoria}
@@ -190,7 +211,7 @@ export default function Catalogo() {
           {estadoCarga === "erro" && (
             <div className="cat-message">
               <p>{mensagemErro}</p>
-              <button type="button" className="cat-btn" onClick={() => setChaveRecarregamento((chave) => chave + 1)}>
+              <button type="button" className="cat-btn" onClick={() => { setEstadoCarga("carregando"); setChaveRecarregamento((chave) => chave + 1); }}>
                 Tentar novamente
               </button>
             </div>
@@ -210,6 +231,13 @@ export default function Catalogo() {
             </div>
           )}
         </div>
+        <nav className="cat-paginacao" aria-label="Páginas do catálogo">
+          <button className="cat-btn cat-btn--ghost" disabled={pagina === 1 || estadoCarga === "carregando"} onClick={() => mudarPagina(pagina - 1)}>Anterior</button>
+          {pagina > 2 && <button className="cat-btn cat-btn--ghost" disabled={estadoCarga === "carregando"} onClick={() => mudarPagina(1)} aria-label="Ir para a página 1">1</button>}
+          <span aria-current="page" role="status">Página {pagina}</span>
+          <button className="cat-btn" disabled={!temProxima || estadoCarga !== "sucesso"} onClick={() => mudarPagina(pagina + 1)}>Próxima</button>
+          <p>Gênero e ordenação se aplicam aos livros desta página.</p>
+        </nav>
       </section>
     </main>
   );
