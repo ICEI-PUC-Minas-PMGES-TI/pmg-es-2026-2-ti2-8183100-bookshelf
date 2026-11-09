@@ -18,7 +18,7 @@
   border: 1px solid var(--bm-line);
   border-radius: 20px;
   background: var(--bm-paper);
-  box-shadow: 0 24px 60px rgb(42 26 20 / 28%);
+  box-shadow: 0 24px 60px var(--bm-shadow);
 }
 
 .modal-container h2 { margin: 0; color: var(--bm-espresso); }

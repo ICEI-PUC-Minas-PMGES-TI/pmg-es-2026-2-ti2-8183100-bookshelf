@@ -9,8 +9,8 @@
   padding: clamp(24px, 4vw, 48px);
   border: 1px solid var(--bm-line);
   border-radius: 30px;
-  background: rgb(255 253 249 / 92%);
-  box-shadow: 0 22px 55px rgb(74 47 36 / 9%);
+  background: var(--bm-panel);
+  box-shadow: 0 22px 55px var(--bm-shadow);
 }
 
 .cat-header {
@@ -89,7 +89,7 @@
   padding: 14px 14px 14px 46px;
 }
 
-.cat-search input::placeholder { color: #a08e7d; }
+.cat-search input::placeholder { color: var(--bm-placeholder); }
 
 .cat-select { padding: 13px 12px; }
 
@@ -188,7 +188,7 @@
 .cat-skeleton {
   min-height: 360px;
   border-radius: 16px;
-  background: linear-gradient(100deg, var(--bm-latte) 30%, #f9edde 50%, var(--bm-latte) 70%);
+  background: linear-gradient(100deg, var(--bm-latte) 30%, var(--bm-panel-soft) 50%, var(--bm-latte) 70%);
   background-size: 220% 100%;
   animation: cat-shimmer 1.4s ease-in-out infinite;
 }

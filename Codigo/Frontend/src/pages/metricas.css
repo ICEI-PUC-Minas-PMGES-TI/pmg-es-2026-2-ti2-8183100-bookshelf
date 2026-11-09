@@ -13,8 +13,8 @@
   padding: clamp(24px, 4vw, 48px);
   border: 1px solid var(--bm-line);
   border-radius: 30px;
-  background: rgb(255 253 249 / 92%);
-  box-shadow: 0 22px 55px rgb(74 47 36 / 9%);
+  background: var(--bm-panel);
+  box-shadow: 0 22px 55px var(--bm-shadow);
 }
 
 .estatisticas,
@@ -60,7 +60,7 @@
   padding: 0 13px;
   border: 1px solid rgb(183 121 77 / 20%);
   border-radius: 11px;
-  background: rgb(255 253 249 / 66%);
+  background: var(--bm-form-ghost);
   color: var(--bm-coffee);
   font-size: 0.9rem;
   font-weight: 750;
@@ -95,7 +95,7 @@
 
 .leituras-card {
   flex: 1;
-  min-height: 230px;
+  min-height: 0;
   padding: 20px;
 }
 
@@ -106,6 +106,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
+  max-height: 270px;
+  overflow-y: auto;
+  padding: 2px 8px 8px 2px;
+  scrollbar-gutter: stable;
 }
 
 .metricas-vazio { margin: 0; color: var(--bm-muted); font-size: 0.85rem; }
@@ -123,6 +127,29 @@
   display: flex;
   flex-wrap: wrap;
   gap: 19px;
+  max-height: 270px;
+  overflow-y: auto;
+  padding: 2px 8px 8px 2px;
+  scrollbar-gutter: stable;
+}
+
+.leituras-lista::-webkit-scrollbar,
+.favoritos-lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.leituras-lista::-webkit-scrollbar-thumb,
+.favoritos-lista::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--bm-sand);
+  background-clip: padding-box;
+}
+
+.leituras-lista::-webkit-scrollbar-track,
+.favoritos-lista::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--bm-line) 35%, transparent);
+  border-radius: 999px;
 }
 
 .metricas-acoes {
@@ -183,7 +210,7 @@
 .calendario-card .react-calendar__tile:enabled:focus { border-color: var(--bm-sand); background: var(--bm-latte); }
 .calendario-card .react-calendar__tile--now { background: var(--bm-sand); color: var(--bm-espresso); font-weight: 800; }
 .calendario-card .react-calendar__tile--active { border-color: var(--bm-coffee); background: var(--bm-coffee) !important; color: var(--bm-paper) !important; font-weight: 800; }
-.calendario-card .react-calendar__month-view__days__day--neighboringMonth { color: #b9a594; }
+.calendario-card .react-calendar__month-view__days__day--neighboringMonth { color: var(--bm-muted); }
 .calendario-card .react-calendar__month-view__days__day--weekend { color: var(--bm-caramel); }
 
 @media (max-width: 1050px) {

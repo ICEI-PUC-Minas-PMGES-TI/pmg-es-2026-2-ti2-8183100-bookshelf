@@ -11,10 +11,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  background: rgb(255 253 249 / 92%);
-  border: 1px solid rgb(228 210 189 / 88%);
+  background: var(--bm-panel);
+  border: 1px solid var(--bm-line);
   border-radius: 22px;
-  box-shadow: 0 14px 34px rgb(74 47 36 / 10%);
+  box-shadow: 0 14px 34px var(--bm-shadow);
   backdrop-filter: blur(16px);
 }
 
@@ -134,6 +134,34 @@
   transform: translateY(-1px);
 }
 
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--bm-line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--bm-coffee);
+  font-size: 0.78rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--bm-sand);
+  background: var(--bm-latte);
+  transform: translateY(-1px);
+}
+
+.theme-toggle > span:first-child {
+  color: var(--bm-caramel);
+  font-size: 1rem;
+  line-height: 1;
+}
+
 @media (max-width: 700px) {
   .navbar {
     top: 8px;
@@ -172,5 +200,13 @@
   .perfil-login {
     padding: 9px 11px;
     font-size: 0.75rem;
+  }
+
+  .theme-toggle {
+    padding: 9px;
+  }
+
+  .theme-toggle__label {
+    display: none;
   }
 }

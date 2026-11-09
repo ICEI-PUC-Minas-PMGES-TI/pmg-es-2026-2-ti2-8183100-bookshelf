@@ -22,12 +22,20 @@ import { FOTO_PADRAO, ouvirPerfilAtualizado } from "./services/perfilService";
 import "./App.css";
 
 function App() {
-  const [logado, setLogado] = useState(
+  const [logado] = useState(
     !!localStorage.getItem("token")
+  );
+  const [tema, setTema] = useState(
+    () => localStorage.getItem("bm-theme") || "light"
   );
 
   // Foto do usuário na barra de navegação (usa a foto padrão enquanto carrega ou se falhar).
   const [fotoDoUsuario, setFotoDoUsuario] = useState("");
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = tema;
+    localStorage.setItem("bm-theme", tema);
+  }, [tema]);
 
   useEffect(() => {
     if (!logado) return;
@@ -58,6 +66,17 @@ function App() {
             to="/metricas" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"} > Métricas
           </NavLink>
         </div>
+
+        <button
+          type="button"
+          className="theme-toggle"
+          aria-pressed={tema === "dark"}
+          aria-label={tema === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+          onClick={() => setTema((atual) => atual === "dark" ? "light" : "dark")}
+        >
+          <span aria-hidden="true">{tema === "dark" ? "☀" : "☾"}</span>
+          <span className="theme-toggle__label">{tema === "dark" ? "Claro" : "Escuro"}</span>
+        </button>
 
         {logado ? (
           <NavLink

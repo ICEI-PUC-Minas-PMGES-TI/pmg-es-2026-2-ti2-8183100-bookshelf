@@ -22,7 +22,7 @@
   border-radius: 50%;
   background: var(--bm-paper);
   object-fit: cover;
-  box-shadow: 0 4px 14px rgb(90 64 35 / 22%);
+  box-shadow: 0 4px 14px var(--bm-shadow);
 }
 
 .editar__foto-acoes {
@@ -71,29 +71,29 @@
 }
 
 .editar__campo.tem-erro {
-  border-color: #b3403f;
-  background: #fff7f6;
+  border-color: var(--bm-danger-border);
+  background: var(--bm-danger-bg);
 }
 
 .editar__contador {
   margin: 4px 0 0;
-  color: #766650;
+  color: var(--bm-muted);
   font-size: 0.8rem;
   text-align: right;
 }
 
 .editar__erro {
   margin: 6px 0 0;
-  color: #9a2f2f;
+  color: var(--bm-danger-text);
   font-size: 0.85rem;
 }
 
 .editar__erro--geral {
   margin-top: 14px;
   padding: 10px 14px;
-  border: 1px solid #c98b8b;
+  border: 1px solid var(--bm-danger-border);
   border-radius: 8px;
-  background: #fbeaea;
+  background: var(--bm-danger-bg);
 }
 
 /* ---- botões ---- */
@@ -107,7 +107,7 @@
 
 .editar__botao {
   padding: 10px 18px;
-  border: 1px solid #8e7048;
+  border: 1px solid var(--bm-coffee);
   border-radius: 8px;
   background: var(--bm-espresso);
   color: var(--bm-paper);

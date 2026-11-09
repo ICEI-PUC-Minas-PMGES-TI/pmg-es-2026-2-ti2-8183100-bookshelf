@@ -1,5 +1,5 @@
 .livro-page {
-  width: min(1100px, calc(100% - 32px));
+  width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
   padding: 56px 0 72px;
   color: var(--bm-espresso);
@@ -9,8 +9,8 @@
   padding: clamp(24px, 4vw, 48px);
   border: 1px solid var(--bm-line);
   border-radius: 30px;
-  background: rgb(255 253 249 / 92%);
-  box-shadow: 0 22px 55px rgb(74 47 36 / 9%);
+  background: var(--bm-panel);
+  box-shadow: 0 22px 55px var(--bm-shadow);
 }
 
 .livro-paginas {
@@ -159,11 +159,11 @@
   padding: 19px 21px;
   border: 1px solid var(--bm-line);
   border-radius: 16px;
-  background: rgb(241 226 207 / 45%);
+  background: color-mix(in srgb, var(--bm-latte) 45%, transparent);
 }
 
 .livro-caixa h2 { margin: 0 0 9px; color: var(--bm-coffee); font-size: 1.2rem; }
-.livro-caixa p { margin: 0; color: #5f4a3d; line-height: 1.72; }
+.livro-caixa p { margin: 0; color: var(--bm-coffee); line-height: 1.72; }
 
 .livro-page :is(a, button, summary):focus-visible {
   outline: 2px solid var(--bm-caramel);
@@ -173,10 +173,10 @@
 .livro-aviso {
   margin: 0;
   padding: 10px 14px;
-  border: 1px solid #e1a79e;
+  border: 1px solid var(--bm-danger-border);
   border-radius: 10px;
-  background: #fff1ed;
-  color: #8d2d20;
+  background: var(--bm-danger-bg);
+  color: var(--bm-danger-text);
   font-size: 0.86rem;
 }
 

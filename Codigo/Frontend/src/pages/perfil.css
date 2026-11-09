@@ -9,8 +9,8 @@
   padding: clamp(24px, 4vw, 48px);
   border: 1px solid var(--bm-line);
   border-radius: 30px;
-  background: rgb(255 253 249 / 92%);
-  box-shadow: 0 22px 55px rgb(74 47 36 / 9%);
+  background: var(--bm-panel);
+  box-shadow: 0 22px 55px var(--bm-shadow);
 }
 
 .perfil-layout {
@@ -102,7 +102,7 @@
   padding: 17px 18px 20px;
   border: 1px solid var(--bm-line);
   border-radius: 16px;
-  background: rgb(241 226 207 / 48%);
+  background: color-mix(in srgb, var(--bm-latte) 48%, transparent);
   scroll-margin-top: 16px;
 }
 
@@ -186,8 +186,8 @@
   font-size: 0.86rem;
 }
 
-.perfil-aviso { border: 1px solid #e1a79e; background: #fff1ed; color: #8d2d20; }
-.perfil-sucesso { border: 1px solid #a4c6a1; background: #eef8ec; color: #315d2c; }
+.perfil-aviso { border: 1px solid var(--bm-danger-border); background: var(--bm-danger-bg); color: var(--bm-danger-text); }
+.perfil-sucesso { border: 1px solid var(--bm-success-border); background: var(--bm-success-bg); color: var(--bm-success-text); }
 
 @media (hover: none) {
   .perfil-livro__remover { opacity: 1; }

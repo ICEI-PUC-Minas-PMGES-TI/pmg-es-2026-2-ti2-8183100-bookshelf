@@ -15,9 +15,9 @@
   border: 1px solid var(--bm-line);
   border-radius: 34px;
   background:
-    linear-gradient(115deg, rgb(255 253 249 / 96%), rgb(246 232 212 / 85%)),
-    var(--bm-paper);
-  box-shadow: 0 24px 60px rgb(74 47 36 / 11%);
+    linear-gradient(115deg, var(--bm-hero-start), var(--bm-hero-end)),
+    var(--bm-panel);
+  box-shadow: 0 24px 60px var(--bm-shadow);
 }
 
 .home-hero::before,
@@ -227,7 +227,7 @@
   padding: 24px 24px 26px;
   border: 1px solid var(--bm-line);
   border-radius: 20px;
-  background: rgb(255 253 249 / 78%);
+  background: var(--bm-form-ghost);
 }
 
 .home-highlight__number {

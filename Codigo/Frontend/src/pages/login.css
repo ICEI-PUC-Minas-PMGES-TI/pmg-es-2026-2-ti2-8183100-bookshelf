@@ -7,8 +7,8 @@
   overflow: hidden;
   border: 1px solid var(--bm-line);
   border-radius: 30px;
-  background: var(--bm-paper);
-  box-shadow: 0 24px 60px rgb(74 47 36 / 12%);
+  background: var(--bm-panel);
+  box-shadow: 0 24px 60px var(--bm-shadow);
 }
 
 .login-ilustracao {

@@ -7,7 +7,7 @@
   border-radius: 20px;
   background: var(--bm-paper);
   color: var(--bm-espresso);
-  box-shadow: 0 24px 60px rgb(46 33 18 / 35%);
+  box-shadow: 0 24px 60px var(--bm-shadow);
 }
 
 .modal::backdrop {
