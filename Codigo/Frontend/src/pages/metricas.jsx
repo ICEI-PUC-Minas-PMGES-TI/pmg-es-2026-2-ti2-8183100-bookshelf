@@ -92,7 +92,6 @@ export default function Metricas() {
 					<div className="favoritos-lista">
 						{favoritos.length === 0 && <p className="metricas-vazio">Nenhum livro favorito.</p>}
 						{favoritos.map((livro) => (
-							console.log(livro),
 							<BookMetricas key={livro.id} livro={livro} />
 						))}
 					</div>

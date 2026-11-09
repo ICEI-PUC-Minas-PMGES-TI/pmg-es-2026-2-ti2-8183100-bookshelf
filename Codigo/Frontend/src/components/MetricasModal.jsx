@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./popUpCadastro.css";
+import "./metricasModal.css";
 import API_URL from "../services/api";
 
 export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDepois, usuarioId, carregarUsuario }) {

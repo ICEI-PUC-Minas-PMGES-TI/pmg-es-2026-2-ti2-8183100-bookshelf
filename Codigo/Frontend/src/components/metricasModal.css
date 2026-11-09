@@ -1,0 +1,279 @@
+
+/* =========================================
+   MODAL - ADICIONAR LEITURA
+========================================= */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    background-color: rgba(30, 30, 30, 0.65);
+    backdrop-filter: blur(3px);
+}
+
+/* CONTAINER */
+
+.modal-container {
+    position: relative;
+
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+
+    padding: 30px 35px;
+    box-sizing: border-box;
+
+    overflow-y: auto;
+
+    background-color: #DEC6A0;
+    border: 2px solid #C1A67C;
+    border-radius: 25px;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+
+    scrollbar-width: thin;
+    scrollbar-color: #C6815B #DEC6A0;
+}
+
+/* BARRA DE ROLAGEM */
+
+.modal-container::-webkit-scrollbar {
+    width: 7px;
+}
+
+.modal-container::-webkit-scrollbar-thumb {
+    background-color: #C6815B;
+    border-radius: 10px;
+}
+
+/* BOTÃO FECHAR */
+
+.modal-fechar {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+
+    background-color: transparent;
+    color: #514333;
+
+    font-size: 30px;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.modal-fechar:hover {
+    background-color: #C1A67C;
+    color: #000;
+}
+
+/* TÍTULO */
+
+.modal-container h2 {
+    margin: 0 0 25px;
+
+    text-align: center;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 30px;
+    font-weight: normal;
+    color: #493621;
+}
+
+/* FORMULÁRIO */
+
+.modal-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.modal-container form label {
+    margin-top: 8px;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    color: #514333;
+}
+
+/* INPUTS E SELECT */
+
+.modal-container form input,
+.modal-container form select {
+    width: 100%;
+    height: 43px;
+
+    padding: 0 12px;
+    box-sizing: border-box;
+
+    border: 1px solid #B09262;
+    border-radius: 9px;
+
+    background-color: #FFE7C2;
+    color: #1E1E1E;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.modal-container form input:focus,
+.modal-container form select:focus {
+    border-color: #C6815B;
+    box-shadow: 0 0 0 3px rgba(198, 129, 91, 0.2);
+}
+
+.modal-container form input::placeholder {
+    color: #A8957B;
+}
+
+/* TEMPO DE LEITURA */
+
+.tempo-inputs {
+    display: flex;
+    gap: 15px;
+}
+
+.tempo-inputs > div {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.tempo-inputs span {
+    text-align: center;
+    font-size: 14px;
+    color: #514333;
+}
+
+/* AVALIAÇÃO */
+
+.avaliacao-estrelas {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 8px 0 12px;
+}
+
+.estrela {
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    color: #A8957B;
+    font-size: 36px;
+
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.estrela:hover {
+    transform: scale(1.2);
+}
+
+.estrela.selecionada {
+    color: #C6815B;
+}
+
+/* BOTÃO SALVAR */
+
+.modal-container form button[type="submit"] {
+    width: 100%;
+    min-height: 48px;
+
+    margin-top: 12px;
+
+    border: 1px solid #A65F3E;
+    border-radius: 9px;
+
+    background-color: #C6815B;
+    color: #FFF;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.modal-container form button[type="submit"]:hover {
+    background-color: #B66E4B;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+    .modal-overlay {
+        padding: 12px;
+        align-items: center;
+    }
+
+    .modal-container {
+        max-width: 100%;
+        max-height: 90dvh;
+
+        padding: 26px 20px;
+        border-radius: 20px;
+    }
+
+    .modal-container h2 {
+        font-size: 26px;
+        margin-bottom: 20px;
+    }
+
+    .modal-container form label {
+        font-size: 16px;
+    }
+
+    .modal-container form input,
+    .modal-container form select {
+        height: 45px;
+        font-size: 16px;
+    }
+
+    .estrela {
+        font-size: 34px;
+    }
+}
+
+@media (max-width: 360px) {
+    .modal-container {
+        padding: 25px 15px;
+    }
+
+    .tempo-inputs {
+        gap: 10px;
+    }
+
+    .avaliacao-estrelas {
+        gap: 6px;
+    }
+}
