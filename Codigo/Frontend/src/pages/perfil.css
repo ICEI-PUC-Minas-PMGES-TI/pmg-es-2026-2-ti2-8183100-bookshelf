@@ -1,96 +1,67 @@
-/* Perfil — mesma moldura "livro" do Feed (marrom por fora, papel creme por dentro). */
 .perfil-page {
-  --bm-tan: #c1a67c;
-  --bm-tan-hover: #b09262;
-  --bm-tan-border: #8e7048;
-  --bm-soft: #f6ebd6;
-  --bm-line: #e8dac0;
-  --bm-title: #493621;
-  --bm-muted: #766650;
-  --bm-ink: #1e1e1e;
-  --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
-
-  width: 100%;
-  max-width: 1200px;
+  width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 40px 28px 64px;
-  box-sizing: border-box;
-  color: var(--bm-ink);
+  padding: 56px 0 72px;
+  color: var(--bm-espresso);
 }
 
 .perfil-moldura {
-  padding: 14px;
-  border: 1px solid #b09262;
-  border-radius: 18px;
-  background: var(--bm-tan);
-  box-shadow:
-    0 18px 40px rgb(90 64 35 / 15%),
-    inset 0 0 0 2px rgb(255 247 235 / 18%);
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--bm-line);
+  border-radius: 30px;
+  background: var(--bm-panel);
+  box-shadow: 0 22px 55px var(--bm-shadow);
 }
 
 .perfil-layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 24px;
-  padding: clamp(18px, 3vw, 32px);
-  border: 1px solid #dec6a0;
-  border-radius: 10px;
-  background: #fff9ef;
-  box-shadow:
-    inset 0 0 24px rgb(128 92 49 / 8%),
-    0 2px 5px rgb(90 64 35 / 8%);
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
-/* ---- menu lateral ---- */
 .perfil-menu {
   display: flex;
   flex-direction: column;
   align-items: center;
   align-self: start;
   padding: 24px 18px;
-  border: 1px solid #dec6a0;
-  border-radius: 14px;
-  background: #f7efdf;
+  border: 1px solid var(--bm-line);
+  border-radius: 18px;
+  background: var(--bm-latte);
   text-align: center;
 }
 
 .perfil-foto {
-  width: 130px;
-  height: 130px;
-  border: 3px solid #ffe7c2;
+  width: 122px;
+  height: 122px;
+  border: 4px solid var(--bm-paper);
   border-radius: 50%;
   object-fit: cover;
-  background: #fff;
-  box-shadow: 0 4px 14px rgb(90 64 35 / 22%);
+  background: var(--bm-sand);
+  box-shadow: 0 10px 24px rgb(74 47 36 / 16%);
 }
 
 .perfil-usuario {
-  margin: 16px 0 4px;
-  color: var(--bm-title);
-  font-size: 1.5rem;
+  margin: 17px 0 3px;
+  color: var(--bm-espresso);
+  font-size: 1.45rem;
 }
 
-.perfil-seguidores {
-  margin: 0;
-  color: var(--bm-muted);
-  font-size: 0.85rem;
-}
+.perfil-nome { margin: 0 0 6px; color: var(--bm-muted); font-size: 0.9rem; }
 
-.perfil-seguidores strong {
-  color: var(--bm-title);
-}
+.perfil-seguidores { margin: 0; color: var(--bm-muted); font-size: 0.8rem; line-height: 1.55; }
+.perfil-seguidores strong { color: var(--bm-coffee); }
 
-.perfil-bio {
-  margin: 12px 0 0;
-  color: var(--bm-muted);
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
+.perfil-bio { margin: 13px 0 0; color: var(--bm-muted); font-size: 0.86rem; line-height: 1.55; }
 
 .perfil-botoes {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 9px;
   width: 100%;
   margin-top: 22px;
 }
@@ -98,51 +69,40 @@
 .perfil-botao {
   display: block;
   padding: 10px;
-  border: 1px solid var(--bm-tan-border);
-  border-radius: 8px;
-  background: var(--bm-tan);
-  color: var(--bm-ink);
-  font: inherit;
-  font-size: 0.95rem;
+  border: 1px solid var(--bm-line);
+  border-radius: 11px;
+  background: var(--bm-paper);
+  color: var(--bm-coffee);
+  font-size: 0.84rem;
+  font-weight: 750;
   text-decoration: none;
   cursor: pointer;
-  transition:
-    background 180ms ease,
-    transform 180ms ease;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
 }
 
 .perfil-botao:hover {
-  background: var(--bm-tan-hover);
+  border-color: var(--bm-sand);
+  background: #fff8ef;
+  transform: translateY(-1px);
 }
 
-.perfil-botao:active {
-  transform: scale(0.98);
-}
+.perfil-botao:active { transform: scale(0.98); }
 
 .perfil-botao--logout {
-  border-color: #7f6040;
-  background: linear-gradient(180deg, #8f6a45, #7b5a3c);
-  color: #fff8ee;
-  font-weight: 600;
+  border-color: var(--bm-coffee);
+  background: var(--bm-coffee);
+  color: var(--bm-paper);
 }
 
-.perfil-botao--logout:hover {
-  background: linear-gradient(180deg, #7b5a3c, #694c31);
-}
+.perfil-botao--logout:hover { background: var(--bm-espresso); }
 
-/* ---- listas ---- */
-.perfil-listas {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-width: 0;
-}
+.perfil-listas { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 
 .perfil-lista {
-  padding: 16px 18px 20px;
-  border: 1px solid #dec6a0;
-  border-radius: 14px;
-  background: #f7efdf;
+  padding: 17px 18px 20px;
+  border: 1px solid var(--bm-line);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bm-latte) 48%, transparent);
   scroll-margin-top: 16px;
 }
 
@@ -153,64 +113,32 @@
   margin-bottom: 14px;
 }
 
-.perfil-lista__topo h2 {
-  margin: 0;
-  color: var(--bm-title);
-  font-size: 1.25rem;
-}
+.perfil-lista__topo h2 { margin: 0; color: var(--bm-coffee); font-size: 1.22rem; }
 
 .perfil-lista__contagem {
-  padding: 2px 10px;
+  padding: 3px 9px;
   border-radius: 999px;
-  background: #fff;
+  background: var(--bm-paper);
   color: var(--bm-muted);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 .perfil-lista__capas {
   display: flex;
-  gap: 16px;
-  min-height: 150px;
+  gap: 15px;
+  min-height: 148px;
   padding: 6px 4px 10px;
   overflow-x: auto;
 }
 
-.perfil-lista__vazia {
-  margin: auto 0;
-  color: var(--bm-muted);
-  font-size: 0.9rem;
-}
+.perfil-lista__vazia { margin: auto 0; color: var(--bm-muted); font-size: 0.86rem; }
 
-.perfil-livro {
-  position: relative;
-  flex: 0 0 100px;
-  cursor: grab;
-}
+.perfil-livro { position: relative; flex: 0 0 94px; cursor: grab; }
+.perfil-livro__link { display: block; color: inherit; text-decoration: none; }
 
-.perfil-livro__link {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-}
-
-.perfil-livro:hover .book-cover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 22px rgb(90 64 35 / 28%);
-}
-
-/* A capa de reserva fica menor nesta tela. */
-.perfil-livro .book-cover--fallback {
-  padding: 12px 8px 10px 14px;
-  border-left-width: 5px;
-}
-
-.perfil-livro .book-cover__title {
-  font-size: 0.78rem;
-}
-
-.perfil-livro .book-cover__brand {
-  font-size: 0.45rem;
-}
+.perfil-livro .book-cover--fallback { padding: 12px 8px 10px 14px; border-left-width: 5px; }
+.perfil-livro .book-cover__title { font-size: 0.75rem; }
+.perfil-livro .book-cover__brand { font-size: 0.42rem; }
 
 .perfil-livro__remover {
   position: absolute;
@@ -222,88 +150,56 @@
   width: 24px;
   height: 24px;
   padding: 0;
-  border: 1px solid var(--bm-tan-border);
+  border: 1px solid var(--bm-sand);
   border-radius: 50%;
-  background: #fff9ef;
-  color: var(--bm-title);
+  background: var(--bm-paper);
+  color: var(--bm-coffee);
   font-size: 1rem;
   line-height: 1;
   cursor: pointer;
   opacity: 0;
-  transition:
-    opacity 180ms ease,
-    background 180ms ease;
+  transition: opacity 180ms ease, background 180ms ease;
 }
 
 .perfil-livro:hover .perfil-livro__remover,
-.perfil-livro__remover:focus-visible {
-  opacity: 1;
-}
-
-.perfil-livro__remover:hover {
-  background: var(--bm-tan);
-}
+.perfil-livro__remover:focus-visible { opacity: 1; }
+.perfil-livro__remover:hover { background: var(--bm-latte); }
 
 .perfil-page :is(a, button):focus-visible {
-  outline: 2px solid var(--bm-tan-border);
-  outline-offset: 2px;
+  outline: 2px solid var(--bm-caramel);
+  outline-offset: 3px;
 }
 
+.perfil-lista.is-alvo {
+  border-color: var(--bm-caramel);
+  background: #f4dfc4;
+  box-shadow: 0 0 0 4px rgb(183 121 77 / 16%);
+}
+
+.perfil-livro[draggable="false"] { cursor: default; }
+
+.perfil-aviso,
+.perfil-sucesso {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.86rem;
+}
+
+.perfil-aviso { border: 1px solid var(--bm-danger-border); background: var(--bm-danger-bg); color: var(--bm-danger-text); }
+.perfil-sucesso { border: 1px solid var(--bm-success-border); background: var(--bm-success-bg); color: var(--bm-success-text); }
+
 @media (hover: none) {
-  .perfil-livro__remover {
-    opacity: 1;
-  }
+  .perfil-livro__remover { opacity: 1; }
 }
 
 @media (max-width: 800px) {
   .perfil-page {
-    padding: 16px 12px 40px;
+    width: min(100% - 24px, 620px);
+    padding: 30px 0 48px;
   }
 
-  .perfil-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .perfil-livro {
-    flex-basis: 84px;
-  }
-}
-
-/* lista que está recebendo um livro arrastado */
-.perfil-lista.is-alvo {
-  border-color: var(--bm-tan-border);
-  background: #f1e3c6;
-  box-shadow: 0 0 0 3px rgb(193 166 124 / 35%);
-}
-
-.perfil-livro[draggable="false"] {
-  cursor: default;
-}
-
-.perfil-aviso {
-  margin: 0;
-  padding: 10px 14px;
-  border: 1px solid #c98b8b;
-  border-radius: 8px;
-  background: #fbeaea;
-  color: #7a2323;
-  font-size: 0.9rem;
-}
-
-/* nome (abaixo do nome de usuário) */
-.perfil-nome {
-  margin: 0 0 6px;
-  color: var(--bm-muted);
-  font-size: 0.95rem;
-}
-
-/* mensagem de perfil salvo */
-.perfil-sucesso {
-  margin: 0;
-  padding: 10px 14px;
-  border: 1px solid #9bb98f;
-  border-radius: 8px;
-  background: #edf6e9;
-  color: #2c5424;
-  font-size: 0.9rem;
+  .perfil-moldura { padding: 22px 16px 28px; border-radius: 22px; }
+  .perfil-layout { grid-template-columns: 1fr; padding: 0; border-radius: 0; }
+  .perfil-livro { flex-basis: 84px; }
 }
