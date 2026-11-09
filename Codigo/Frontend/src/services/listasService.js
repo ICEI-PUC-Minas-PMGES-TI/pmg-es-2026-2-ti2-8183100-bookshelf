@@ -26,7 +26,7 @@ function normalizarUsuario(usuario) {
 }
 
 // Os dados do usuário vêm do backend (MongoDB). O endereço fica em VITE_API_URL, no arquivo .env.
-function urlDoUsuario() {
+export function urlDoUsuario() {
   if (!API_URL) throw new Error("O endereço da API (VITE_API_URL) não está configurado.");
   return `${API_URL}/api/usuarios/${ID_USUARIO}`;
 }
