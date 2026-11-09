@@ -3,15 +3,15 @@
   width: min(520px, calc(100% - 24px));
   max-height: calc(100vh - 24px);
   padding: 0;
-  border: 1px solid #b09262;
-  border-radius: 16px;
-  background: #fff9ef;
-  color: #1e1e1e;
-  box-shadow: 0 24px 60px rgb(46 33 18 / 35%);
+  border: 1px solid var(--bm-line);
+  border-radius: 20px;
+  background: var(--bm-paper);
+  color: var(--bm-espresso);
+  box-shadow: 0 24px 60px var(--bm-shadow);
 }
 
 .modal::backdrop {
-  background: rgb(46 33 18 / 55%);
+  background: rgb(42 26 20 / 62%);
 }
 
 .modal[open] {
@@ -44,14 +44,14 @@ body:has(dialog.modal[open]) {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 18px 22px;
-  border-bottom: 1px solid #dec6a0;
-  background: #f7efdf;
+  padding: 19px 22px;
+  border-bottom: 1px solid var(--bm-line);
+  background: var(--bm-latte);
 }
 
 .modal__titulo {
   margin: 0;
-  color: #493621;
+  color: var(--bm-coffee);
   font-size: 1.3rem;
 }
 
@@ -65,7 +65,7 @@ body:has(dialog.modal[open]) {
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #80613e;
+  color: var(--bm-coffee);
   font-size: 1.7rem;
   line-height: 1;
   cursor: pointer;
@@ -73,7 +73,7 @@ body:has(dialog.modal[open]) {
 }
 
 .modal__fechar:hover {
-  background: #dec6a0;
+  background: var(--bm-sand);
 }
 
 .modal__corpo {
@@ -83,7 +83,7 @@ body:has(dialog.modal[open]) {
 }
 
 .modal :is(button, input, textarea):focus-visible {
-  outline: 2px solid #8e7048;
+  outline: 2px solid var(--bm-caramel);
   outline-offset: 2px;
 }
 

@@ -125,10 +125,10 @@ function PublicacaoCard({ publicacao, onCurtir }) {
                     icon="heart"
                     size={24}
                     corner={24}
-                    likedColor="#C6815B"
-                    idleColor="#B09262"
-                    pillColor="#F1E3D0"
-                    textColor="#1E1E1E"
+                    likedColor="var(--bm-caramel)"
+                    idleColor="var(--bm-sand)"
+                    pillColor="var(--bm-latte)"
+                    textColor="var(--bm-espresso)"
                     label="Curtir resenha"
                 />
 

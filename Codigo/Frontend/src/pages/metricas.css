@@ -1,83 +1,76 @@
 .metricas-main {
-  min-height: calc(100vh - 94px);
-  padding: 39px 30px 36px;
-  box-sizing: border-box;
-  background-color: #ffe7c2;
-  font-family: Arial, sans-serif;
-  color: #000;
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 56px 0 72px;
+  color: var(--bm-espresso);
 }
 
 .metricas-layout {
-  width: 100%;
-  max-width: 1304px;
-  min-height: 813px;
-  margin: 0 auto;
-  padding: 20px 26px 22px;
-  box-sizing: border-box;
   display: grid;
-  grid-template-columns: 286px minmax(300px, 370px) minmax(350px, 1fr);
-  grid-template-rows: 468px minmax(208px, auto) 60px;
-  gap: 15px 24px;
-  background-color: #c1a67c;
-  border-radius: 32px;
+  grid-template-columns: 220px minmax(250px, 0.78fr) minmax(330px, 1.22fr);
+  grid-template-rows: auto auto auto;
+  gap: 16px;
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--bm-line);
+  border-radius: 30px;
+  background: var(--bm-panel);
+  box-shadow: 0 22px 55px var(--bm-shadow);
+}
+
+.estatisticas,
+.calendario-card,
+.streak-card,
+.leituras-card,
+.favoritos-card {
+  border: 1px solid var(--bm-line);
+  border-radius: 20px;
+  background: var(--bm-latte);
 }
 
 .estatisticas {
   grid-column: 1;
   grid-row: 1 / 4;
-  padding: 10px 19px;
-  background-color: #dec6a0;
-  border-radius: 32px;
+  padding: 23px 18px;
 }
 
 .estatisticas h2,
 .streak-card h2,
 .leituras-card h2 {
   margin: 0;
-  text-align: center;
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: normal;
+  color: var(--bm-coffee);
+  font-family: var(--bm-display);
+  font-weight: 600;
 }
 
-.estatisticas h2 {
-  margin-bottom: 30px;
-  font-size: 34px;
-}
-
-.estatistica-item {
-  margin-bottom: 29px;
-}
+.estatisticas h2 { margin-bottom: 25px; font-size: 1.75rem; }
+.estatistica-item { margin-bottom: 23px; }
 
 .estatistica-item label {
   display: block;
-  margin-bottom: 10px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 19px;
-  color: #514333;
+  margin-bottom: 8px;
+  color: var(--bm-muted);
+  font-size: 0.8rem;
+  font-weight: 750;
 }
 
 .estatistica-valor {
   display: flex;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  box-sizing: border-box;
-  border-radius: 9px;
-  background-color: #c1a67c;
-  color: #514333;
-  font-size: 16px;
+  min-height: 42px;
+  padding: 0 13px;
+  border: 1px solid rgb(183 121 77 / 20%);
+  border-radius: 11px;
+  background: var(--bm-form-ghost);
+  color: var(--bm-coffee);
+  font-size: 0.9rem;
+  font-weight: 750;
 }
 
 .calendario-card {
-    grid-column: 2;
-    grid-row: 1;
-    align-self: start;
-    min-height: 468px;
-    overflow: hidden;
-    border-radius: 28px;
-    background-color: #DEC6A0;
-    padding: 16px;
-    box-sizing: border-box;
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 360px;
+  padding: 14px;
 }
 
 .metricas-direita {
@@ -85,320 +78,160 @@
   grid-row: 1;
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  padding: 23px 8px 0 0;
+  gap: 16px;
 }
 
 .streak-card {
-  min-height: 115px;
-  padding: 12px 24px;
-  box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
-  border-radius: 30px;
-  background-color: #dec6a0;
+  justify-content: space-between;
+  min-height: 112px;
+  padding: 18px 22px;
 }
 
-.streak-card h2 {
-  font-size: 35px;
-  white-space: nowrap;
-}
-
-.streak-card strong {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 76px;
-  font-weight: normal;
-}
-
-.streak-fogo {
-  font-size: 64px;
-}
+.streak-card h2 { font-size: 1.35rem; }
+.streak-card strong { color: var(--bm-espresso); font-family: var(--bm-display); font-size: 4.2rem; font-weight: 600; line-height: 1; }
+.streak-fogo { font-size: 2.7rem; }
 
 .leituras-card {
   flex: 1;
   min-height: 0;
-  padding: 7px 17px 18px;
-  box-sizing: border-box;
-  border-radius: 30px;
-  background-color: #dec6a0;
+  padding: 20px;
 }
 
-.leituras-card h2 {
-  margin-bottom: 20px;
-  font-size: 34px;
-}
+.leituras-card h2 { margin-bottom: 18px; font-size: 1.45rem; }
 
 .leituras-lista {
-  --capa-largura: 104px;
+  --capa-largura: 92px;
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 18px;
+  max-height: 270px;
+  overflow-y: auto;
+  padding: 2px 8px 8px 2px;
+  scrollbar-gutter: stable;
 }
 
-.metricas-vazio {
-  margin: 0;
-  color: #493621;
-  font-size: 0.95rem;
-}
+.metricas-vazio { margin: 0; color: var(--bm-muted); font-size: 0.85rem; }
 
 .favoritos-card {
   grid-column: 2 / 4;
   grid-row: 2;
-  padding: 15px 20px 20px;
-  box-sizing: border-box;
-  border-radius: 30px;
-  background-color: #dec6a0;
+  padding: 19px 20px 22px;
 }
 
-.favoritos-card h3 {
-  margin: 0 0 7px;
-  font-size: 16px;
-  font-weight: normal;
-}
+.favoritos-card h3 { margin: 0 0 14px; color: var(--bm-coffee); font-family: var(--bm-display); font-size: 1.35rem; }
 
 .favoritos-lista {
-  --capa-largura: 88px;
+  --capa-largura: 78px;
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
-  padding-left: 14px;
+  gap: 19px;
+  max-height: 270px;
+  overflow-y: auto;
+  padding: 2px 8px 8px 2px;
+  scrollbar-gutter: stable;
+}
+
+.leituras-lista::-webkit-scrollbar,
+.favoritos-lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.leituras-lista::-webkit-scrollbar-thumb,
+.favoritos-lista::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--bm-sand);
+  background-clip: padding-box;
+}
+
+.leituras-lista::-webkit-scrollbar-track,
+.favoritos-lista::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--bm-line) 35%, transparent);
+  border-radius: 999px;
 }
 
 .metricas-acoes {
   grid-column: 3;
   grid-row: 3;
   display: flex;
-  align-items: center;
   justify-content: flex-end;
-  padding-right: 26px;
+  align-items: center;
+  min-height: 56px;
 }
 
 .botao-circulo {
-  width: 236px;
-  height: 58px;
-  border: 1px solid #000;
-  border-radius: 7px;
-  background-color: #c6815b;
-  color: #fff;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 20px;
-  font-weight: bold;
-  text-shadow: 1px 1px #000, -1px -1px #000;
+  min-width: 210px;
+  padding: 13px 18px;
+  border: 1px solid var(--bm-espresso);
+  border-radius: 12px;
+  background: var(--bm-espresso);
+  color: var(--bm-paper);
+  font-size: 0.86rem;
+  font-weight: 800;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background 180ms ease, transform 180ms ease;
 }
 
-.botao-circulo:hover {
-  background-color: #b66e4b;
-}
-
-/* Calendario */
+.botao-circulo:hover { background: var(--bm-coffee); transform: translateY(-1px); }
 
 .calendario-card .react-calendar {
-    width: 100%;
-    max-width: 100%;
-    border: 2px solid #C1A67C;
-    border-radius: 18px;
-    background-color: #FFE7C2;
-    color: #1E1E1E;
-    font-family: inherit;
-    padding: 10px;
-    box-sizing: border-box;
-    box-shadow: none;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--bm-line);
+  border-radius: 15px;
+  background: var(--bm-paper);
+  color: var(--bm-espresso);
+  font-family: inherit;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
-/* Cabeçalho do mês */
-.calendario-card .react-calendar__navigation {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.calendario-card .react-calendar__navigation button {
-    color: #1E1E1E;
-    background: transparent;
-    border-radius: 10px;
-    font-weight: bold;
-}
-
+.calendario-card .react-calendar__navigation { margin-bottom: 8px; }
+.calendario-card .react-calendar__navigation button { color: var(--bm-coffee); background: transparent; border-radius: 8px; font-weight: 750; }
 .calendario-card .react-calendar__navigation button:enabled:hover,
-.calendario-card .react-calendar__navigation button:enabled:focus {
-    background-color: #DEC6A0;
-}
+.calendario-card .react-calendar__navigation button:enabled:focus { background: var(--bm-latte); }
+.calendario-card .react-calendar__month-view__weekdays { color: var(--bm-caramel); font-weight: 800; font-size: 0.68rem; text-transform: uppercase; }
+.calendario-card .react-calendar__month-view__weekdays__weekday { padding: 7px 0; }
+.calendario-card .react-calendar__month-view__weekdays abbr { text-decoration: none; }
 
-/* Dias da semana */
-.calendario-card .react-calendar__month-view__weekdays {
-    color: #6B5038;
-    font-weight: bold;
-    font-size: 12px;
-    text-transform: uppercase;
-}
-
-.calendario-card .react-calendar__month-view__weekdays__weekday {
-    padding: 8px 0;
-}
-
-.calendario-card .react-calendar__month-view__weekdays abbr {
-    text-decoration: none;
-}
-
-/* Dias do mês */
 .calendario-card .react-calendar__tile {
-    color: #1E1E1E;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    padding: 10px 0;
-    font-size: 14px;
-    transition: 0.2s;
+  padding: 9px 0;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--bm-coffee);
+  font-size: 0.8rem;
+  transition: background 180ms ease, border-color 180ms ease;
 }
 
-/* Efeito ao passar o mouse */
 .calendario-card .react-calendar__tile:enabled:hover,
-.calendario-card .react-calendar__tile:enabled:focus {
-    background-color: #DEC6A0;
-    border-color: #C1A67C;
+.calendario-card .react-calendar__tile:enabled:focus { border-color: var(--bm-sand); background: var(--bm-latte); }
+.calendario-card .react-calendar__tile--now { background: var(--bm-sand); color: var(--bm-espresso); font-weight: 800; }
+.calendario-card .react-calendar__tile--active { border-color: var(--bm-coffee); background: var(--bm-coffee) !important; color: var(--bm-paper) !important; font-weight: 800; }
+.calendario-card .react-calendar__month-view__days__day--neighboringMonth { color: var(--bm-muted); }
+.calendario-card .react-calendar__month-view__days__day--weekend { color: var(--bm-caramel); }
+
+@media (max-width: 1050px) {
+  .metricas-layout { grid-template-columns: 200px minmax(240px, 1fr); }
+  .estatisticas { grid-column: 1; grid-row: 1 / 4; }
+  .calendario-card { grid-column: 2; grid-row: 1; }
+  .metricas-direita { grid-column: 2; grid-row: 2; }
+  .favoritos-card { grid-column: 1 / 3; grid-row: 4; }
+  .metricas-acoes { grid-column: 2; grid-row: 3; }
 }
 
-/* Dia atual */
-.calendario-card .react-calendar__tile--now {
-    background-color: #B09262;
-    color: #FFFFFF;
-    font-weight: bold;
-}
-
-/* Dia selecionado */
-.calendario-card .react-calendar__tile--active {
-    background-color: #C6815B !important;
-    color: #FFFFFF !important;
-    font-weight: bold;
-    border-color: #A65F3E;
-}
-
-/* Hover do dia selecionado */
-.calendario-card .react-calendar__tile--active:enabled:hover,
-.calendario-card .react-calendar__tile--active:enabled:focus {
-    background-color: #A65F3E !important;
-    color: #FFFFFF !important;
-}
-
-/* Dias de outros meses */
-.calendario-card .react-calendar__month-view__days__day--neighboringMonth {
-    color: #A8957B;
-}
-
-/* Fins de semana */
-.calendario-card .react-calendar__month-view__days__day--weekend {
-    color: #A65F3E;
-}
-
-/* Mantém o texto branco no dia selecionado, inclusive aos fins de semana */
-.calendario-card .react-calendar__tile--active,
-.calendario-card .react-calendar__tile--active:enabled:hover {
-    color: #FFFFFF !important;
-}
-
-
-@media (max-width: 1100px) {
-  .metricas-layout {
-    grid-template-columns: 230px minmax(280px, 1fr);
-    grid-template-rows: auto auto auto auto;
-  }
-
-  .estatisticas {
-    grid-column: 1;
-    grid-row: 1 / 4;
-  }
-
-  .calendario-card {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .metricas-direita {
-    grid-column: 2;
-    grid-row: 2;
-    padding: 0;
-  }
-
-  .favoritos-card {
-    grid-column: 1 / 3;
-    grid-row: 4;
-    min-height: 200px;
-  }
-
-  .metricas-acoes {
-    grid-column: 2;
-    grid-row: 3;
-  }
-}
-
-@media (max-width: 650px) {
-  .metricas-main {
-    padding: 20px 12px;
-  }
-
-  .metricas-layout {
-    display: flex;
-    flex-direction: column;
-    padding: 14px;
-    gap: 18px;
-  }
-
-  .estatisticas {
-    padding-bottom: 5px;
-  }
-
-  .calendario-card {
-    width: 100%;
-  }
-
-  .calendario-grade {
-    padding-right: 5px;
-    padding-left: 5px;
-  }
-
-  .dia-semana,
-  .dia-calendario {
-    width: 34px;
-    height: 34px;
-  }
-
-  .streak-card {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .streak-card h2 {
-    font-size: 25px;
-  }
-
-  .streak-card strong {
-    font-size: 55px;
-  }
-
-  .streak-fogo {
-    font-size: 45px;
-  }
-
-  .leituras-card {
-    min-height: 280px;
-  }
-
-  .favoritos-lista {
-    --capa-largura: 70px;
-    gap: 12px;
-    padding-left: 0;
-  }
-
-  .metricas-acoes {
-    justify-content: center;
-    padding: 0;
-  }
-
-  .botao-circulo {
-    max-width: 100%;
-  }
+@media (max-width: 700px) {
+  .metricas-main { width: min(100% - 24px, 620px); padding: 30px 0 48px; }
+  .metricas-layout { display: flex; flex-direction: column; padding: 22px 16px 28px; border-radius: 22px; }
+  .estatisticas { order: 1; }
+  .calendario-card { order: 2; min-height: 0; }
+  .metricas-direita { order: 3; }
+  .favoritos-card { order: 4; }
+  .metricas-acoes { order: 5; justify-content: center; }
+  .streak-card { flex-wrap: wrap; gap: 10px; }
+  .streak-card h2 { font-size: 1.15rem; }
+  .streak-card strong { font-size: 3.4rem; }
+  .botao-circulo { width: 100%; min-width: 0; }
 }
