@@ -220,6 +220,28 @@
 .calendario-card .react-calendar__month-view__days__day--neighboringMonth { color: var(--bm-muted); }
 .calendario-card .react-calendar__month-view__days__day--weekend { color: var(--bm-caramel); }
 
+.calendario-card .react-calendar__tile.dia-com-streak {
+    background-color: #C6815B;
+    color: #FFFFFF;
+    font-weight: bold;
+    border-radius: 10px;
+    border: 1px solid #A65F3E;
+}
+
+.calendario-card .react-calendar__tile.dia-com-streak:enabled:hover {
+    background-color: #A65F3E;
+    color: #FFFFFF;
+}
+
+.calendario-card .react-calendar__tile.dia-com-streak.react-calendar__tile--active {
+    background-color: #A65F3E !important;
+    color: #FFFFFF !important;
+}
+
+.calendario-card .react-calendar__tile--now {
+  border: 2px solid #FFFFFF !important;
+}
+
 @media (max-width: 1050px) {
   .metricas-layout { grid-template-columns: 200px minmax(240px, 1fr); }
   .estatisticas { grid-column: 1; grid-row: 1 / 4; }

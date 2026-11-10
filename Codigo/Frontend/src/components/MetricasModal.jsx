@@ -17,7 +17,7 @@ export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDep
     ].filter((livro, index, self) =>
         index === self.findIndex(l => l.id === livro.id)
     );
-    
+
     const token = localStorage.getItem("token");
 
     if (!aberto) {
@@ -28,7 +28,9 @@ export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDep
         event.preventDefault();
         const tempoLeituraMinutos = Number(horas) * 60 + Number(minutos);
         const paginasLidas = Number(pagFinal) - Number(pagInicial);
-        const dataLeitura = new Date().toISOString().split("T")[0];
+        const hoje = new Date();
+        const dataLeitura =
+            `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 
         const dadosmetrica = {
             usuarioId,
