@@ -96,7 +96,7 @@
 
 .streak-card h2 { font-size: 1.35rem; }
 .streak-card strong { color: var(--bm-espresso); font-family: var(--bm-display); font-size: 4.2rem; font-weight: 600; line-height: 1; }
-.streak-fogo { font-size: 2.7rem; }
+.streak-fogo { width: 38px; height: 44px; flex-shrink: 0; color: var(--bm-mocha); stroke-width: 1.7; }
 
 .leituras-card {
   flex: 1;

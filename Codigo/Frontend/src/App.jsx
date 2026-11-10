@@ -5,6 +5,7 @@ import {
   Route,
   NavLink,
   Link,
+  useLocation,
 } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useEffect, useState } from "react";
@@ -18,24 +19,27 @@ import Livro from "./pages/livro";
 import Login from "./pages/login";
 import { obterUsuario } from "./services/listasService";
 import { FOTO_PADRAO, ouvirPerfilAtualizado } from "./services/perfilService";
+import { obterTema, salvarTema } from "./services/temaService";
 
 import "./App.css";
+import "./tema.css";
 
 function App() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   const [logado] = useState(
     !!localStorage.getItem("token")
   );
-  const [tema, setTema] = useState(
-    () => localStorage.getItem("bm-theme") || "light"
-  );
+  const [tema, setTema] = useState(obterTema);
 
   // Foto do usuário na barra de navegação (usa a foto padrão enquanto carrega ou se falhar).
   const [fotoDoUsuario, setFotoDoUsuario] = useState("");
 
   useEffect(() => {
-    document.documentElement.dataset.theme = tema;
-    localStorage.setItem("bm-theme", tema);
-  }, [tema]);
+    const sincronizar = () => setTema(obterTema());
+    window.addEventListener("tema-atualizado", sincronizar);
+    return () => window.removeEventListener("tema-atualizado", sincronizar);
+  }, []);
 
   useEffect(() => {
     if (!logado) return;
@@ -48,7 +52,7 @@ function App() {
   }, [logado]);
   return (
     <>
-      <nav className="navbar">
+      <nav className="navbar" aria-label="Navegação principal">
         <Link to="/" className="logo" aria-label="BookMark - Início">
           <img src="/logo.png" alt="BookMark" />
         </Link>
@@ -70,12 +74,12 @@ function App() {
         <button
           type="button"
           className="theme-toggle"
-          aria-pressed={tema === "dark"}
-          aria-label={tema === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
-          onClick={() => setTema((atual) => atual === "dark" ? "light" : "dark")}
+          aria-pressed={tema === "escuro"}
+          aria-label={tema === "escuro" ? "Ativar modo claro" : "Ativar modo escuro"}
+          onClick={() => salvarTema(tema === "escuro" ? "claro" : "escuro")}
         >
-          <span aria-hidden="true">{tema === "dark" ? "☀" : "☾"}</span>
-          <span className="theme-toggle__label">{tema === "dark" ? "Claro" : "Escuro"}</span>
+          <span aria-hidden="true">{tema === "escuro" ? "☀" : "☾"}</span>
+          <span className="theme-toggle__label">{tema === "escuro" ? "Claro" : "Escuro"}</span>
         </button>
 
         {logado ? (

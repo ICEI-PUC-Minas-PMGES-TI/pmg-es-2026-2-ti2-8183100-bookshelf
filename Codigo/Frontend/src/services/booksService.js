@@ -75,16 +75,16 @@ function normalizarLivro(item) {
   };
 }
 
-// Termos amplos para garantir uma vitrine inicial relevante quando a busca estiver vazia
-const VITRINE_PADRAO = [
-  "subject:fiction",
-  "Machado de Assis",
-  "J.R.R. Tolkien",
-  "George Orwell",
-  "Clarice Lispector",
-];
+// Consulta estável para manter a mesma coleção entre páginas.
+const VITRINE_PADRAO = "subject:fiction";
 
 export async function buscarLivros(termoBusca = "", filtros = {}) {
+  const pagina = await buscarPaginaLivros(termoBusca, filtros);
+  return pagina.livros;
+}
+
+export async function buscarPaginaLivros(termoBusca = "", filtros = {}, pagina = 1) {
+  if (!Number.isInteger(pagina) || pagina < 1) throw new Error("Página inválida.");
   // Verificação preventiva de conexão offline
   if (!navigator.onLine) {
     throw new ErroRede();
@@ -92,15 +92,17 @@ export async function buscarLivros(termoBusca = "", filtros = {}) {
 
   const buscaVazia = termoBusca.trim() === "";
 
-  // Se não houver termo, sorteia um autor/gênero da vitrine
+  // A busca vazia mantém a mesma vitrine durante a paginação.
   const termoAtivo = buscaVazia
-    ? VITRINE_PADRAO[Math.floor(Math.random() * VITRINE_PADRAO.length)]
+    ? VITRINE_PADRAO
     : termoBusca;
 
-  // 20 resultados para a vitrine aleatória, 12 para buscas específicas
-  const maximoResultados = buscaVazia ? 20 : 12;
+  // Limite por requisição permitido pelo Google Books.
+  const maximoResultados = 40;
+  const inicio = (pagina - 1) * maximoResultados;
 
   let url = `${URL_BASE}?q=${encodeURIComponent(termoAtivo)}&maxResults=${maximoResultados}&key=${CHAVE_API}`;
+  url += `&startIndex=${inicio}`;
 
   // Aplicação dos filtros do controle de pesquisa
   if (filtros.idioma) url += `&langRestrict=${filtros.idioma}`;
@@ -128,7 +130,7 @@ export async function buscarLivros(termoBusca = "", filtros = {}) {
     // NOTA: As chaves do objeto permanecem em inglês para manter a compatibilidade com as props do card.
     const livros = itens.map(normalizarLivro);
     guardarNoCache(livros);
-    return livros;
+    return { livros, temProxima: itens.length > 0 && (itens.length === maximoResultados || dados.totalItems > inicio + itens.length) };
   } catch (erro) {
     // Repassa os erros personalizados ou mascara erros genéricos com uma mensagem amigável
     if (erro instanceof ErroRede || erro instanceof ErroLimiteApi) {
@@ -137,6 +139,7 @@ export async function buscarLivros(termoBusca = "", filtros = {}) {
     throw new Error(
       erro.message ||
         "Encontramos um obstáculo inesperado. Tente novamente em breve.",
+      { cause: erro },
     );
   }
 }

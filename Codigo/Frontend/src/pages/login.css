@@ -1,3 +1,5 @@
+.login-intro { color: var(--bm-muted); width: 100%; line-height: 1.6; }
+.login-explorar { margin-top: 18px; color: var(--bm-mocha); }
 .login-container {
   display: grid;
   grid-template-columns: minmax(320px, 0.82fr) minmax(420px, 1.18fr);

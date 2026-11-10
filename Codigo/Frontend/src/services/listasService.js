@@ -1,7 +1,5 @@
 import API_URL from "./api";
 
-const ID_USUARIO = JSON.parse(localStorage.getItem("usuario"))?.id;
-
 // Nomes dos campos do usuário que guardam cada lista.
 export const LISTAS = [
   { chave: "livrosFav", titulo: "Favoritos" },
@@ -28,7 +26,9 @@ function normalizarUsuario(usuario) {
 // Os dados do usuário vêm do backend (MongoDB). O endereço fica em VITE_API_URL, no arquivo .env.
 export function urlDoUsuario() {
   if (!API_URL) throw new Error("O endereço da API (VITE_API_URL) não está configurado.");
-  return `${API_URL}/api/usuarios/${ID_USUARIO}`;
+  const id = JSON.parse(localStorage.getItem("usuario") || "null")?.id;
+  if (!id) throw new Error("Sua sessão expirou. Entre novamente.");
+  return `${API_URL}/api/usuarios/${id}`;
 }
 
 export async function obterUsuario() {

@@ -1,3 +1,23 @@
+.perfil-biblioteca { min-width: 0; }
+.perfil-identidade h1 { margin: 16px 0 4px; font-size: 1.5rem; }
+.perfil-biblioteca-topo { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.perfil-biblioteca-topo h2 { font-size: 1.6rem; }
+.perfil-biblioteca-topo a { color: var(--bm-mocha); }
+.perfil-botoes .perfil-botao, .perfil-sair { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.perfil-sair { padding: 10px; border: 1px solid var(--bm-coffee); border-radius: 11px; background: var(--bm-coffee); color: var(--bm-on-action); cursor: pointer; }
+.perfil-abas { display: flex; gap: 6px; overflow-x: auto; padding: 12px 0; margin-bottom: 20px; border-bottom: 1px solid var(--bm-line); }
+.perfil-abas button { flex-shrink: 0; padding: 10px 12px; border: 1px solid var(--bm-line); border-radius: 11px; background: var(--bm-paper); color: var(--bm-coffee); cursor: pointer; }
+.perfil-abas button[aria-selected="true"], .perfil-abas button.is-alvo { background: var(--bm-coffee); color: var(--bm-on-action); }
+.perfil-abas span { margin-left: 8px; font-size: 0.8em; }
+.perfil-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 24px 18px; }
+.perfil-livro h3 { margin: 10px 0 4px; font-size: 1rem; overflow-wrap: anywhere; }
+.perfil-livro p { margin: 0 0 10px; color: var(--bm-muted); font-size: 0.8rem; }
+.perfil-livro__acoes { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.perfil-livro__acoes button, .perfil-livro__acoes select { padding: 6px; border: 1px solid var(--bm-line); border-radius: 8px; background: var(--bm-paper); color: var(--bm-coffee); min-width: 0; max-width: 100%; }
+.perfil-livro__acoes select { flex: 1; font-size: 0.75rem; }
+.perfil-vazio { padding: 30px 10px; color: var(--bm-muted); }
+.perfil-vazio .perfil-botao { display: inline-block; margin-top: 10px; }
+.perfil-salvando { color: var(--bm-muted); }
 .perfil-page {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;

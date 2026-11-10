@@ -5,6 +5,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import { autenticarToken, autenticarTokenOpcional } from "./authMiddleware.js";
 import { validarEdicaoPerfil } from "./validacoes.js";
+import { protegerSenha, conferirSenha } from "./senhas.js";
 
 dotenv.config();
 
@@ -45,7 +46,7 @@ async function iniciarServidor() {
 					.collection("usuarios")
 					.findOne({ email });
 
-				if (!usuario || usuario.senha !== senha) {
+				if (!usuario || !(await conferirSenha(senha, usuario.senha))) {
 					return res.status(401).json({
 						erro: "E-mail ou senha incorretos."
 					});
@@ -82,7 +83,7 @@ async function iniciarServidor() {
 			try {
 				const usuarios = await db
 					.collection("usuarios")
-					.find({})
+					.find({}, { projection: { senha: 0 } })
 					.toArray();
 
 				res.json(usuarios);
@@ -104,6 +105,10 @@ async function iniciarServidor() {
 					dataNascimento
 				} = req.body;
 
+				if (typeof senha !== "string" || !senha.trim() || senha.length > 128) {
+					return res.status(400).json({ erro: "Informe uma senha de até 128 caracteres." });
+				}
+
 				const usuario = await db
 					.collection("usuarios")
 					.findOne({ email });
@@ -118,7 +123,7 @@ async function iniciarServidor() {
 					nome,
 					userName,
 					email,
-					senha,
+					senha: await protegerSenha(senha),
 					dataNascimento,
 					dataCadastro: new Date().toISOString().split("T")[0],
 					perfil: {
@@ -172,6 +177,7 @@ async function iniciarServidor() {
 					});
 				}
 
+				delete usuario.senha;
 				res.json(usuario);
 			} catch (erro) {
 				console.error(erro);
@@ -181,8 +187,11 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.put("/api/usuarios/:id", autenticarToken, async (req, res) => {
+		app.put(["/api/usuarios/:id", "/api/configuracoes/:id"], autenticarToken, async (req, res) => {
 			try {
+				if (req.usuario.id !== req.params.id) {
+					return res.status(403).json({ erro: "Você só pode alterar sua própria conta." });
+				}
 				if (!ObjectId.isValid(req.params.id)) {
 					return res.status(400).json({
 						erro: "ID do usuário inválido."
@@ -191,6 +200,36 @@ async function iniciarServidor() {
 
 				const dados = { ...req.body };
 				delete dados._id;
+				const senhaAtual = dados.senhaAtual;
+				delete dados.senhaAtual;
+				const usuarios = db.collection("usuarios");
+				const conta = await usuarios.findOne({ _id: new ObjectId(req.params.id) });
+				if (!conta) return res.status(404).json({ erro: "Usuário não encontrado." });
+
+				if (dados.email !== undefined) {
+					if (typeof dados.email !== "string" || !/^[^\s@]+@[^\s@]+$/.test(dados.email.trim())) {
+						return res.status(400).json({ erro: "Informe um e-mail válido." });
+					}
+					dados.email = dados.email.trim();
+					const repetido = await usuarios.findOne({
+						email: dados.email, _id: { $ne: conta._id },
+					}, { collation: { locale: "pt", strength: 2 } });
+					if (repetido) return res.status(409).json({ erro: "Este e-mail já está cadastrado." });
+				}
+
+				const alteraSenha = dados.senha !== undefined;
+				const alteraEmail = dados.email !== undefined && dados.email !== conta.email;
+				if (alteraSenha || alteraEmail) {
+					if (!(await conferirSenha(senhaAtual, conta.senha))) {
+						return res.status(400).json({ erro: "A senha atual está incorreta." });
+					}
+				}
+				if (alteraSenha) {
+					if (typeof dados.senha !== "string" || !dados.senha.trim() || dados.senha.length > 128) {
+						return res.status(400).json({ erro: "Informe uma nova senha de até 128 caracteres." });
+					}
+					dados.senha = await protegerSenha(dados.senha);
+				}
 
 				// Valida os campos da edição de perfil (nome, nome de usuário, descrição e foto).
 				const erroValidacao = validarEdicaoPerfil(dados);
@@ -222,13 +261,13 @@ async function iniciarServidor() {
 				const resultado = await db
 					.collection("usuarios")
 					.updateOne(
-						{ _id: new ObjectId(req.params.id) },
+						{ _id: conta._id, senha: conta.senha },
 						{ $set: dados }
 					);
 
 				if (resultado.matchedCount === 0) {
 					return res.status(404).json({
-						erro: "Usuário não encontrado."
+						erro: "A conta foi alterada. Reabra as configurações e tente novamente."
 					});
 				}
 
@@ -243,18 +282,26 @@ async function iniciarServidor() {
 			}
 		});
 
-		app.delete("/api/usuarios/:id", autenticarToken, async (req, res) => {
+		app.delete(["/api/usuarios/:id", "/api/configuracoes/:id"], autenticarToken, async (req, res) => {
 			try {
+				if (req.usuario.id !== req.params.id) {
+					return res.status(403).json({ erro: "Você só pode excluir sua própria conta." });
+				}
 				if (!ObjectId.isValid(req.params.id)) {
 					return res.status(400).json({
 						erro: "ID do usuário inválido."
 					});
 				}
 
+				const conta = await db.collection("usuarios").findOne({ _id: new ObjectId(req.params.id) });
+				if (!conta) return res.status(404).json({ erro: "Usuário não encontrado." });
+				if (req.body?.confirmacao !== "EXCLUIR" || !(await conferirSenha(req.body?.senhaAtual, conta.senha))) {
+					return res.status(400).json({ erro: "Confirme a exclusão e informe sua senha atual corretamente." });
+				}
 				const resultado = await db
 					.collection("usuarios")
 					.deleteOne({
-						_id: new ObjectId(req.params.id)
+						_id: conta._id, senha: conta.senha,
 					});
 
 				if (resultado.deletedCount === 0) {

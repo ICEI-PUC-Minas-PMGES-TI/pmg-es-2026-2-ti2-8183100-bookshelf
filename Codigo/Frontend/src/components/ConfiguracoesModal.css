@@ -1,0 +1,114 @@
+.modal-configuracoes {
+  --config-papel: var(--bm-paper);
+  --config-tinta: var(--bm-espresso);
+  --config-suave: var(--bm-muted);
+  --config-linha: var(--bm-line);
+  --config-apoio: var(--bm-latte);
+  --config-acao: var(--bm-coffee);
+  --config-contraste: var(--bm-on-action);
+  width: min(820px, calc(100% - 32px));
+  border: 1px solid var(--config-linha);
+  border-radius: 20px;
+  color: var(--config-tinta);
+  background: var(--config-papel);
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.modal-configuracoes .modal__topo {
+  padding: 26px 32px 22px;
+  background: var(--config-papel);
+  border-color: var(--config-linha);
+}
+
+.modal-configuracoes .modal__titulo {
+  color: var(--config-tinta);
+  font-family: var(--bm-display);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.modal-configuracoes .modal__fechar { color: var(--config-suave); width: 44px; height: 44px; }
+.modal-configuracoes .modal__fechar:hover { background: var(--config-apoio); }
+.modal-configuracoes .modal__corpo { padding: 0; }
+.config-layout { display: grid; grid-template-columns: 180px minmax(0, 1fr); min-height: 460px; }
+.config-nav { padding: 28px 16px; border-right: 1px solid var(--config-linha); }
+.config-nav button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 6px;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 0 5px 5px 0;
+  background: transparent;
+  color: var(--config-suave);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.config-nav button:hover { background: var(--config-apoio); color: var(--config-tinta); }
+.config-nav button[aria-current] { border-left-color: var(--config-acao); background: var(--config-apoio); color: var(--config-acao); font-weight: 600; }
+.config-conteudo { min-width: 0; padding: 30px 36px 32px; }
+.config-conteudo h3, .config-descarte h3 { margin: 0 0 8px; color: var(--config-tinta); font-size: 24px; font-weight: 400; font-family: var(--bm-display); }
+.config-intro { margin: 0 0 26px; color: var(--config-suave); max-width: 46ch; }
+.config-conteudo fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.config-campo { margin-bottom: 18px; }
+.config-campo label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 15px; }
+.config-campo input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--config-linha);
+  border-radius: 5px;
+  color: var(--config-tinta);
+  background: var(--config-papel);
+  font: inherit;
+}
+.config-campo input[aria-invalid="true"] { border-color: var(--config-acao); }
+.modal-configuracoes :is(button, input):focus-visible { outline: 2px solid var(--config-acao); outline-offset: 3px; }
+.config-acoes { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.config-botao { min-height: 44px; padding: 10px 18px; border: 1px solid var(--config-acao); border-radius: 5px; background: var(--config-acao); color: var(--config-contraste); font: inherit; font-weight: 600; cursor: pointer; }
+.config-botao:hover:not(:disabled) { filter: brightness(0.92); }
+.config-botao--secundario { border-color: var(--config-linha); background: transparent; color: var(--config-tinta); font-weight: 400; }
+.config-botao:disabled { opacity: 0.55; cursor: not-allowed; }
+.config-erro { color: #a32f28; margin: 6px 0 0; font-size: 14px; }
+.config-feedback { padding: 12px 0 0; border-top: 1px solid var(--config-linha); margin-top: 24px; }
+.config-sucesso { color: #42603e; }
+.config-nota { font-size: 14px; color: var(--config-suave); margin: 22px 0 0; }
+.config-temas legend { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+.config-tema { display: flex; align-items: center; gap: 14px; padding: 18px 14px; border: 1px solid var(--config-linha); border-radius: 5px; margin-bottom: 12px; cursor: pointer; }
+.config-tema:has(:checked) { border-color: var(--config-acao); background: var(--config-apoio); }
+.config-tema input { accent-color: var(--config-acao); width: 18px; height: 18px; margin: 0; }
+.config-tema svg { flex-shrink: 0; }
+.config-tema span { font-weight: 600; }
+.config-tema small { display: block; color: var(--config-suave); font-size: 14px; font-weight: 400; margin-top: 3px; }
+.config-exclusao { border-top: 1px solid var(--config-linha); padding-top: 24px; margin-top: 32px; }
+.config-exclusao h4 { margin: 0 0 8px; font: inherit; font-weight: 600; }
+.config-exclusao p { color: var(--config-suave); font-size: 14px; }
+.config-link-perigo { padding: 8px 0; background: none; border: 0; color: #a32f28; font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.config-botao--perigo { background: #a32f28; border-color: #a32f28; color: white; }
+.config-descarte { padding: 32px; }
+
+:root[data-tema="escuro"] .config-erro, :root[data-tema="escuro"] .config-link-perigo { color: #ffb4aa; }
+:root[data-tema="escuro"] .config-sucesso { color: #b6d9a6; }
+
+@media (max-width: 600px) {
+  .modal-configuracoes { width: calc(100% - 16px); max-height: calc(100dvh - 16px); }
+  .modal-configuracoes .modal__janela { max-height: calc(100dvh - 16px); }
+  .modal-configuracoes .modal__topo { padding: 16px 20px; }
+  .modal-configuracoes .modal__titulo { font-size: 27px; }
+  .config-layout { grid-template-columns: 1fr; min-height: 0; }
+  .config-nav { display: flex; gap: 4px; padding: 12px; border-right: 0; border-bottom: 1px solid var(--config-linha); }
+  .config-nav button { justify-content: center; gap: 5px; padding: 10px 7px; border-left: 0; border-bottom: 3px solid transparent; border-radius: 4px 4px 0 0; margin: 0; font-size: 14px; }
+  .config-nav button[aria-current] { border-bottom-color: var(--config-acao); }
+  .config-nav svg { width: 16px; }
+  .config-conteudo { padding: 24px 20px; }
+  .config-acoes { gap: 8px; }
+  .config-acoes .config-botao { flex: 1; }
+}

@@ -1,4 +1,5 @@
 :root {
+  --bm-on-action: #fffdf9;
   color-scheme: light;
   --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
   --bm-espresso: #2a1a14;
@@ -41,6 +42,7 @@
 }
 
 :root[data-theme="dark"] {
+  --bm-on-action: #17110e;
   color-scheme: dark;
   --bm-espresso: #f7eee6;
   --bm-coffee: #ead4c1;

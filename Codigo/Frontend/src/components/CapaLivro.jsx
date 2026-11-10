@@ -1,9 +1,11 @@
 import "./BookCard.css";
+import { useState } from "react";
 
 // Capa do livro, igual à do Catálogo: usa a imagem ou, se não houver, a capa de reserva.
 export default function CapaLivro({ livro }) {
-  if (livro.thumbnail) {
-    return <img className="book-cover" src={livro.thumbnail} alt={`Capa de ${livro.title}`} loading="lazy" draggable="false" />;
+  const [imagemComErro, setImagemComErro] = useState(null);
+  if (livro.thumbnail && livro.thumbnail !== imagemComErro) {
+    return <img className="book-cover" src={livro.thumbnail} alt={`Capa de ${livro.title}`} loading="lazy" draggable="false" onError={() => setImagemComErro(livro.thumbnail)} />;
   }
   return (
     <div className="book-cover book-cover--fallback">

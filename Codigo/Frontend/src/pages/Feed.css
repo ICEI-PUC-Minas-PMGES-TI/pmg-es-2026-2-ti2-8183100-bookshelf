@@ -1,3 +1,4 @@
+.feed-nota-mobile { display: none; }
 .feed-page {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
@@ -489,4 +490,9 @@
   .feed-sort { width: 100%; justify-content: space-between; }
   .feed-select { flex: 1; min-width: 0; }
   .feed-book-footer { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 700px) {
+  .feed-chips { display: none; }
+  .feed-nota-mobile { display: flex; align-items: center; gap: 12px; width: 100%; color: var(--bm-muted); }
 }

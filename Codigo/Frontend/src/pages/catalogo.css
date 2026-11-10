@@ -1,9 +1,15 @@
 .cat-page {
+  scroll-margin-top: 100px;
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
   padding: 56px 0 72px;
   color: var(--bm-espresso);
 }
+
+.cat-paginacao { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--bm-line); color: var(--bm-coffee); }
+.cat-paginacao p { flex-basis: 100%; text-align: center; margin: 0; font-size: 14px; color: var(--bm-muted); }
+.cat-paginacao button:disabled { opacity: 0.45; cursor: not-allowed; }
+.cat-categoria-mobile { display: none; }
 
 .cat-panel {
   padding: clamp(24px, 4vw, 48px);
@@ -252,4 +258,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 26px 14px;
   }
+}
+
+@media (max-width: 700px) {
+  .cat-chips { display: none; }
+  .cat-categoria-mobile { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 10px; color: var(--bm-muted); }
+  .cat-categoria-mobile .cat-select { flex: 1; min-width: 0; }
 }

@@ -1,8 +1,8 @@
+import CapaLivro from "./CapaLivro";
 
-import PulseHeart from "./PulseHeart";
 import "./PublicacaoCard.css";
 
-function PublicacaoCard({ publicacao, onCurtir }) {
+function PublicacaoCard({ publicacao }) {
     const {
         usuario = "Usuário desconhecido",
         userName = "leitor",
@@ -54,29 +54,13 @@ function PublicacaoCard({ publicacao, onCurtir }) {
             </header>
 
             <div className="publicacao-livro">
-                {capa ? (
-                    <div className="publicacao-capa publicacao-capa-real">
-                        <img
-                            src={capa}
-                            alt={`Capa do livro ${titulo}`}
-                            loading="lazy"
-                        />
-                    </div>
-                ) : (
-                    <div className="publicacao-capa" aria-hidden="true">
-                        <span className="publicacao-capa-detalhe">
-                            BOOKMARK
-                        </span>
-                        <span className="publicacao-capa-titulo">
-                            {titulo}
-                        </span>
-                        <span className="publicacao-capa-linha" />
-                    </div>
-                )}
+                <div className="publicacao-capa publicacao-capa-real">
+                    <CapaLivro livro={{ title: titulo, thumbnail: capa }} />
+                </div>
 
                 <div className="publicacao-livro-info">
                     <span className="publicacao-label">
-                        RESENHA DE LIVRO
+                        Resenha
                     </span>
 
                     <h4>{titulo}</h4>
@@ -117,21 +101,6 @@ function PublicacaoCard({ publicacao, onCurtir }) {
             </div>
 
             <footer className="publicacao-footer">
-                <PulseHeart
-                    liked={publicacao.curtiu}
-                    count={publicacao.curtidas}
-                    onChange={onCurtir}
-                    showCount
-                    icon="heart"
-                    size={24}
-                    corner={24}
-                    likedColor="var(--bm-caramel)"
-                    idleColor="var(--bm-sand)"
-                    pillColor="var(--bm-latte)"
-                    textColor="var(--bm-espresso)"
-                    label="Curtir resenha"
-                />
-
                 <span className="publicacao-livro-indicador">
                     <span aria-hidden="true">▤</span>
                     Leitura compartilhada
