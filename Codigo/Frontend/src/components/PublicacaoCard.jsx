@@ -3,6 +3,7 @@ import { Trash2 } from "lucide-react";
 
 import CapaLivro from "./CapaLivro";
 import PulseHeart from "./PulseHeart";
+import { Link } from "react-router-dom";
 
 import "./PublicacaoCard.css";
 
@@ -10,6 +11,7 @@ function PublicacaoCard({ publicacao, onCurtir, onExcluir }) {
     const {
         usuario = "Usuário desconhecido",
         userName = "leitor",
+        foto,
         tituloLivro = "Livro sem título",
         dataPublicacao,
         resenha,
@@ -46,8 +48,16 @@ function PublicacaoCard({ publicacao, onCurtir, onExcluir }) {
         <article className="publicacao-card">
             <header className="publicacao-header">
                 <div className="publicacao-usuario">
-                    <div className="publicacao-avatar" aria-hidden="true">
-                        {iniciais}
+                    <div className="publicacao-avatar">
+                        <span aria-hidden="true">{iniciais}</span>
+
+                        {foto && (
+                            <img
+                                src={foto}
+                                alt={`Foto de perfil de ${usuario}`}
+                                onError={(e) => e.currentTarget.remove()}
+                            />
+                        )}
                     </div>
 
                     <div className="publicacao-usuario-info">
@@ -62,9 +72,21 @@ function PublicacaoCard({ publicacao, onCurtir, onExcluir }) {
             </header>
 
             <div className="publicacao-livro">
-                <div className="publicacao-capa publicacao-capa-real">
-                    <CapaLivro livro={{ title: titulo, thumbnail: capa }} />
-                </div>
+                {livro?.id ? (
+                    <Link
+                        to={`/livro/${encodeURIComponent(livro.id)}`}
+                        className="publicacao-capa-link"
+                        aria-label={`Ver detalhes de ${titulo}`}
+                    >
+                        <div className="publicacao-capa publicacao-capa-real">
+                            <CapaLivro livro={{ title: titulo, thumbnail: capa }} />
+                        </div>
+                    </Link>
+                ) : (
+                    <div className="publicacao-capa publicacao-capa-real">
+                        <CapaLivro livro={{ title: titulo, thumbnail: capa }} />
+                    </div>
+                )}
 
                 <div className="publicacao-livro-info">
                     <span className="publicacao-label">

@@ -577,7 +577,8 @@ async function iniciarServidor() {
 									dataPublicacao: 1,
 									usuarioId: 1,
 									usuario: "$autor.nome",
-									userName: "$autor.userName"
+									userName: "$autor.userName",
+									foto: "$autor.perfil.foto"
 								}
 							}
 						])

@@ -46,13 +46,12 @@ export async function obterPublicacoes() {
             id: publicacao._id,
             usuario: publicacao.usuario || "Usuário desconhecido",
             userName: publicacao.userName || "leitor",
+            foto: publicacao.foto || null,
             resenha: textoResenha,
             avaliacao: Number(nota),
             dataOrdenacao: publicacao.dataPublicacao,
             dataPublicacao: publicacao.dataPublicacao
-                ? new Date(
-                    publicacao.dataPublicacao
-                ).toLocaleDateString("pt-BR")
+                ? new Date(publicacao.dataPublicacao).toLocaleDateString("pt-BR")
                 : "",
             curtidas: Number(publicacao.curtidas || 0),
             curtiu: Boolean(publicacao.curtiu),
