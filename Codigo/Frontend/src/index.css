@@ -117,3 +117,34 @@ h4 {
   font-optical-sizing: auto;
   letter-spacing: -0.01em;
 }
+
+/* Barra de rolagem */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bm-caramel) var(--bm-latte);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bm-latte);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bm-caramel);
+  border: 2px solid var(--bm-latte);
+  border-radius: 10px;
+  transition: background 180ms ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bm-mocha);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--bm-latte);
+}
