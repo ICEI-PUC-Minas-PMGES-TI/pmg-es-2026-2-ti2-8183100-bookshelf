@@ -1,8 +1,12 @@
+
+import { Trash2 } from "lucide-react";
+
 import CapaLivro from "./CapaLivro";
+import PulseHeart from "./PulseHeart";
 
 import "./PublicacaoCard.css";
 
-function PublicacaoCard({ publicacao }) {
+function PublicacaoCard({ publicacao, onCurtir, onExcluir }) {
     const {
         usuario = "Usuário desconhecido",
         userName = "leitor",
@@ -10,7 +14,10 @@ function PublicacaoCard({ publicacao }) {
         dataPublicacao,
         resenha,
         avaliacao = 0,
-        livro
+        livro,
+        curtidas = 0,
+        curtiu = false,
+        podeExcluir = false
     } = publicacao;
 
     const textoResenha =
@@ -20,6 +27,7 @@ function PublicacaoCard({ publicacao }) {
 
     const titulo = livro?.titulo || tituloLivro;
     const capa = livro?.capa || livro?.thumbnail || null;
+
     const autores = Array.isArray(livro?.autores)
         ? livro.autores
         : Array.isArray(livro?.authors)
@@ -105,6 +113,29 @@ function PublicacaoCard({ publicacao }) {
                     <span aria-hidden="true">▤</span>
                     Leitura compartilhada
                 </span>
+
+                <div className="publicacao-acoes">
+                    <PulseHeart
+                        liked={curtiu}
+                        count={curtidas}
+                        onChange={onCurtir}
+                        size={25}
+                        corner={999}
+                        label="Curtir publicação"
+                    />
+
+                    {podeExcluir && (
+                        <button
+                            className="publicacao-excluir"
+                            type="button"
+                            onClick={onExcluir}
+                            aria-label="Excluir publicação"
+                            title="Excluir publicação"
+                        >
+                            <Trash2 size={19} />
+                        </button>
+                    )}
+                </div>
             </footer>
         </article>
     );
