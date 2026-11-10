@@ -5,27 +5,77 @@ import 'react-calendar/dist/Calendar.css';
 import BookMetricas from "../components/BookMetricas";
 import MetricasModal from "../components/MetricasModal";
 import { buscarLivrosPorIds } from "../services/booksService";
-import { logUser } from "../services/metricasService";
+import { logUser, buscarMetricas } from "../services/metricasService";
+
+function formatarData(data) {
+	if (!data) return null;
+
+	if (typeof data === "string" && /^\d{4}-\d{2}-\d{2}/.test(data)) {
+		return data.substring(0, 10);
+	}
+
+	const dataConvertida = new Date(data);
+
+	if (isNaN(dataConvertida.getTime())) return null;
+
+	const ano = dataConvertida.getFullYear();
+	const mes = String(dataConvertida.getMonth() + 1).padStart(2, "0");
+	const dia = String(dataConvertida.getDate()).padStart(2, "0");
+
+	return `${ano}-${mes}-${dia}`;
+}
+
+function obterDiasStreak(metricas) {
+	const datas = [...new Set(
+		metricas
+			.map(metrica => formatarData(metrica.dataLeitura))
+			.filter(Boolean)
+	)].sort();
+
+	const diasComStreak = new Set();
+
+	const adicionarDia = (data) => {
+		const [ano, mes, dia] = data.split("-").map(Number);
+		return Date.UTC(ano, mes - 1, dia);
+	};
+
+	const umDia = 24 * 60 * 60 * 1000;
+
+	for (let i = 1; i < datas.length; i++) {
+		const diferenca =
+			adicionarDia(datas[i]) - adicionarDia(datas[i - 1]);
+
+		if (diferenca === umDia) {
+			diasComStreak.add(datas[i - 1]);
+			diasComStreak.add(datas[i]);
+		}
+	}
+
+	return diasComStreak;
+}
 
 
 export default function Metricas() {
+	async function carregarUsuario() {
+		try {
+			const data = await logUser(userLog.id);
+			setUsuario(data);
+			const dadosMetricas = await buscarMetricas(userLog.id);
+			setMetricas(dadosMetricas);
+			const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
+			setLivros(await buscarLivrosPorIds(ids));
+		} catch (error) {
+			console.error(error);
+		}
+	}
 	const [usuario, setUsuario] = useState(null);
 	const [livros, setLivros] = useState([]);
 	const userLog = JSON.parse(localStorage.getItem("usuario"));
 	const [popUp, setPopUp] = useState(false);
+	const [metricas, setMetricas] = useState([]);
+	const diasStreak = obterDiasStreak(metricas);
 
 	useEffect(() => {
-		async function carregarUsuario() {
-			try {
-				const data = await logUser(userLog.id);
-				setUsuario(data);
-				const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
-				setLivros(await buscarLivrosPorIds(ids));
-			} catch (error) {
-				console.error(error);
-			}
-		}
-
 		carregarUsuario();
 	}, []);
 
@@ -37,6 +87,7 @@ export default function Metricas() {
 
 	const lendo = livrosDa("livrosLendo");
 	const favoritos = livrosDa("livrosFav");
+	const lerDepois = livrosDa("livrosLerDepois");
 
 	return (
 		<main className="metricas-main">
@@ -63,7 +114,17 @@ export default function Metricas() {
 				</aside>
 
 				<section className="calendario-card">
-					<Calendar />
+					<Calendar
+						tileClassName={({ date, view }) => {
+							if (view !== "month") return null;
+
+							const data = formatarData(date);
+
+							return diasStreak.has(data)
+								? "dia-com-streak"
+								: null;
+						}}
+					/>
 				</section>
 
 				<section className="metricas-direita">
@@ -109,6 +170,12 @@ export default function Metricas() {
 				<MetricasModal
 					aberto={popUp}
 					fechar={() => setPopUp(false)}
+					lendo={lendo}
+					favoritos={favoritos}
+					lerDepois={lerDepois}
+					usuarioId={userLog?.id}
+					usuario={userLog}
+					carregarUsuario={() => carregarUsuario()}
 				/>
 			</section>
 		</main>

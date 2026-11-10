@@ -294,7 +294,7 @@ async function iniciarServidor() {
 
 		app.get("/api/metricas/:id", autenticarToken, async (req, res) => {
 			try {
-				const id = Number(req.params.id);
+				const id = new ObjectId(req.params.id);
 
 				const metrica = await db
 					.collection("metricas")
@@ -315,11 +315,43 @@ async function iniciarServidor() {
 			}
 		});
 
+		app.get("/api/metricas/usuario/:usuarioId", autenticarToken, async (req, res) => {
+			try {
+				const { usuarioId } = req.params;
+
+				const metricas = await db
+					.collection("metricas")
+					.find({ usuarioId: usuarioId })
+					.sort({ data: -1 })
+					.toArray();
+
+				res.status(200).json(metricas);
+
+			} catch (erro) {
+				console.error(erro);
+
+				res.status(500).json({
+					erro: "Erro ao buscar métricas do usuário."
+				});
+			}
+		});
+
 		app.post("/api/metricas", autenticarToken, async (req, res) => {
 			try {
 				const resultado = await db
 					.collection("metricas")
 					.insertOne(req.body);
+
+				await db.collection("usuarios").updateOne(
+					{ _id: new ObjectId(req.body.usuarioId) },
+					{
+						$inc: {
+							sequencia: 1,
+							minLidos: Number(req.body.tempoLeituraMinutos),
+							pagsLidas: Number(req.body.paginasLidas)
+						}
+					}
+				);
 
 				res.status(201).json({
 					mensagem: "Métrica cadastrada com sucesso!",
@@ -335,7 +367,7 @@ async function iniciarServidor() {
 
 		app.put("/api/metricas/:id", autenticarToken, async (req, res) => {
 			try {
-				const id = Number(req.params.id);
+				const id = new ObjectId(req.params.id);
 				const dados = { ...req.body };
 				delete dados._id;
 
