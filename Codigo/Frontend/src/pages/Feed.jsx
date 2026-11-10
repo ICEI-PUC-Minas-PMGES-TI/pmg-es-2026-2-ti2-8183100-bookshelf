@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 import "./Feed.css";
 import PublicacaoCard from "../components/PublicacaoCard";
+import Notificacao from "../components/Notificacao";
 
 import {
   obterPublicacoes,
@@ -23,17 +24,16 @@ const filtrosNota = [
 ];
 
 function Feed() {
-  // Verifica se existe um usuário autenticado.
   const usuarioLogado = Boolean(localStorage.getItem("token"));
 
   const [publicacoes, setPublicacoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
-  const [erroAcao, setErroAcao] = useState("");
+
+  const [notificacao, setNotificacao] = useState(null);
 
   const [formAberto, setFormAberto] = useState(false);
 
-  // Busca e seleção de livros.
   const [buscaLivro, setBuscaLivro] = useState("");
   const [livroSelecionado, setLivroSelecionado] = useState(null);
   const [livrosEncontrados, setLivrosEncontrados] = useState([]);
@@ -48,6 +48,19 @@ function Feed() {
   const [filtroNota, setFiltroNota] = useState("todas");
   const [ordenacao, setOrdenacao] = useState("recentes");
 
+  function mostrarNotificacao(tipo, titulo, mensagem) {
+    setNotificacao({
+      id: Date.now(),
+      tipo,
+      titulo,
+      mensagem
+    });
+  }
+
+  function fecharNotificacao() {
+    setNotificacao(null);
+  }
+
   // Carrega as publicações da API.
   useEffect(() => {
     async function carregarPublicacoes() {
@@ -59,7 +72,14 @@ function Feed() {
         setPublicacoes(dados);
       } catch (error) {
         console.error("Erro ao carregar publicações:", error);
+
         setErro(error.message);
+
+        mostrarNotificacao(
+          "erro",
+          "Não foi possível carregar o Feed",
+          error.message || "Tente atualizar a página."
+        );
       } finally {
         setCarregando(false);
       }
@@ -92,8 +112,16 @@ function Feed() {
       } catch (error) {
         if (!cancelado) {
           console.error("Erro ao pesquisar livros:", error);
+
           setLivrosEncontrados([]);
+
           setErroBuscaLivro(
+            "Não foi possível pesquisar os livros. Tente novamente."
+          );
+
+          mostrarNotificacao(
+            "erro",
+            "Erro na pesquisa",
             "Não foi possível pesquisar os livros. Tente novamente."
           );
         }
@@ -135,6 +163,7 @@ function Feed() {
     setErroBuscaLivro("");
   }
 
+  // Exclui uma publicação do usuário.
   async function excluirPublicacao(id) {
     const confirmar = window.confirm(
       "Tem certeza de que deseja excluir esta publicação? Essa ação não poderá ser desfeita."
@@ -143,15 +172,24 @@ function Feed() {
     if (!confirmar) return;
 
     try {
-      setErroAcao("");
-
       await excluirPublicacaoAPI(id);
 
       const dados = await obterPublicacoes();
       setPublicacoes(dados);
+
+      mostrarNotificacao(
+        "sucesso",
+        "Publicação excluída!",
+        "Sua publicação foi removida do Feed."
+      );
     } catch (error) {
       console.error("Erro ao excluir publicação:", error);
-      setErroAcao(error.message);
+
+      mostrarNotificacao(
+        "erro",
+        "Erro ao excluir publicação",
+        error.message || "Não foi possível excluir a publicação."
+      );
     }
   }
 
@@ -165,7 +203,6 @@ function Feed() {
 
     try {
       setPublicando(true);
-      setErroAcao("");
 
       const novaPublicacao = {
         tituloLivro: livroSelecionado.title,
@@ -190,9 +227,20 @@ function Feed() {
       setPesquisa("");
       setFiltroNota("todas");
       setOrdenacao("recentes");
+
+      mostrarNotificacao(
+        "sucesso",
+        "Resenha publicada!",
+        "Sua resenha foi compartilhada com a comunidade."
+      );
     } catch (error) {
       console.error("Erro ao publicar resenha:", error);
-      setErroAcao(error.message);
+
+      mostrarNotificacao(
+        "erro",
+        "Erro ao publicar resenha",
+        error.message || "Não foi possível publicar sua resenha."
+      );
     } finally {
       setPublicando(false);
     }
@@ -201,15 +249,32 @@ function Feed() {
   // Alterna a curtida de uma publicação.
   async function alternarCurtida(id) {
     try {
-      setErroAcao("");
+      const publicacaoAtual = publicacoes.find(
+        (publicacao) => publicacao.id === id
+      );
+
+      const estavaCurtida = Boolean(publicacaoAtual?.curtiu);
 
       await alternarCurtidaAPI(id);
 
       const dados = await obterPublicacoes();
       setPublicacoes(dados);
+
+      mostrarNotificacao(
+        "sucesso",
+        estavaCurtida ? "Curtida removida" : "Publicação curtida!",
+        estavaCurtida
+          ? "Você removeu sua curtida desta publicação."
+          : "Você curtiu esta publicação."
+      );
     } catch (error) {
       console.error("Erro ao atualizar curtida:", error);
-      setErroAcao(error.message);
+
+      mostrarNotificacao(
+        "erro",
+        "Não foi possível atualizar a curtida",
+        error.message || "Tente novamente."
+      );
     }
   }
 
@@ -256,6 +321,16 @@ function Feed() {
 
   return (
     <main className="feed-page">
+      {notificacao && (
+        <Notificacao
+          key={notificacao.id}
+          tipo={notificacao.tipo}
+          titulo={notificacao.titulo}
+          mensagem={notificacao.mensagem}
+          onClose={fecharNotificacao}
+        />
+      )}
+
       <div className="feed-book">
         <div className="feed-book-pages">
           <header className="feed-header">
@@ -288,7 +363,6 @@ function Feed() {
             </div>
           </header>
 
-          {/* O formulário também exige autenticação. */}
           {usuarioLogado && formAberto && (
             <form className="feed-form" onSubmit={publicarResenha}>
               <div className="feed-form-header">
@@ -346,12 +420,6 @@ function Feed() {
                 </p>
               )}
 
-              {erroBuscaLivro && (
-                <p className="feed-book-search-error">
-                  {erroBuscaLivro}
-                </p>
-              )}
-
               {!livroSelecionado &&
                 buscaLivro.trim().length >= 2 &&
                 !buscandoLivros &&
@@ -372,10 +440,7 @@ function Feed() {
                       onClick={() => selecionarLivro(livro)}
                     >
                       {livro.thumbnail ? (
-                        <img
-                          src={livro.thumbnail}
-                          alt=""
-                        />
+                        <img src={livro.thumbnail} alt="" />
                       ) : (
                         <span className="feed-book-suggestion-placeholder">
                           📖
@@ -433,9 +498,9 @@ function Feed() {
                     type="button"
                     className={estrela <= avaliacao ? "selected" : ""}
                     onClick={() => setAvaliacao(estrela)}
-                    aria-label={`${estrela
-                      } ${estrela === 1 ? "estrela" : "estrelas"
-                      }`}
+                    aria-label={`${estrela} ${
+                      estrela === 1 ? "estrela" : "estrelas"
+                    }`}
                     aria-pressed={avaliacao === estrela}
                   >
                     ★
@@ -531,8 +596,9 @@ function Feed() {
                 <button
                   key={filtro.valor}
                   type="button"
-                  className={`feed-chip ${filtroNota === filtro.valor ? "is-active" : ""
-                    }`}
+                  className={`feed-chip ${
+                    filtroNota === filtro.valor ? "is-active" : ""
+                  }`}
                   onClick={() => setFiltroNota(filtro.valor)}
                   aria-pressed={filtroNota === filtro.valor}
                 >
@@ -554,12 +620,6 @@ function Feed() {
               </select>
             </label>
           </div>
-
-          {erroAcao && (
-            <p className="feed-action-error" role="alert">
-              {erroAcao}
-            </p>
-          )}
 
           <section
             className="feed-publications"
