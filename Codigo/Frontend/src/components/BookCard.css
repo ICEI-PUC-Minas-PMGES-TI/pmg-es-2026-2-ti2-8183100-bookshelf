@@ -16,18 +16,18 @@
   display: block;
   width: 100%;
   aspect-ratio: 2 / 3;
-  object-fit: contain;
-  border-radius: 7px;
+  object-fit: cover;
+  border-radius: 14px;
   background: var(--bm-latte);
-  box-shadow: 0 4px 12px rgb(74 47 36 / 9%);
+  box-shadow: 0 10px 22px var(--bm-shadow);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .book-card:hover .book-cover,
 .card-livro:hover .book-cover,
 .perfil-livro:hover .book-cover {
-  transform: translateY(-2px);
-  box-shadow: 0 7px 16px rgb(74 47 36 / 12%);
+  transform: translateY(-5px) rotate(-1deg);
+  box-shadow: 0 16px 28px var(--bm-shadow);
 }
 
 .book-cover--fallback {
@@ -38,13 +38,26 @@
   overflow: hidden;
   padding: 22px 16px 20px 22px;
   border-left: 7px solid var(--bm-caramel);
-  border-radius: 7px;
-  background: var(--bm-latte);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 100% 0, rgb(255 253 249 / 45%), transparent 42%),
+    linear-gradient(145deg, var(--bm-cover-start), var(--bm-cover-end));
   color: var(--bm-espresso);
 }
 
+.book-cover--fallback::after {
+  position: absolute;
+  top: -44px;
+  right: -44px;
+  width: 150px;
+  height: 150px;
+  border: 1px solid color-mix(in srgb, var(--bm-paper) 55%, transparent);
+  border-radius: 50%;
+  content: "";
+}
+
 .book-cover__brand {
-  color: var(--bm-muted);
+  color: var(--bm-coffee);
   font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.15em;
@@ -190,7 +203,3 @@
 @media (max-width: 650px) {
   .card-livro .book-cover__title { font-size: 0.62rem; }
 }
-
-.book-card__pill { white-space: normal; overflow-wrap: anywhere; }
-.book-card__rating { flex-wrap: wrap; letter-spacing: 0; }
-.book-card__meta { flex-wrap: wrap; }

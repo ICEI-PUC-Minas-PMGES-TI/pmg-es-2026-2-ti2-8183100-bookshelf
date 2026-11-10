@@ -1,5 +1,7 @@
 # Atualização visual e regras de leitura
 
+> Integração posterior: o usuário escolheu preservar o layout atual da main e adaptar as funcionalidades desta branch. Consulte [Resolução de conflitos com a main](Resolucao%20de%20conflitos%20com%20a%20main.md) para o merge documentado e autorizado na LkConfigurações. As descrições abaixo registram a entrega anterior.
+
 Decisões confirmadas pelo usuário em 9 de novembro de 2026. A pasta `Bookmark layout novo` fornecida no workspace é a referência desta atualização.
 
 ## Identidade e alcance

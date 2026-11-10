@@ -11,11 +11,11 @@
 
 .card-livro:hover .book-cover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 22px rgb(90 64 35 / 28%);
+  box-shadow: 0 10px 22px var(--bm-shadow);
 }
 
 .card-livro:focus-visible {
-  outline: 2px solid var(--tema-contorno, #8e7048);
+  outline: 2px solid var(--bm-caramel);
   outline-offset: 4px;
   border-radius: 6px;
 }
@@ -24,7 +24,7 @@
   display: -webkit-box;
   overflow: hidden;
   margin: 8px 0 0;
-  color: var(--tema-titulo-forte, #2f2212);
+  color: var(--bm-espresso);
   font-family: var(--bm-display, Georgia, "Times New Roman", serif);
   font-size: 0.95rem;
   font-weight: 650;
@@ -36,7 +36,7 @@
 .card-livro p {
   overflow: hidden;
   margin: 0;
-  color: var(--tema-secundario-catalogo, #6f5f48);
+  color: var(--bm-muted);
   font-size: 0.78rem;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -8,7 +8,7 @@
   --config-contraste: var(--bm-on-action);
   width: min(820px, calc(100% - 32px));
   border: 1px solid var(--config-linha);
-  border-radius: 10px;
+  border-radius: 20px;
   color: var(--config-tinta);
   background: var(--config-papel);
   font-family: "Source Sans 3", "Segoe UI", sans-serif;

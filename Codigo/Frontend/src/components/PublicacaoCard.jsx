@@ -54,7 +54,7 @@ function PublicacaoCard({ publicacao }) {
             </header>
 
             <div className="publicacao-livro">
-                <div className="publicacao-capa-real">
+                <div className="publicacao-capa publicacao-capa-real">
                     <CapaLivro livro={{ title: titulo, thumbnail: capa }} />
                 </div>
 

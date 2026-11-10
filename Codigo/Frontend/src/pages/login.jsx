@@ -36,14 +36,15 @@ export default function Login() {
 
   return (
     <main className="login-container">
-      <aside className="login-literatura">
-        <blockquote>“Mesmo não sabendo que era amor, sentiam que era bom.”</blockquote>
-        <p>Capitães de areia <span>Jorge Amado</span></p>
+      <aside className="login-ilustracao">
+        <p>“Mesmo não sabendo que era amor, sentiam que era bom.”</p>
+        <span>Capitães de areia, Jorge Amado</span>
       </aside>
       <section className="login-conteudo" aria-labelledby="login-titulo">
         <h1 id="login-titulo">Volte para suas leituras.</h1>
         <p className="login-intro">Entre para acompanhar seus livros e continuar sua jornada.</p>
-        <form className="conta-form" onSubmit={entrar}>
+        <div className="login-card">
+        <form id="login-form" className="conta-form" onSubmit={entrar}>
           <fieldset disabled={enviando}>
             <label htmlFor="login-email">E-mail</label>
             <input id="login-email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -52,9 +53,10 @@ export default function Login() {
           </fieldset>
           {erro && <p className="conta-erro" role="alert">{erro}</p>}
           {sucesso && <p className="conta-sucesso" role="status">{sucesso}</p>}
-          <button className="conta-principal" disabled={enviando}>{enviando ? "Entrando…" : "Entrar"}</button>
         </form>
         <p className="login-cadastro">Sua primeira visita? <button onClick={() => setCadastro(true)}>Criar uma conta</button></p>
+        </div>
+        <div className="login-botoes"><button className="btn-cancelar" type="button" onClick={() => window.location.assign("/")}>Cancelar</button><button className="btn-entrar" type="submit" form="login-form" disabled={enviando}>{enviando ? "Entrando…" : "Entrar"}</button></div>
         <Link className="login-explorar" to="/catalogo">Explorar o catálogo</Link>
       </section>
       <CadastroModal aberto={cadastro} fechar={() => setCadastro(false)} aoCadastrar={(novoEmail) => {

@@ -3,6 +3,7 @@ import Modal from "./Modal";
 import API_URL from "../services/api";
 import { validarPerfil } from "../services/perfilService";
 import "./popUpCadastro.css";
+import "./contaForm.css";
 
 function FormularioCadastro({ fechar, aoCadastrar }) {
   const [dados, setDados] = useState({ nome: "", userName: "", dataNascimento: "", email: "", senha: "" });

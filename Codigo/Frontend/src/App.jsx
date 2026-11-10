@@ -19,7 +19,6 @@ import Livro from "./pages/livro";
 import Login from "./pages/login";
 import { obterUsuario } from "./services/listasService";
 import { FOTO_PADRAO, ouvirPerfilAtualizado } from "./services/perfilService";
-import { Bookmark, Moon, Sun } from "lucide-react";
 import { obterTema, salvarTema } from "./services/temaService";
 
 import "./App.css";
@@ -28,18 +27,19 @@ import "./tema.css";
 function App() {
   const { pathname } = useLocation();
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  const [logado] = useState(
+    !!localStorage.getItem("token")
+  );
   const [tema, setTema] = useState(obterTema);
+
+  // Foto do usuário na barra de navegação (usa a foto padrão enquanto carrega ou se falhar).
+  const [fotoDoUsuario, setFotoDoUsuario] = useState("");
+
   useEffect(() => {
     const sincronizar = () => setTema(obterTema());
     window.addEventListener("tema-atualizado", sincronizar);
     return () => window.removeEventListener("tema-atualizado", sincronizar);
   }, []);
-  const [logado] = useState(
-    !!localStorage.getItem("token")
-  );
-
-  // Foto do usuário na barra de navegação (usa a foto padrão enquanto carrega ou se falhar).
-  const [fotoDoUsuario, setFotoDoUsuario] = useState("");
 
   useEffect(() => {
     if (!logado) return;
@@ -54,8 +54,7 @@ function App() {
     <>
       <nav className="navbar" aria-label="Navegação principal">
         <Link to="/" className="logo" aria-label="BookMark - Início">
-          <Bookmark aria-hidden="true" />
-          <span>BookMark</span>
+          <img src="/logo.png" alt="BookMark" />
         </Link>
 
         <div className="nav-links">
@@ -72,12 +71,17 @@ function App() {
           </NavLink>
         </div>
 
-        <div className="nav-conta">
-          <button type="button" className="tema-rapido"
-            aria-label={tema === "claro" ? "Ativar tema escuro" : "Ativar tema claro"}
-            onClick={() => salvarTema(tema === "claro" ? "escuro" : "claro")}>
-            {tema === "claro" ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
-          </button>
+        <button
+          type="button"
+          className="theme-toggle"
+          aria-pressed={tema === "escuro"}
+          aria-label={tema === "escuro" ? "Ativar modo claro" : "Ativar modo escuro"}
+          onClick={() => salvarTema(tema === "escuro" ? "claro" : "escuro")}
+        >
+          <span aria-hidden="true">{tema === "escuro" ? "☀" : "☾"}</span>
+          <span className="theme-toggle__label">{tema === "escuro" ? "Claro" : "Escuro"}</span>
+        </button>
+
         {logado ? (
           <NavLink
             to="/perfil"
@@ -99,7 +103,6 @@ function App() {
             Entrar
           </NavLink>
         )}
-        </div>
       </nav>
 
       <Suspense fallback={<p>Carregando página...</p>}>

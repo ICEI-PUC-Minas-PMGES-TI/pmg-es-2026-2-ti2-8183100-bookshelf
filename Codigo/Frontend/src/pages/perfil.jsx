@@ -121,7 +121,8 @@ export default function Perfil() {
 
   return (
     <main className="perfil-page">
-      <header className="perfil-cabecalho">
+      <div className="perfil-moldura"><div className="perfil-layout">
+      <header className="perfil-menu">
         <img className="perfil-foto" src={usuario.perfil?.foto || FOTO_PADRAO} alt="Foto de perfil"
           onError={(e) => { if (e.currentTarget.src !== FOTO_PADRAO) e.currentTarget.src = FOTO_PADRAO; }} />
         <div className="perfil-identidade">
@@ -187,6 +188,7 @@ export default function Perfil() {
         })}
         {salvandoLista && <p className="perfil-salvando" role="status">Salvando biblioteca…</p>}
       </section>
+      </div></div>
       <EditarPerfilModal aberto={editando} usuario={usuario} aoSalvar={salvarEdicaoDoPerfil} aoFechar={() => setEditando(false)} />
       <ConfiguracoesModal aberto={configurando} usuario={usuario} aoAtualizar={(dados) => setUsuario((atual) => ({ ...atual, ...dados }))} aoFechar={() => setConfigurando(false)} />
     </main>

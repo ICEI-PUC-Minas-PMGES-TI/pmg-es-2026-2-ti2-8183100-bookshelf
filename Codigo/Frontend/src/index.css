@@ -1,17 +1,38 @@
 :root {
-  --bm-display: "Fraunces", Georgia, serif;
+  --bm-on-action: #fffdf9;
+  color-scheme: light;
+  --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
   --bm-espresso: #2a1a14;
   --bm-coffee: #4a2f24;
   --bm-mocha: #76513b;
-  --bm-caramel: #a9653d;
+  --bm-caramel: #b7794d;
   --bm-sand: #d7b58b;
   --bm-cream: #fbf5eb;
   --bm-paper: #fffdf9;
   --bm-latte: #f1e2cf;
   --bm-line: #e4d2bd;
-  --bm-muted: #756254;
-  --bm-on-action: #fffdf9;
-  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  --bm-muted: #826f60;
+  --bm-panel: #fffdf9;
+  --bm-panel-soft: #fff8ef;
+  --bm-form-ghost: rgb(255 253 249 / 66%);
+  --bm-placeholder: #a08e7d;
+  --bm-shadow: rgb(74 47 36 / 12%);
+  --bm-body-background:
+    radial-gradient(circle at 8% 10%, rgb(215 181 139 / 18%), transparent 26rem),
+    radial-gradient(circle at 92% 0%, rgb(183 121 77 / 12%), transparent 24rem),
+    var(--bm-cream);
+  --bm-hero-start: rgb(255 253 249 / 96%);
+  --bm-hero-end: rgb(246 232 212 / 85%);
+  --bm-cover-start: #ead4b6;
+  --bm-cover-end: #b77b53;
+  --bm-danger-bg: #fff1ed;
+  --bm-danger-border: #e1a79e;
+  --bm-danger-text: #8d2d20;
+  --bm-success-bg: #eef8ec;
+  --bm-success-border: #a4c6a1;
+  --bm-success-text: #315d2c;
+  --bm-display: "Fraunces", Georgia, "Times New Roman", serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--bm-espresso);
   background: var(--bm-cream);
   font-synthesis: none;
@@ -19,28 +40,80 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-* { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--bm-cream); }
-button, input, select, textarea { font: inherit; }
-button, a, select { -webkit-tap-highlight-color: transparent; }
-::selection { background: var(--bm-sand); color: var(--bm-espresso); }
-h1, h2, h3, h4 { font-family: var(--bm-display); font-optical-sizing: auto; letter-spacing: -0.025em; }
-a, button, input, select, textarea { touch-action: manipulation; }
-:focus-visible { outline: 2px solid var(--bm-mocha); outline-offset: 4px; }
-button:disabled { cursor: not-allowed; }
-:root[data-tema="escuro"] {
-  --bm-espresso: #f4e9dc;
-  --bm-coffee: #e6d0b9;
-  --bm-mocha: #cbb69e;
-  --bm-caramel: #d5a279;
-  --bm-sand: #785f49;
-  --bm-cream: #211d1a;
-  --bm-paper: #2c2621;
-  --bm-latte: #3b3028;
-  --bm-line: #5b4b3e;
-  --bm-muted: #c5b5a3;
-  --bm-on-action: #211d1a;
+
+:root[data-theme="dark"] {
+  --bm-on-action: #17110e;
+  color-scheme: dark;
+  --bm-espresso: #f7eee6;
+  --bm-coffee: #ead4c1;
+  --bm-mocha: #c5aa98;
+  --bm-caramel: #d99467;
+  --bm-sand: #8e654a;
+  --bm-cream: #17110e;
+  --bm-paper: #271b16;
+  --bm-latte: #37261e;
+  --bm-line: #5a4033;
+  --bm-muted: #c3ad9f;
+  --bm-panel: #271b16;
+  --bm-panel-soft: #30211b;
+  --bm-form-ghost: rgb(255 255 255 / 5%);
+  --bm-placeholder: #bfa796;
+  --bm-shadow: rgb(0 0 0 / 32%);
+  --bm-body-background:
+    radial-gradient(circle at 8% 10%, rgb(142 101 74 / 16%), transparent 26rem),
+    radial-gradient(circle at 92% 0%, rgb(217 148 103 / 11%), transparent 24rem),
+    var(--bm-cream);
+  --bm-hero-start: #2a1c17;
+  --bm-hero-end: #3a261d;
+  --bm-cover-start: #8d5c3f;
+  --bm-cover-end: #38241c;
+  --bm-danger-bg: #43221e;
+  --bm-danger-border: #965249;
+  --bm-danger-text: #ffd0c7;
+  --bm-success-bg: #213522;
+  --bm-success-border: #527a50;
+  --bm-success-text: #c5edbf;
 }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--bm-cream);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bm-body-background);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--bm-sand);
+  color: var(--bm-espresso);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--bm-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
 }
