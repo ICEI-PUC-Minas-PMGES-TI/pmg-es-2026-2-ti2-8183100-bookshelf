@@ -1,3 +1,4 @@
+
 import API_URL from "./api";
 
 // Busca as publicações cadastradas no MongoDB.
@@ -30,7 +31,6 @@ export async function obterPublicacoes() {
     }
 
     return dados.map((publicacao) => {
-        // Trata resenhas que chegam como objeto ou texto.
         const textoResenha =
             typeof publicacao.resenha === "string"
                 ? publicacao.resenha
@@ -55,7 +55,8 @@ export async function obterPublicacoes() {
                 ).toLocaleDateString("pt-BR")
                 : "",
             curtidas: Number(publicacao.curtidas || 0),
-            curtiu: Boolean(publicacao.curtiu)
+            curtiu: Boolean(publicacao.curtiu),
+            podeExcluir: Boolean(publicacao.podeExcluir)
         };
     });
 }
@@ -109,6 +110,37 @@ export async function alternarCurtidaAPI(id) {
     if (!response.ok) {
         throw new Error(
             dados.erro || "Erro ao atualizar curtida."
+        );
+    }
+
+    return dados;
+}
+
+// Exclui uma publicação do usuário autenticado.
+export async function excluirPublicacaoAPI(id) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        throw new Error(
+            "Você precisa fazer login para excluir uma publicação."
+        );
+    }
+
+    const response = await fetch(
+        `${API_URL}/api/publicacao/${id}`,
+        {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    const dados = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            dados.erro || "Erro ao excluir publicação."
         );
     }
 

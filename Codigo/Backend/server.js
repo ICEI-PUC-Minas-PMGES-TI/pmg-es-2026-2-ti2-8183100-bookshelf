@@ -1,3 +1,4 @@
+
 import express from "express";
 import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
@@ -13,7 +14,6 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
-// A foto de perfil chega como texto (base64), por isso o limite é maior que o padrão (100 kb).
 app.use(express.json({ limit: "1mb" }));
 
 const client = new MongoClient(process.env.MONGODB_URI);
@@ -89,6 +89,7 @@ async function iniciarServidor() {
 				res.json(usuarios);
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao buscar usuários."
 				});
@@ -106,7 +107,9 @@ async function iniciarServidor() {
 				} = req.body;
 
 				if (typeof senha !== "string" || !senha.trim() || senha.length > 128) {
-					return res.status(400).json({ erro: "Informe uma senha de até 128 caracteres." });
+					return res.status(400).json({
+						erro: "Informe uma senha de até 128 caracteres."
+					});
 				}
 
 				const usuario = await db
@@ -151,6 +154,7 @@ async function iniciarServidor() {
 				});
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao cadastrar usuário."
 				});
@@ -181,6 +185,7 @@ async function iniciarServidor() {
 				res.json(usuario);
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao buscar usuário."
 				});
@@ -190,8 +195,11 @@ async function iniciarServidor() {
 		app.put(["/api/usuarios/:id", "/api/configuracoes/:id"], autenticarToken, async (req, res) => {
 			try {
 				if (req.usuario.id !== req.params.id) {
-					return res.status(403).json({ erro: "Você só pode alterar sua própria conta." });
+					return res.status(403).json({
+						erro: "Você só pode alterar sua própria conta."
+					});
 				}
+
 				if (!ObjectId.isValid(req.params.id)) {
 					return res.status(400).json({
 						erro: "ID do usuário inválido."
@@ -200,44 +208,81 @@ async function iniciarServidor() {
 
 				const dados = { ...req.body };
 				delete dados._id;
+
 				const senhaAtual = dados.senhaAtual;
 				delete dados.senhaAtual;
+
 				const usuarios = db.collection("usuarios");
-				const conta = await usuarios.findOne({ _id: new ObjectId(req.params.id) });
-				if (!conta) return res.status(404).json({ erro: "Usuário não encontrado." });
+
+				const conta = await usuarios.findOne({
+					_id: new ObjectId(req.params.id)
+				});
+
+				if (!conta) {
+					return res.status(404).json({
+						erro: "Usuário não encontrado."
+					});
+				}
 
 				if (dados.email !== undefined) {
-					if (typeof dados.email !== "string" || !/^[^\s@]+@[^\s@]+$/.test(dados.email.trim())) {
-						return res.status(400).json({ erro: "Informe um e-mail válido." });
+					if (
+						typeof dados.email !== "string" ||
+						!/^[^\s@]+@[^\s@]+$/.test(dados.email.trim())
+					) {
+						return res.status(400).json({
+							erro: "Informe um e-mail válido."
+						});
 					}
+
 					dados.email = dados.email.trim();
+
 					const repetido = await usuarios.findOne({
-						email: dados.email, _id: { $ne: conta._id },
-					}, { collation: { locale: "pt", strength: 2 } });
-					if (repetido) return res.status(409).json({ erro: "Este e-mail já está cadastrado." });
+						email: dados.email,
+						_id: { $ne: conta._id }
+					}, {
+						collation: { locale: "pt", strength: 2 }
+					});
+
+					if (repetido) {
+						return res.status(409).json({
+							erro: "Este e-mail já está cadastrado."
+						});
+					}
 				}
 
 				const alteraSenha = dados.senha !== undefined;
 				const alteraEmail = dados.email !== undefined && dados.email !== conta.email;
+
 				if (alteraSenha || alteraEmail) {
 					if (!(await conferirSenha(senhaAtual, conta.senha))) {
-						return res.status(400).json({ erro: "A senha atual está incorreta." });
+						return res.status(400).json({
+							erro: "A senha atual está incorreta."
+						});
 					}
 				}
+
 				if (alteraSenha) {
-					if (typeof dados.senha !== "string" || !dados.senha.trim() || dados.senha.length > 128) {
-						return res.status(400).json({ erro: "Informe uma nova senha de até 128 caracteres." });
+					if (
+						typeof dados.senha !== "string" ||
+						!dados.senha.trim() ||
+						dados.senha.length > 128
+					) {
+						return res.status(400).json({
+							erro: "Informe uma nova senha de até 128 caracteres."
+						});
 					}
+
 					dados.senha = await protegerSenha(dados.senha);
 				}
 
-				// Valida os campos da edição de perfil (nome, nome de usuário, descrição e foto).
 				const erroValidacao = validarEdicaoPerfil(dados);
+
 				if (erroValidacao) {
-					return res.status(400).json({ erro: erroValidacao });
+					return res.status(400).json({
+						erro: erroValidacao
+					});
 				}
 
-				// O nome de usuário não pode ser igual ao de outra pessoa (sem diferenciar maiúsculas).
 				if (dados.userName !== undefined) {
 					dados.userName = String(dados.userName).trim();
 
@@ -276,6 +321,7 @@ async function iniciarServidor() {
 				});
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao atualizar usuário."
 				});
@@ -285,23 +331,41 @@ async function iniciarServidor() {
 		app.delete(["/api/usuarios/:id", "/api/configuracoes/:id"], autenticarToken, async (req, res) => {
 			try {
 				if (req.usuario.id !== req.params.id) {
-					return res.status(403).json({ erro: "Você só pode excluir sua própria conta." });
+					return res.status(403).json({
+						erro: "Você só pode excluir sua própria conta."
+					});
 				}
+
 				if (!ObjectId.isValid(req.params.id)) {
 					return res.status(400).json({
 						erro: "ID do usuário inválido."
 					});
 				}
 
-				const conta = await db.collection("usuarios").findOne({ _id: new ObjectId(req.params.id) });
-				if (!conta) return res.status(404).json({ erro: "Usuário não encontrado." });
-				if (req.body?.confirmacao !== "EXCLUIR" || !(await conferirSenha(req.body?.senhaAtual, conta.senha))) {
-					return res.status(400).json({ erro: "Confirme a exclusão e informe sua senha atual corretamente." });
+				const conta = await db.collection("usuarios").findOne({
+					_id: new ObjectId(req.params.id)
+				});
+
+				if (!conta) {
+					return res.status(404).json({
+						erro: "Usuário não encontrado."
+					});
 				}
+
+				if (
+					req.body?.confirmacao !== "EXCLUIR" ||
+					!(await conferirSenha(req.body?.senhaAtual, conta.senha))
+				) {
+					return res.status(400).json({
+						erro: "Confirme a exclusão e informe sua senha atual corretamente."
+					});
+				}
+
 				const resultado = await db
 					.collection("usuarios")
 					.deleteOne({
-						_id: conta._id, senha: conta.senha,
+						_id: conta._id,
+						senha: conta.senha
 					});
 
 				if (resultado.deletedCount === 0) {
@@ -315,6 +379,7 @@ async function iniciarServidor() {
 				});
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao excluir usuário."
 				});
@@ -333,6 +398,7 @@ async function iniciarServidor() {
 				res.json(metricas);
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao buscar métricas."
 				});
@@ -356,6 +422,7 @@ async function iniciarServidor() {
 				res.json(metrica);
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao buscar métrica."
 				});
@@ -373,7 +440,6 @@ async function iniciarServidor() {
 					.toArray();
 
 				res.status(200).json(metricas);
-
 			} catch (erro) {
 				console.error(erro);
 
@@ -406,6 +472,7 @@ async function iniciarServidor() {
 				});
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao cadastrar métrica."
 				});
@@ -416,11 +483,15 @@ async function iniciarServidor() {
 			try {
 				const id = new ObjectId(req.params.id);
 				const dados = { ...req.body };
+
 				delete dados._id;
 
 				const resultado = await db
 					.collection("metricas")
-					.updateOne({ _id: id }, { $set: dados });
+					.updateOne(
+						{ _id: id },
+						{ $set: dados }
+					);
 
 				if (resultado.matchedCount === 0) {
 					return res.status(404).json({
@@ -433,6 +504,7 @@ async function iniciarServidor() {
 				});
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao atualizar métrica."
 				});
@@ -458,6 +530,7 @@ async function iniciarServidor() {
 				});
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao excluir métrica."
 				});
@@ -465,6 +538,7 @@ async function iniciarServidor() {
 		});
 
 		// CRUD DE PUBLICAÇÕES
+
 		app.get(
 			"/api/publicacao",
 			autenticarTokenOpcional,
@@ -501,6 +575,7 @@ async function iniciarServidor() {
 									curtidas: 1,
 									curtidoPor: 1,
 									dataPublicacao: 1,
+									usuarioId: 1,
 									usuario: "$autor.nome",
 									userName: "$autor.userName"
 								}
@@ -514,22 +589,28 @@ async function iniciarServidor() {
 						const curtiu = Boolean(
 							req.usuario?.id &&
 							curtidoPor.some(
-								id =>
-									id.toString() ===
-									req.usuario.id.toString()
+								id => id.toString() === req.usuario.id.toString()
 							)
+						);
+
+						const podeExcluir = Boolean(
+							req.usuario?.id &&
+							publicacao.usuarioId?.toString() === req.usuario.id.toString()
 						);
 
 						return {
 							...publicacao,
+							usuarioId: undefined,
 							curtidoPor: undefined,
-							curtiu
+							curtiu,
+							podeExcluir
 						};
 					});
 
 					res.json(resultado);
 				} catch (erro) {
 					console.error(erro);
+
 					res.status(500).json({
 						erro: "Erro ao buscar publicações."
 					});
@@ -560,6 +641,7 @@ async function iniciarServidor() {
 				res.json(publicacao);
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao buscar publicação."
 				});
@@ -602,7 +684,6 @@ async function iniciarServidor() {
 
 				const usuarioId = new ObjectId(req.usuario.id);
 
-				// Guarda os dados recebidos do livro selecionado no Catálogo.
 				const livroSalvo = {
 					id: livro.id.trim(),
 					titulo: livro.titulo.trim(),
@@ -634,7 +715,6 @@ async function iniciarServidor() {
 					mensagem: "Publicação cadastrada com sucesso!",
 					id: resultado.insertedId
 				});
-
 			} catch (erro) {
 				console.error("Erro ao cadastrar publicação:", erro);
 
@@ -644,7 +724,8 @@ async function iniciarServidor() {
 			}
 		});
 
-		// CURTIR E DESCURTIR PUBLICAÇÃO.
+		// CURTIR E DESCURTIR PUBLICAÇÃO
+
 		app.post(
 			"/api/publicacao/:id/curtir",
 			autenticarToken,
@@ -796,6 +877,7 @@ async function iniciarServidor() {
 				}
 
 				const dados = { ...req.body };
+
 				delete dados._id;
 				delete dados.curtidoPor;
 				delete dados.curtidas;
@@ -818,12 +900,14 @@ async function iniciarServidor() {
 				});
 			} catch (erro) {
 				console.error(erro);
+
 				res.status(500).json({
 					erro: "Erro ao atualizar publicação."
 				});
 			}
 		});
 
+		// EXCLUIR PUBLICAÇÃO
 		app.delete("/api/publicacao/:id", autenticarToken, async (req, res) => {
 			try {
 				if (!ObjectId.isValid(req.params.id)) {
@@ -832,15 +916,22 @@ async function iniciarServidor() {
 					});
 				}
 
+				if (!ObjectId.isValid(req.usuario.id)) {
+					return res.status(400).json({
+						erro: "ID do usuário inválido."
+					});
+				}
+
 				const resultado = await db
 					.collection("publicacao")
 					.deleteOne({
-						_id: new ObjectId(req.params.id)
+						_id: new ObjectId(req.params.id),
+						usuarioId: new ObjectId(req.usuario.id)
 					});
 
 				if (resultado.deletedCount === 0) {
 					return res.status(404).json({
-						erro: "Publicação não encontrada."
+						erro: "Publicação não encontrada ou você não tem permissão para excluí-la."
 					});
 				}
 
@@ -848,7 +939,8 @@ async function iniciarServidor() {
 					mensagem: "Publicação excluída com sucesso!"
 				});
 			} catch (erro) {
-				console.error(erro);
+				console.error("Erro ao excluir publicação:", erro);
+
 				res.status(500).json({
 					erro: "Erro ao excluir publicação."
 				});

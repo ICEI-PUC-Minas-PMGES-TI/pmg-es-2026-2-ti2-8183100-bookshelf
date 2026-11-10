@@ -1,3 +1,4 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 import "./Feed.css";
@@ -5,7 +6,9 @@ import PublicacaoCard from "../components/PublicacaoCard";
 
 import {
   obterPublicacoes,
-  criarPublicacao
+  criarPublicacao,
+  alternarCurtidaAPI,
+  excluirPublicacaoAPI
 } from "../services/feedService";
 
 import { buscarLivros } from "../services/booksService";
@@ -20,6 +23,9 @@ const filtrosNota = [
 ];
 
 function Feed() {
+  // Verifica se existe um usuário autenticado.
+  const usuarioLogado = Boolean(localStorage.getItem("token"));
+
   const [publicacoes, setPublicacoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -129,18 +135,37 @@ function Feed() {
     setErroBuscaLivro("");
   }
 
+  async function excluirPublicacao(id) {
+    const confirmar = window.confirm(
+      "Tem certeza de que deseja excluir esta publicação? Essa ação não poderá ser desfeita."
+    );
+
+    if (!confirmar) return;
+
+    try {
+      setErroAcao("");
+
+      await excluirPublicacaoAPI(id);
+
+      const dados = await obterPublicacoes();
+      setPublicacoes(dados);
+    } catch (error) {
+      console.error("Erro ao excluir publicação:", error);
+      setErroAcao(error.message);
+    }
+  }
+
   // Publica uma nova resenha associada a um livro selecionado.
   async function publicarResenha(event) {
     event.preventDefault();
 
-    if (!livroSelecionado || !resenha.trim()) {
+    if (!usuarioLogado || !livroSelecionado || !resenha.trim()) {
       return;
     }
 
     try {
       setPublicando(true);
       setErroAcao("");
-
 
       const novaPublicacao = {
         tituloLivro: livroSelecionado.title,
@@ -170,6 +195,21 @@ function Feed() {
       setErroAcao(error.message);
     } finally {
       setPublicando(false);
+    }
+  }
+
+  // Alterna a curtida de uma publicação.
+  async function alternarCurtida(id) {
+    try {
+      setErroAcao("");
+
+      await alternarCurtidaAPI(id);
+
+      const dados = await obterPublicacoes();
+      setPublicacoes(dados);
+    } catch (error) {
+      console.error("Erro ao atualizar curtida:", error);
+      setErroAcao(error.message);
     }
   }
 
@@ -235,18 +275,21 @@ function Feed() {
                   : " publicações"}
               </span>
 
-              <button
-                className="feed-create-button"
-                type="button"
-                onClick={() => setFormAberto((aberto) => !aberto)}
-              >
-                <span aria-hidden="true">+</span>
-                Escrever resenha
-              </button>
+              {usuarioLogado && (
+                <button
+                  className="feed-create-button"
+                  type="button"
+                  onClick={() => setFormAberto(true)}
+                >
+                  <span>+</span>
+                  Escrever resenha
+                </button>
+              )}
             </div>
           </header>
 
-          {formAberto && (
+          {/* O formulário também exige autenticação. */}
+          {usuarioLogado && formAberto && (
             <form className="feed-form" onSubmit={publicarResenha}>
               <div className="feed-form-header">
                 <div>
@@ -390,7 +433,8 @@ function Feed() {
                     type="button"
                     className={estrela <= avaliacao ? "selected" : ""}
                     onClick={() => setAvaliacao(estrela)}
-                    aria-label={`${estrela} ${estrela === 1 ? "estrela" : "estrelas"
+                    aria-label={`${estrela
+                      } ${estrela === 1 ? "estrela" : "estrelas"
                       }`}
                     aria-pressed={avaliacao === estrela}
                   >
@@ -465,10 +509,19 @@ function Feed() {
           <div className="feed-toolbar">
             <label className="feed-nota-mobile">
               Avaliação
-              <select className="feed-select" value={filtroNota} onChange={(e) => setFiltroNota(e.target.value)}>
-                {filtrosNota.map((filtro) => <option key={filtro.valor} value={filtro.valor}>{filtro.texto}</option>)}
+              <select
+                className="feed-select"
+                value={filtroNota}
+                onChange={(event) => setFiltroNota(event.target.value)}
+              >
+                {filtrosNota.map((filtro) => (
+                  <option key={filtro.valor} value={filtro.valor}>
+                    {filtro.texto}
+                  </option>
+                ))}
               </select>
             </label>
+
             <div
               className="feed-chips"
               role="group"
@@ -527,6 +580,8 @@ function Feed() {
                   <PublicacaoCard
                     key={publicacao.id}
                     publicacao={publicacao}
+                    onCurtir={() => alternarCurtida(publicacao.id)}
+                    onExcluir={() => excluirPublicacao(publicacao.id)}
                   />
                 ))}
               </div>
