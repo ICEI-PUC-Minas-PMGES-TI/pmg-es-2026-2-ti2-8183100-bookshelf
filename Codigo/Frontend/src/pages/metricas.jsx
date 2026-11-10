@@ -5,38 +5,79 @@ import 'react-calendar/dist/Calendar.css';
 import BookMetricas from "../components/BookMetricas";
 import MetricasModal from "../components/MetricasModal";
 import { buscarLivrosPorIds } from "../services/booksService";
-import { buscarMetricas } from "../services/metricasService";
-import { obterUsuario } from "../services/listasService";
-import { formatarData, obterDiasStreak } from "../services/leituraUtils";
-import { Flame } from "lucide-react";
-import "../components/contaForm.css";
+import { logUser, buscarMetricas } from "../services/metricasService";
+
+function formatarData(data) {
+	if (!data) return null;
+
+	if (typeof data === "string" && /^\d{4}-\d{2}-\d{2}/.test(data)) {
+		return data.substring(0, 10);
+	}
+
+	const dataConvertida = new Date(data);
+
+	if (isNaN(dataConvertida.getTime())) return null;
+
+	const ano = dataConvertida.getFullYear();
+	const mes = String(dataConvertida.getMonth() + 1).padStart(2, "0");
+	const dia = String(dataConvertida.getDate()).padStart(2, "0");
+
+	return `${ano}-${mes}-${dia}`;
+}
+
+function obterDiasStreak(metricas) {
+	const datas = [...new Set(
+		metricas
+			.map(metrica => formatarData(metrica.dataLeitura))
+			.filter(Boolean)
+	)].sort();
+
+	const diasComStreak = new Set();
+
+	const adicionarDia = (data) => {
+		const [ano, mes, dia] = data.split("-").map(Number);
+		return Date.UTC(ano, mes - 1, dia);
+	};
+
+	const umDia = 24 * 60 * 60 * 1000;
+
+	for (let i = 1; i < datas.length; i++) {
+		const diferenca =
+			adicionarDia(datas[i]) - adicionarDia(datas[i - 1]);
+
+		if (diferenca === umDia) {
+			diasComStreak.add(datas[i - 1]);
+			diasComStreak.add(datas[i]);
+		}
+	}
+
+	return diasComStreak;
+}
+
 
 export default function Metricas() {
+	async function carregarUsuario() {
+		try {
+			const data = await logUser(userLog.id);
+			setUsuario(data);
+			const dadosMetricas = await buscarMetricas(userLog.id);
+			setMetricas(dadosMetricas);
+			const ids = [...(data.livrosLendo ?? []), ...(data.livrosFav ?? [])];
+			setLivros(await buscarLivrosPorIds(ids));
+		} catch (error) {
+			console.error(error);
+		}
+	}
 	const [usuario, setUsuario] = useState(null);
 	const [livros, setLivros] = useState([]);
-	const [userLog] = useState(() => JSON.parse(localStorage.getItem("usuario") || "null"));
-	const [erro, setErro] = useState("");
-	const [versao, setVersao] = useState(0);
+	const userLog = JSON.parse(localStorage.getItem("usuario"));
 	const [popUp, setPopUp] = useState(false);
 	const [metricas, setMetricas] = useState([]);
 	const diasStreak = obterDiasStreak(metricas);
 
 	useEffect(() => {
-		let cancelado = false;
-		async function carregar() {
-			try {
-				if (!userLog?.id) throw new Error("Sua sessão expirou. Entre novamente.");
-				const [data, registros] = await Promise.all([obterUsuario(), buscarMetricas(userLog.id)]);
-				const ids = [...new Set([...(data.livrosLendo ?? []), ...(data.livrosFav ?? []), ...(data.livrosLerDepois ?? [])])];
-				const encontrados = await buscarLivrosPorIds(ids);
-				if (!cancelado) { setUsuario(data); setMetricas(registros); setLivros(encontrados); setErro(""); }
-			} catch {
-				if (!cancelado) setErro("Não foi possível carregar suas métricas. Verifique sua conexão e tente novamente.");
-			}
-		}
-		carregar();
-		return () => { cancelado = true; };
-	}, [userLog, versao]);
+		carregarUsuario();
+	}, []);
 
 	function livrosDa(lista) {
 		return (usuario?.[lista] ?? [])
@@ -50,11 +91,16 @@ export default function Metricas() {
 
 	return (
 		<main className="metricas-main">
-			{erro && <div className="conta-erro" role="alert">{erro} <button onClick={() => setVersao((v) => v + 1)}>Tentar novamente</button></div>}
-			{!usuario && !erro && <p role="status">Carregando suas leituras…</p>}
 			<section className="metricas-layout">
 				<aside className="estatisticas">
 					<h2>Estatísticas:</h2>
+
+					<div className="estatistica-item">
+						<label>Horas lidas:</label>
+						<div className="estatistica-valor">
+							{Math.floor((usuario?.minLidos || 0) / 60)}h {(usuario?.minLidos || 0) % 60}min
+						</div>
+					</div>
 
 					<div className="estatistica-item">
 						<label>Livros lidos:</label>
@@ -69,7 +115,6 @@ export default function Metricas() {
 
 				<section className="calendario-card">
 					<Calendar
-						locale="pt-BR"
 						tileClassName={({ date, view }) => {
 							if (view !== "month") return null;
 
@@ -86,7 +131,9 @@ export default function Metricas() {
 					<div className="streak-card">
 						<h2>Streak Máximo:</h2>
 						<strong>{usuario?.sequencia || 0}</strong>
-						<Flame className="streak-fogo" aria-hidden="true" />
+						<span className="streak-fogo" role="img" aria-label="Fogo">
+							🔥
+						</span>
 					</div>
 
 					<section className="leituras-card">
@@ -116,9 +163,8 @@ export default function Metricas() {
 						type="button"
 						onClick={() => setPopUp(true)}
 						className="botao-circulo"
-						disabled={!usuario}
 					>
-						Registrar leitura
+						CIRCULO +
 					</button>
 				</div>
 				<MetricasModal
@@ -129,7 +175,7 @@ export default function Metricas() {
 					lerDepois={lerDepois}
 					usuarioId={userLog?.id}
 					usuario={userLog}
-					aoSalvar={() => { setPopUp(false); setVersao((v) => v + 1); }}
+					carregarUsuario={() => carregarUsuario()}
 				/>
 			</section>
 		</main>
