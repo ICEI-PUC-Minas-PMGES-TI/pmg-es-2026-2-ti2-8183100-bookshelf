@@ -368,31 +368,48 @@
     outline-offset: 3px;
 }
 
+
 /* Modal da publicação */
 
 .publicacao-modal-overlay {
+    --publicacao-navbar-offset: 80px;
+
     position: fixed;
-    inset: 0;
-    z-index: 10000;
+    top: var(--publicacao-navbar-offset);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99999;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+
+    padding: 20px 24px;
+    overflow: hidden;
+
     background: rgb(25 20 15 / 65%);
     backdrop-filter: blur(4px);
+
     animation: publicacao-modal-fade 180ms ease;
 }
 
 .publicacao-modal {
     display: flex;
     flex-direction: column;
+
     width: min(680px, 100%);
-    max-height: min(85vh, 800px);
+    max-height: calc(100% - 40px);
+    min-height: 0;
+
     overflow: hidden;
+
     border: 1px solid var(--bm-line);
     border-radius: 18px;
+
     background: var(--bm-panel);
     box-shadow: 0 20px 60px rgb(0 0 0 / 25%);
+
     animation: publicacao-modal-entrada 220ms ease;
 }
 
@@ -400,9 +417,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     flex-shrink: 0;
-    padding: 20px 24px;
+
+    padding: 18px 24px;
     border-bottom: 1px solid var(--bm-line);
+
+    background: var(--bm-panel);
 }
 
 .publicacao-modal-header h2 {
@@ -416,14 +437,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     width: 36px;
     height: 36px;
+    flex-shrink: 0;
+
     padding: 0;
     border: none;
     border-radius: 50%;
+
     background: var(--bm-latte);
     color: var(--bm-espresso);
+
     cursor: pointer;
+
     transition: background 180ms ease, transform 180ms ease;
 }
 
@@ -432,9 +459,17 @@
     transform: rotate(90deg);
 }
 
+.publicacao-modal-fechar:focus-visible {
+    outline: 2px solid var(--bm-caramel);
+    outline-offset: 3px;
+}
+
 .publicacao-modal-conteudo {
+    min-height: 0;
     padding: 24px;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
 }
 
 .publicacao-modal-conteudo .publicacao-header {
@@ -447,8 +482,10 @@
 
 .publicacao-modal-resenha {
     padding: 22px;
+
     border: 1px solid var(--bm-line);
     border-radius: 12px;
+
     background: var(--bm-panel-soft);
 }
 
@@ -472,8 +509,6 @@
     margin-top: 22px;
 }
 
-/* Animações */
-
 @keyframes publicacao-modal-fade {
     from {
         opacity: 0;
@@ -496,12 +531,12 @@
     }
 }
 
-/* Responsividade */
 
 @media (max-width: 520px) {
     .publicacao-header {
         align-items: flex-start;
         padding: 16px;
+        gap: 10px;
     }
 
     .publicacao-usuario {
@@ -519,6 +554,7 @@
     }
 
     .publicacao-livro {
+        align-items: flex-start;
         gap: 13px;
         margin: 16px 16px 0;
         padding: 12px;
@@ -532,6 +568,10 @@
 
     .publicacao-capa-titulo {
         font-size: 0.73rem;
+    }
+
+    .publicacao-livro-info {
+        flex: 1;
     }
 
     .publicacao-livro-info h4 {
@@ -558,26 +598,76 @@
     }
 
     .publicacao-modal-overlay {
+        --publicacao-navbar-offset: 68px;
+
         align-items: flex-end;
-        padding: 0;
+        padding: 8px 10px;
     }
 
     .publicacao-modal {
         width: 100%;
-        max-height: 90vh;
-        border-radius: 18px 18px 0 0;
+        max-height: calc(100% - 8px);
+        border-radius: 18px;
     }
 
     .publicacao-modal-header {
-        padding: 17px 18px;
+        padding: 15px 17px;
     }
 
     .publicacao-modal-conteudo {
-        padding: 18px;
+        padding: 16px;
+    }
+
+    .publicacao-modal-conteudo .publicacao-header {
+        padding: 0 0 14px;
+        margin-bottom: 16px;
+    }
+
+    .publicacao-modal-conteudo .publicacao-livro {
+        margin: 0 0 18px;
     }
 
     .publicacao-modal-resenha {
-        padding: 17px;
+        padding: 16px;
+    }
+
+    .publicacao-modal-resenha p {
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+
+    .publicacao-modal-conteudo .publicacao-footer {
+        margin-top: 16px;
+    }
+}
+
+@media (max-width: 360px) {
+    .publicacao-modal-overlay {
+        --publicacao-navbar-offset: 64px;
+        padding: 5px;
+    }
+
+    .publicacao-modal-header {
+        padding: 12px 14px;
+    }
+
+    .publicacao-modal-conteudo {
+        padding: 12px;
+    }
+
+    .publicacao-modal-conteudo .publicacao-livro {
+        gap: 10px;
+        padding: 9px;
+    }
+
+    .publicacao-capa-real {
+        width: 62px;
+        height: 94px;
+        min-height: 94px;
+    }
+
+    .publicacao-modal-resenha {
+        padding: 13px;
     }
 }
 
