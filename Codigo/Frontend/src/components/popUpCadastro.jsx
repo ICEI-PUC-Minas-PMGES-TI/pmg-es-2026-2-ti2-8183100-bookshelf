@@ -6,7 +6,7 @@ import "./popUpCadastro.css";
 import "./contaForm.css";
 
 function FormularioCadastro({ fechar, aoCadastrar }) {
-  const [dados, setDados] = useState({ nome: "", userName: "", dataNascimento: "", email: "", senha: "" });
+  const [dados, setDados] = useState({ nome: "", userName: "", dataNascimento: "", email: "", senha: "", confirmarSenha: "" });
   const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [concluido, setConcluido] = useState(false);
@@ -15,6 +15,7 @@ function FormularioCadastro({ fechar, aoCadastrar }) {
     evento.preventDefault();
     if (enviando) return;
     const erros = validarPerfil({ ...dados, bio: "" });
+    if (dados.senha !== dados.confirmarSenha) erros.confirmarSenha = "As senhas estão diferentes.";
     if (Object.keys(erros).length) {
       setErro(Object.values(erros)[0]);
       return;
@@ -54,6 +55,8 @@ function FormularioCadastro({ fechar, aoCadastrar }) {
             <input id="cadastro-email" type="email" autoComplete="email" value={dados.email} onChange={(e) => setDados({ ...dados, email: e.target.value })} required />
             <label htmlFor="cadastro-senha">Senha</label>
             <input id="cadastro-senha" type="password" autoComplete="new-password" maxLength={128} value={dados.senha} onChange={(e) => setDados({ ...dados, senha: e.target.value })} required />
+            <label htmlFor="cadastro-confirmar-senha">Confirmar senha</label>
+            <input id="cadastro-confirmar-senha" type="password" autoComplete="new-password" maxLength={128} value={dados.confirmarSenha} onChange={(e) => setDados({ ...dados, confirmarSenha: e.target.value })} required />
           </fieldset>
           {erro && <p className="conta-erro" role="alert">{erro}</p>}
           <button className="conta-principal" disabled={enviando}>{enviando ? "Criando conta…" : "Criar conta"}</button>
