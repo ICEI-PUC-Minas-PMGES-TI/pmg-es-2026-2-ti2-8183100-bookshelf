@@ -201,6 +201,179 @@
     transform: translateY(-2px);
 }
 
+
+.metricas-livro-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.metricas-livro-trigger {
+    width: 100%;
+    min-height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 9px 12px;
+    box-sizing: border-box;
+
+    border: 1px solid #B09262;
+    border-radius: 9px;
+
+    background-color: #FFE7C2;
+    color: #493621;
+
+    font-family: Arial, sans-serif;
+    text-align: left;
+    cursor: pointer;
+
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.metricas-livro-trigger:hover {
+    border-color: #C6815B;
+}
+
+.metricas-livro-trigger:focus {
+    outline: none;
+    border-color: #C6815B;
+    box-shadow: 0 0 0 3px rgba(198, 129, 91, 0.2);
+}
+
+.metricas-livro-trigger > img,
+.metricas-livro-option > img {
+    width: 42px;
+    height: 58px;
+    flex-shrink: 0;
+
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.metricas-livro-trigger > span:first-of-type,
+.metricas-livro-option > span:not(:only-child) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+}
+
+.metricas-livro-trigger strong,
+.metricas-livro-option strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 13px;
+    color: #493621;
+}
+
+.metricas-livro-trigger small,
+.metricas-livro-option small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 11px;
+    color: #806D55;
+}
+
+.metricas-livro-options {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+
+    padding: 10px;
+    box-sizing: border-box;
+
+    background-color: #DEC6A0;
+    border: 1px solid #C1A67C;
+    border-radius: 12px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+
+    z-index: 1001;
+
+    scrollbar-width: thin;
+    scrollbar-color: #C6815B #DEC6A0;
+}
+
+.metricas-livro-options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.metricas-livro-options::-webkit-scrollbar-thumb {
+    background-color: #C6815B;
+    border-radius: 10px;
+}
+
+.metricas-livro-options input {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 12px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+
+    background-color: #FFE7C2;
+    border: 1px solid #B09262;
+    border-radius: 8px;
+
+    color: #493621;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.metricas-livro-section {
+    display: block;
+
+    padding: 10px 7px 6px;
+
+    color: #806D55;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.metricas-livro-option {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 8px;
+    margin-bottom: 3px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: transparent;
+    text-align: left;
+
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.metricas-livro-option:hover {
+    background-color: rgba(198, 129, 91, 0.18);
+}
+
+.metricas-livro-options > p {
+    padding: 8px;
+    color: #806D55;
+    font-size: 13px;
+    text-align: center;
+}
+
+
 @media (max-width: 600px) {
     .modal-overlay {
         padding: 12px;

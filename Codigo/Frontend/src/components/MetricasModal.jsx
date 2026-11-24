@@ -1,14 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./metricasModal.css";
 import API_URL from "../services/api";
+import { buscarLivros } from "../services/booksService";
+
 
 export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDepois, usuarioId, carregarUsuario }) {
+    function selecionarLivro(livro) {
+        setLivroId(livro.id);
+        setLivroSelecionado(livro);
+        setDropdownAberto(false);
+        setBuscaLivro("");
+        setLivrosEncontrados([]);
+    }
     const [livroId, setLivroId] = useState("");
     const [pagInicial, setPagInicial] = useState("");
     const [pagFinal, setPagFinal] = useState("");
     const [horas, setHoras] = useState(0);
     const [minutos, setMinutos] = useState(0);
     const [avaliacao, setAvaliacao] = useState(5);
+    const [dropdownAberto, setDropdownAberto] = useState(false);
+    const [buscaLivro, setBuscaLivro] = useState("");
+    const [livroSelecionado, setLivroSelecionado] = useState(null);
+    const [livrosEncontrados, setLivrosEncontrados] = useState([]);
+    const [buscandoLivros, setBuscandoLivros] = useState(false);
 
     const livrosDisponiveis = [
         ...lendo,
@@ -17,6 +31,43 @@ export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDep
     ].filter((livro, index, self) =>
         index === self.findIndex(l => l.id === livro.id)
     );
+
+    useEffect(() => {
+        if (!dropdownAberto || buscaLivro.trim().length < 2) {
+            setLivrosEncontrados([]);
+            setBuscandoLivros(false);
+            return;
+        }
+
+        let cancelado = false;
+
+        const temporizador = setTimeout(async () => {
+            try {
+                setBuscandoLivros(true);
+
+                const resultados = await buscarLivros(buscaLivro.trim());
+
+                if (!cancelado) {
+                    setLivrosEncontrados(resultados);
+                }
+            } catch (error) {
+                console.error("Erro ao pesquisar livros:", error);
+
+                if (!cancelado) {
+                    setLivrosEncontrados([]);
+                }
+            } finally {
+                if (!cancelado) {
+                    setBuscandoLivros(false);
+                }
+            }
+        }, 400);
+
+        return () => {
+            cancelado = true;
+            clearTimeout(temporizador);
+        };
+    }, [buscaLivro, dropdownAberto]);
 
     const token = localStorage.getItem("token");
 
@@ -96,20 +147,122 @@ export default function MetricasModal({ aberto, fechar, lendo, favoritos, lerDep
                 <h2>Adicionar Leitura</h2>
                 <form onSubmit={handleSubmit}>
 
-                    <label>Livro</label>
-                    <select
-                        value={livroId}
-                        onChange={(event) => setLivroId(event.target.value)}
-                        required
-                    >
-                        <option value="">Selecione um livro</option>
-                        {livrosDisponiveis.map((livro) => (
-                            <option key={livro.id} value={livro.id}>
-                                {livro.title}
-                            </option>
-                        ))}
-                    </select>
-                    <label>Página inicial</label>
+                    <div className="metricas-livro-dropdown">
+
+                        <label>Livro</label>
+
+                        <button
+                            type="button"
+                            className="metricas-livro-trigger"
+                            onClick={() => setDropdownAberto(!dropdownAberto)}
+                        >
+                            {livroSelecionado ? (
+                                <>
+                                    <img
+                                        src={livroSelecionado.thumbnail}
+                                        alt=""
+                                    />
+                                    <span>
+                                        <strong>{livroSelecionado.title}</strong>
+                                        <small>
+                                            {livroSelecionado.authors?.join(", ") ||
+                                                "Autor desconhecido"}
+                                        </small>
+                                    </span>
+                                </>
+                            ) : (
+                                <span>Selecione um livro</span>
+                            )}
+
+                            <span>⌄</span>
+                        </button>
+
+                        {dropdownAberto && (
+                            <div className="metricas-livro-options">
+
+                                <input
+                                    type="search"
+                                    placeholder="Pesquisar outros livros..."
+                                    value={buscaLivro}
+                                    onChange={(event) => setBuscaLivro(event.target.value)}
+                                />
+
+                                {buscandoLivros && (
+                                    <p>Pesquisando livros...</p>
+                                )}
+
+                                {/* Livros da biblioteca */}
+                                {buscaLivro.trim().length < 2 && (
+                                    <>
+                                        <small className="metricas-livro-section">
+                                            Minha biblioteca
+                                        </small>
+
+                                        {livrosDisponiveis.map((livro) => (
+                                            <button
+                                                key={livro.id}
+                                                type="button"
+                                                className="metricas-livro-option"
+                                                onClick={() => selecionarLivro(livro)}
+                                            >
+                                                {livro.thumbnail ? (
+                                                    <img src={livro.thumbnail} alt="" />
+                                                ) : (
+                                                    <span>📖</span>
+                                                )}
+
+                                                <span>
+                                                    <strong>{livro.title}</strong>
+                                                    <small>
+                                                        {livro.authors?.join(", ") ||
+                                                            "Autor desconhecido"}
+                                                    </small>
+                                                </span>
+                                            </button>
+                                        ))}
+                                    </>
+                                )}
+
+                                {/* Resultados da Google Books */}
+                                {buscaLivro.trim().length >= 2 && (
+                                    <>
+                                        <small className="metricas-livro-section">
+                                            Resultados da pesquisa
+                                        </small>
+
+                                        {livrosEncontrados.map((livro) => (
+                                            <button
+                                                key={livro.id}
+                                                type="button"
+                                                className="metricas-livro-option"
+                                                onClick={() => selecionarLivro(livro)}
+                                            >
+                                                {livro.thumbnail ? (
+                                                    <img src={livro.thumbnail} alt="" />
+                                                ) : (
+                                                    <span>📖</span>
+                                                )}
+
+                                                <span>
+                                                    <strong>{livro.title}</strong>
+                                                    <small>
+                                                        {livro.authors?.join(", ") ||
+                                                            "Autor desconhecido"}
+                                                    </small>
+                                                </span>
+                                            </button>
+                                        ))}
+
+                                        {!buscandoLivros &&
+                                            livrosEncontrados.length === 0 && (
+                                                <p>Nenhum livro encontrado.</p>
+                                            )}
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                    <label>Página começada a leitura</label>
                     <input
                         type="number"
                         min="1"
